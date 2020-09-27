@@ -11,8 +11,11 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const sessionsRouter = require("./routes/trainingSessions");
-app.use("/sessions", sessionsRouter);
+const trainingsRouter = require("./routes/trainings");
+app.use("/trainings", trainingsRouter);
+
+const memebersRouter = require("./routes/members");
+app.use("/members", memebersRouter);
 
 app.listen(port, function() {
     console.log("Runnning on " + port);

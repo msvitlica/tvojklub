@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-//let sessions = require("database");
+let members = [
+  { _id: 1, name:"Sinisa Kovacevic" },
+  { _id: 2, name:"Milan Svitlica" },
+  { _id: 3, name:"Nada Jankovic" },
+  { _id: 4, name:"Srecko Lazic" },
+];
 
-router.get("/list", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
       res.status(200).json({
-        data: '[]'
+        members: members
       });
     } catch (err) {
       res.status(400).json({
