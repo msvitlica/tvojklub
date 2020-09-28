@@ -8,7 +8,7 @@ let tranings = [
   { _id: 4, term: "18-20", groups: "Group5", coach:"Sinisa Kovacevic" },
 ];
 
-router.get("/list", async (req, res) => {
+router.get("/trainings", async (req, res) => {
     try {
       res.status(200).json({
         trainings: tranings
