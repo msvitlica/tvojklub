@@ -1,6 +1,5 @@
 import React from 'react';
-
-
+import {Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 export class TrainngList extends React.Component{
 
     constructor(props) {
@@ -12,7 +11,7 @@ export class TrainngList extends React.Component{
       }
      
       componentDidMount() {
-        fetch('http://localhost:3001/trainings/list')
+        fetch('http://localhost:3001/trainings/trainings')
           .then(response => response.json())
           .then(data => {
               console.log(data);
@@ -21,11 +20,25 @@ export class TrainngList extends React.Component{
       }
 
       render(){
-          return (<div>
-              {this.state.trainings.map(t => (
-                  <h5>{t.term}</h5>
-              ))}
-              </div>
+          return (
+            <div>
+                    <Card>
+                            {this.state.trainings.map(el=>(
+                              <CardActionArea key={el.id}>
+                                <CardContent >
+                                    <Typography style={{ float: "left" }} color="textPrimary" gutterBottom> {el.term}
+                                    </Typography>
+                                    <br></br>
+                                    <Typography style={{ float: "left" }} variant='caption'> {el.groups}
+                                    </Typography>
+                                    <Typography style={{ float: "right" }} color="textPrimary">
+                                        {el.coach}
+                                    </Typography>
+                                </CardContent>
+                                </CardActionArea>
+                            ))}
+                    </Card>
+                    </div>
           )
       }
   

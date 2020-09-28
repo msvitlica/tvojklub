@@ -10,8 +10,7 @@ export default class InternalComponent extends React.Component {
         return (
             <div>
                 <NavBar title="Lista Treninga" />
-                {/*<TrainngList></TrainngList> */}
-                <Members></Members>
+                <TrainngList></TrainngList>
             </div>
         )
     }
