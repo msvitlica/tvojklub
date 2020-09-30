@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-export class TrainngList extends React.Component{
+export default class TrainngList extends React.Component{
 
     constructor(props) {
         super(props);
@@ -11,7 +11,7 @@ export class TrainngList extends React.Component{
       }
      
       componentDidMount() {
-        fetch('http://localhost:3001/trainings/trainings')
+        fetch('http://localhost:3001/trainings/list')
           .then(response => response.json())
           .then(data => {
               console.log(data);
@@ -25,7 +25,7 @@ export class TrainngList extends React.Component{
                     <Card>
                             {this.state.trainings.map(el=>(
                               <CardActionArea key={el.id}>
-                                <CardContent >
+                                <CardContent>
                                     <Typography style={{ float: "left" }} color="textPrimary" gutterBottom> {el.term}
                                     </Typography>
                                     <br></br>
