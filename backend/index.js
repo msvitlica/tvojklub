@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const trainingsRouter = require("./routes/trainings");
-app.use("/trainings", trainingsRouter);
+app.use('/trainings',trainingsRouter);
 
 //const memebersRouter = require("./routes/members");
 //app.use("/members", memebersRouter);
