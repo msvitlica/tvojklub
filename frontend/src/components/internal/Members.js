@@ -15,7 +15,6 @@ export class Members extends React.Component{
         fetch('http://localhost:3001/members')
           .then(response => response.json())
           .then(data => {
-              console.log(data);
                this.setState({ members: data.members });
             });
       }

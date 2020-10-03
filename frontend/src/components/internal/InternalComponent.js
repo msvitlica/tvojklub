@@ -17,9 +17,9 @@ export default class InternalComponent extends React.Component {
         return (
             <div>
                 <Router>
-                    <NavBar title="Lista Treninga" />
+                    <NavBar />
                     <Switch>
-                        <Route exact path='/trainings/list' children={<TrainngList />}/>
+                        <Route exact path='/trainings/list' children={<TrainngList  />}/>
                         <Route exact path='/members' children={<Members />}/>
                     </Switch>
                 </Router>

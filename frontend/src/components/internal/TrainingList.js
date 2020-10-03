@@ -15,7 +15,6 @@ export class TrainngList extends React.Component{
         fetch('http://localhost:3001/trainings/list')
           .then(response => response.json())
           .then(data => {
-              console.log(data);
                this.setState({ trainings: data.trainings });
             });
       }
