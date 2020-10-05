@@ -10,7 +10,7 @@ export default class TrainingDetails extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3001/trainings/2')
+    fetch('http://localhost:3001/trainings/'+this.props.trainingId)
       .then(response => response.json())
       .then(data => {
         console.log(data);
