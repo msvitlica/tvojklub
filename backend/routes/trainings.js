@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const uuid= require('uuid');
+var url = require("url");
 
 let trainings = [
-  { _id: 1, term: "13-14", groups: "Group1, Group2", coach:"Sinisa Kovacevic" },
-  { _id: 2, term: "15-16", groups: "Group3", coach:"Sinisa Kovacevic" },
-  { _id: 3, term: "17-20", groups: "Group5", coach:"Sinisa Kovacevic" },
-  { _id: 4, term: "18-20", groups: "Group5", coach:"Sinisa Kovacevic" },
+  { id: 1,term: "13-14", group: "Group1", coach:"Sinisa Kovacevic",
+  membersInGroup: ["Sinisa Kovacevic","Milan Svitlica","Nada Jankovic","Srecko Lazic"]},
+  { id:2,term: "15-16", group: "Group3", coach:"Sinisa Kovacevic", 
+   membersInGroup:['Rada Svitlica','Sofija Svitlica','Filip Svitlica']},
 ];
 
 router.get("/list", async (req, res) => {
     try {
       res.status(200).json({
-        trainings: trainings
+        trainings: trainings,
       });
     } catch (err) {
       res.status(400).json({
@@ -20,5 +22,25 @@ router.get("/list", async (req, res) => {
       });
     }
   });
+  // get group by id
+
+  router.get('/:id', async (req, res) => {
+    let pathName = url.parse(req.url, true).pathname;
+   let pathId = pathName.replace('/', '');
+   let filteredFile= trainings.filter(el=> el.id.toString()=== pathId)[0];
+   console.log(filteredFile);
+    try {
+      res.status(200).json({
+        trainingInfo : filteredFile
+      });
+    } catch (err) {
+      res.status(400).json({
+        message: "Some error occured",
+        err
+      });
+    }
+  }
+
+);
  
   module.exports = router;
