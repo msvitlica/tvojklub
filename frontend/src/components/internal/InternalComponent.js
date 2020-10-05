@@ -8,9 +8,9 @@ export default class InternalComponent extends React.Component {
     super(props);
     this.state = {
       step: 1,
-      value:2,
+      value: 2,
       trainings: [],
-      trainingInfo: []
+      trainingInfo:undefined,  
     };
   }
   nextStep = () => {
@@ -19,27 +19,29 @@ export default class InternalComponent extends React.Component {
       step: step + 1
     });
   }
-  componentDidMount = () => {
-    fetch('http://localhost:3001/trainings/2')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.setState({ trainingInfo: data.trainingInfo});
-      });
-  }
- 
+  // componentDidMount = () => {
+  //   fetch('http://localhost:3001/trainings/2')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       this.setState({ trainingInfo: data.trainingInfo });
+  //     });
+  // }
 
-  render() {
-        return (
-          <div>
-            <NavBar></NavBar>
-      <TrainingDetails
-      trainingInfo={this.state.trainingInfo}
-/>
-</div>
-        )
-    }
+
+  render() {    
+    return (     
+      <div>
+        <NavBar></NavBar>
+        <div>          
+        <TrainingDetails
+          trainingId ="2"
+        />
+        </div>
+      </div>
+    )
   }
+}
 
 
 
