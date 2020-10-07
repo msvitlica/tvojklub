@@ -10,38 +10,50 @@ export default class InternalComponent extends React.Component {
       step: 1,
       value: 2,
       trainings: [],
-      trainingInfo:undefined,  
     };
   }
+  componentDidMount = () => {
+    fetch('http://localhost:3001/trainings/list')
+      .then(response => response.json())
+      .then(data => {
+
+        this.setState({ trainings: data.trainings });
+      });
+   }
   nextStep = () => {
-    const { step } = this.state;
+    const {step} = this.state;
     this.setState({
       step: step + 1
     });
   }
-  // componentDidMount = () => {
-  //   fetch('http://localhost:3001/trainings/2')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log(data);
-  //       this.setState({ trainingInfo: data.trainingInfo });
-  //     });
-  // }
-
-
-  render() {    
-    return (     
-      <div>
-        <NavBar></NavBar>
-        <div>          
-        <TrainingDetails
-          trainingId ="2"
-        />
-        </div>
-      </div>
-    )
+  render() {
+    const { step } = this.state;
+    const { value } = this.state;
+    const tabValue = { value };
+    switch (step) {
+      default:
+      case 1:
+        return (
+          <div>
+            <NavBar />
+            <ScheduleBar
+              tabValue={tabValue}
+            />
+            <TrainngList
+              nextStep={this.nextStep}
+              trainings={this.state.trainings}
+            />
+          </div>
+        )
+      case 2:
+        return (
+          <div>
+            <NavBar />
+            <TrainingDetails
+            />
+          </div>
+        )
+    }
   }
 }
-
-
 
