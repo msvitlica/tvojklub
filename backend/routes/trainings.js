@@ -5,11 +5,11 @@ var url = require("url");
 
 let trainings = [
   {
-    id: 1, term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
+    id:uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
     membersInGroup: ["Sinisa Kovacevic", "Milan Svitlica", "Nada Jankovic", "Srecko Lazic"]
   },
   {
-    id: 2, term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
+    id:uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
     membersInGroup: ['Rada Svitlica', 'Sofija Svitlica', 'Filip Svitlica']
   },
 ];
@@ -31,10 +31,10 @@ router.get('/:id', async (req, res) => {
   let pathName = url.parse(req.url, true).pathname;
   let pathId = pathName.replace('/', '');
   let filteredFile = trainings.filter(el => el.id.toString() === pathId)[0];
-  console.log(pathId);
+  console.log(filteredFile);
   try {
     res.status(200).json({
-      trainingInfo: filteredFile
+      trainingId:filteredFile
     });
   } catch (err) {
     res.status(400).json({
