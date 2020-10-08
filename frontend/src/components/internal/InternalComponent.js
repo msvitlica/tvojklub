@@ -10,21 +10,34 @@ export default class InternalComponent extends React.Component {
       step: 1,
       value: 2,
       trainings: [],
+      trainingId: 'ima li id-ja?'
     };
   }
   componentDidMount = () => {
     fetch('http://localhost:3001/trainings/list')
       .then(response => response.json())
       .then(data => {
-
+        console.log(data.trainings)
         this.setState({ trainings: data.trainings });
       });
-   }
+  }
   nextStep = () => {
-    const {step} = this.state;
+    const { step } = this.state;
     this.setState({
-      step: step + 1
+      step: step + 1,
     });
+  }
+  previousStep = () => {
+    const { step } = this.state;
+    this.setState({
+      step: step -1,
+    });
+  }
+  fetchTrainingById = (id) => {
+    this.setState({ trainingId: id },()=>{
+      console.log(this.state.trainingId)
+    })
+   
   }
   render() {
     const { step } = this.state;
@@ -40,6 +53,7 @@ export default class InternalComponent extends React.Component {
               tabValue={tabValue}
             />
             <TrainngList
+              onChildClick={this.fetchTrainingById}
               nextStep={this.nextStep}
               trainings={this.state.trainings}
             />
@@ -48,8 +62,9 @@ export default class InternalComponent extends React.Component {
       case 2:
         return (
           <div>
-            <NavBar />
+            <NavBar previousStep={this.previousStep}/>
             <TrainingDetails
+              trainingId={this.state.trainingId}
             />
           </div>
         )

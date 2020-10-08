@@ -4,29 +4,35 @@ export default class TrainingDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      trainingInfo: undefined,
-    };
-  } 
-// pass an object trainingInfo as props from TrainingList component
-//and render 
+      trainingInfo: undefined
+    }
+  }
+  componentDidMount = () => {
+    fetch(`http://localhost:3001/trainings/` + this.props.trainingId)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ trainingInfo: data.trainingId })
+      });
+  }
 
   render() {
-    if (!this.props.trainingInfo) {
+    if (!this.state.trainingInfo) {
       return null;
-    } 
+    }
     return (
       <React.Fragment>
         <Card >
           <CardContent>
             <Typography style={{ float: 'left' }} color="textPrimary" variant='h6'>
-              {this.props.trainingInfo.term}({this.props.trainingInfo.group})</Typography>
+              {this.state.trainingInfo.term}({this.state.trainingInfo.group})</Typography>
           </CardContent>
           <TextField style={{ float: 'right' }} id="outlined-basic"
             label="Search" variant="filled" />
         </Card>
         <FormControl style={{ float: 'left' }}  >
-          <FormLabel color='primary'>{this.props.trainingInfo.group}</FormLabel>
-          {this.props.trainingInfo.membersInGroup.map((el, index) => (
+          <FormLabel color='primary'>{this.state.trainingInfo.group}</FormLabel>
+          {this.state.trainingInfo.membersInGroup.map((el, index) => (
             <FormControl key={index} style={{ float: 'left' }}  >
               <FormGroup>
                 <FormControlLabel
