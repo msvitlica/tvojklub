@@ -3,7 +3,6 @@ import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core
 export default class TrainngList extends React.Component {
   handleClick = (id) => {
     this.props.onChildClick(id);
-    this.props.nextStep();
   }
   render() {
     return (

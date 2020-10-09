@@ -37,7 +37,7 @@ export default class InternalComponent extends React.Component {
     this.setState({ trainingId: id },()=>{
       console.log(this.state.trainingId)
     })
-   
+   this.nextStep();
   }
   render() {
     const { step } = this.state;
@@ -54,7 +54,6 @@ export default class InternalComponent extends React.Component {
             />
             <TrainngList
               onChildClick={this.fetchTrainingById}
-              nextStep={this.nextStep}
               trainings={this.state.trainings}
             />
           </div>
