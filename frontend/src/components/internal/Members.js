@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-export class Members extends React.Component{
+export default class Members extends React.Component{
 
     constructor(props) {
         super(props);

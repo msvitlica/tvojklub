@@ -4,7 +4,7 @@ import InternalComponent from './components/internal/InternalComponent';
 function App() {
   return (
     <div className="App">
-      <InternalComponent></InternalComponent>      
+      <InternalComponent></InternalComponent>
     </div>
   );
 }
