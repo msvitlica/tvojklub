@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 const trainingsRouter = require("./routes/trainings");
 app.use('/trainings', trainingsRouter);
 
-const memebersRouter = require("./routes/trainings");
-app.use("/trainings", memebersRouter);
+const memebersRouter = require("./routes/members");
+app.use("/members", memebersRouter);
 
 app.listen(port, function () {
   console.log("Runnning on " + port);

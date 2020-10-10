@@ -8,7 +8,9 @@ export default class TrainingDetails extends React.Component {
     }
   }
   componentDidMount = () => {
-    fetch(`http://localhost:3001/trainings/` + this.props.trainingId)
+    const { match: { params } } = this.props;
+
+    fetch(`http://localhost:3001/trainings/${params.trainingId}`)
       .then(response => response.json())
       .then(data => {
         console.log(data);

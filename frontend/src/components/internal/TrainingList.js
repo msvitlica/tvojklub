@@ -1,22 +1,41 @@
 import React from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-export default class TrainngList extends React.Component {
+import { useHistory } from "react-router-dom";
+
+export default class TrainingList extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      trainings: []            
+    };
+  }
+  componentDidMount = () => {
+    fetch('http://localhost:3001/trainings/list')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.trainings)
+        this.setState({ trainings: data.trainings });
+      });
+  }
+
   handleClick = (id) => {
-    this.props.onChildClick(id);
+    const { match: { params }, history } = this.props;
+    history.push(`${id}`);
   }
   render() {
     return (
       <div>
         <Card>
-          {this.props.trainings.map((el) => (
+          {this.state.trainings.map((el) => (
             <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
               <CardContent>
-                <Typography style={{ float: "left" }} color="textPrimary" gutterBottom> {el.term}{el.group}
+                <Typography gutterBottom> {el.term}{el.group}
                 </Typography>
                 <br></br>
-                <Typography style={{ float: "left" }} variant='caption'> {el.groups}
+                <Typography variant='caption'> {el.groups}
                 </Typography>
-                <Typography style={{ float: "right" }} color="textPrimary">
+                <Typography>
                   {el.coach}
                 </Typography>
               </CardContent>
