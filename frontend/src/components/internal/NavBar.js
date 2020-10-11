@@ -13,7 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import HomeIcon from '@material-ui/icons/Home';
+import GroupIcon from '@material-ui/icons/Group';
 import TrainingListIcon from '@material-ui/icons/FormatListNumbered';
 import MembersIcon from '@material-ui/icons/Person';
 
@@ -30,8 +30,7 @@ import {
 // Routing Component
 
 import {
-    Link,
-    useLocation
+    Link
 } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +50,6 @@ export default function NavBar(props) {
     const [state, setState] = React.useState({
         drawerState: false
     });
-    const { pathname } = useLocation();
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -60,13 +58,12 @@ export default function NavBar(props) {
     }
     return (
         <div>
-            <AppBar position="static">
+            <AppBar className='navbar' position="static">
                 <Toolbar>
                     <IconButton onClick={toggleDrawer(true)} edge="start" color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        {pathname === '/trainings/list' ? 'Lista Treninga' : 'Članovi'}
                     </Typography>
                     <Button>
                         <Avatar src="/broken-image.jpg" />
@@ -76,7 +73,7 @@ export default function NavBar(props) {
 
             <Drawer id="nav" open={state.drawerState} onClose={toggleDrawer(false)}>
                 <List>
-                    <Link to='/trainings/list' onClick={toggleDrawer(false)}>
+                    <Link to='/trainings' onClick={toggleDrawer(false)}>
                         <ListItem button>
                             <ListItemIcon>
                                 <TrainingListIcon />
@@ -89,6 +86,14 @@ export default function NavBar(props) {
                             <ListItemIcon>
                                 <MembersIcon />
                                 <ListItemText primary='Članovi' />
+                            </ListItemIcon>
+                        </ListItem>
+                    </Link>
+                    <Link to='/groups' onClick={toggleDrawer(false)}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <GroupIcon />
+                                <ListItemText primary='Grupe' />
                             </ListItemIcon>
                         </ListItem>
                     </Link>

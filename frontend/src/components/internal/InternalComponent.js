@@ -1,32 +1,32 @@
 import React from 'react';
 import NavBar from './NavBar';
 import Members from './Members';
-import TrainingList  from './TrainingList';
+import TrainingList from './TrainingList';
+import Group from './Group';
 import TrainingDetails from './TrainingDetails';
 
 // Routing components 
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route
+    Switch,
+    Route
 } from 'react-router-dom';
 
 
-export default class InternalComponent extends React.Component { 
-  render() {
-    return (
-      <div>
-                  <NavBar />
-          <Switch>
-            <Route exact path="/" component={TrainingList} />
-            <Route path='/trainings/list' component={TrainingList} />
-            <Route path='/members' component={Members} />
-            <Route path='/trainings/:trainingId' component={TrainingDetails} />
-         </Switch>
-        
-      </div>
-    )
-  }
+export default class InternalComponent extends React.Component {
+    render() {
+        return (
+            <div>
+                <NavBar />
+                <Switch>
+                    <Route exact path="/" component={TrainingList} />
+                    <Route path='/trainings/:trainingId' component={TrainingDetails} />
+                    <Route path='/trainings' component={TrainingList} />
+                    <Route path='/members' component={Members} />
+                    <Route path='/groups' component={Group} />
+                </Switch>
+            </div>
+        )
+    }
 }
 
