@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 router.post('/newMember', async (req, res) => {
   const data = req.body;
   console.log(data.member);
-  const filteredMembers = members.filter((el) => el.firstName === data.member.firstName)[0];
+  const filteredMembers = members.find((el) => el.id=== data.id);
   try {
     if (!filteredMembers) {
       members.push({
