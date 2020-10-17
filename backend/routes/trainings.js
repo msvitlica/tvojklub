@@ -14,7 +14,7 @@ let trainings = [
   },
 ];
 
-router.get("/list", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     res.status(200).json({
       trainings: trainings,
