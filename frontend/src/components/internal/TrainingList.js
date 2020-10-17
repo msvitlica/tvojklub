@@ -1,17 +1,16 @@
 import React from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-import { useHistory } from "react-router-dom";
 
 export default class TrainingList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      trainings: []            
+      trainings: []
     };
   }
   componentDidMount = () => {
-    fetch('http://localhost:3001/trainings/list')
+    fetch('http://localhost:3001/trainings')
       .then(response => response.json())
       .then(data => {
         console.log(data.trainings)
@@ -21,7 +20,7 @@ export default class TrainingList extends React.Component {
 
   handleClick = (id) => {
     const { match: { params }, history } = this.props;
-    history.push(`${id}`);
+    history.push(`trainings/${id}`);
   }
   render() {
     return (
@@ -30,7 +29,7 @@ export default class TrainingList extends React.Component {
           {this.state.trainings.map((el) => (
             <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
               <CardContent>
-                <Typography gutterBottom> {el.term}{el.group}
+                <Typography> {el.term}{el.group}
                 </Typography>
                 <br></br>
                 <Typography variant='caption'> {el.groups}

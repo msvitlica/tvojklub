@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
+import { Link } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 export default function Members(props) {
   const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
@@ -21,20 +23,22 @@ export default function Members(props) {
       group: el.group
     }
   ));
-  console.log(rows)
+ /*  console.log(rows) */
   return (
-    <div style={{ height: 300, width: '100%' }}>
+    <div style={{ height: 400, width: '100%' }}>
+      <Link to='members/newMember'>
+        <Button variant="contained">New Member</Button>
+      </Link>
       <DataGrid
         columns={[
-          { field: 'id', type: 'string', width: 90 },
           { field: 'firstName', type: 'string', width: 140 },
           { field: 'lastName', type: 'string', width: 140 },
-          { field: 'dateOfBirth', type: 'date', width: 140, },
+          { field: 'dateOfBirth', type: 'string', width: 140, },
           { field: 'group', type: 'string', width: 140, },
         ]}
         rows={rows}
         checkboxSelection
-        pageSize={3}
+        pageSize={5}
       />
     </div>
   )
