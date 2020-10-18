@@ -22,13 +22,12 @@ router.get("/", async (req, res) => {
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  const isValid = groups.filter(el => el.name === data.name)[0];
-  console.log(isValid)
+  const isValid = groups.filter(el => el.name === data.name.trim())[0] || data.name === '';
   try {
     if (!isValid) {
       groups.push({
         id: uuid.v4(),
-        name: data.name
+        name: data.name.trim()
       });
       res.status(200).json({
         msg: 'Item added'
@@ -40,7 +39,6 @@ router.post('/', async (req, res) => {
     res.status(400).json({
       msg: 'Bad Request'
     })
-    console.log(err);
   }
 });
 
