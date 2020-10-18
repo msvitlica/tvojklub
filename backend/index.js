@@ -16,6 +16,9 @@ app.use('/trainings', trainingsRouter);
 const memebersRouter = require("./routes/members");
 app.use("/members", memebersRouter);
 
+const groupeRouter = require("./routes/groups");
+app.use("/groups", groupeRouter);
+
 app.listen(port, function () {
   console.log("Runnning on " + port);
 });
