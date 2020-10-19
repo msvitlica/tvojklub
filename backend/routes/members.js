@@ -4,8 +4,6 @@ const uuid = require('uuid');
 let members = [
   { id: uuid.v4(), firstName: "Sinisa", lastName: 'Kovacevic', dateOfBirth: '12.04.1988.', group: 'Napredna' },
   { id: uuid.v4(), firstName: "Milan", lastName: 'Svitlica', dateOfBirth: '20.06.1987.', group: 'Napredna' },
-  { id: uuid.v4(), firstName: "Nada", lastName: 'Jankovic', dateOfBirth: '22.10.1986.', group: 'Napredna' },
-  { id: uuid.v4(), firstName: "Srecko", lastName: 'Lazic', dateOfBirth: '10.11.1990.', group: 'Napredna' },
 ];
 router.get("/", async (req, res) => {
   try {
