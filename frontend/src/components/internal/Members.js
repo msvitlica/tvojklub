@@ -23,7 +23,6 @@ export default function Members(props) {
       group: el.group
     }
   ));
- /*  console.log(rows) */
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Link to='members/newMember'>
