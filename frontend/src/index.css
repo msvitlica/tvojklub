@@ -68,3 +68,14 @@ div.MuiGrid-item p.MuiTypography-root.modalMessage {
   padding: 10px;
   background-color: wheat;
 }
+div h1.MuiTypography-h1.loginLogo {
+  text-align: center;
+}
+button.btn {
+  width: 300px;
+  max-width: 300px;
+  align-self: center;
+}
+div.loginContainer {
+  margin-top: 10vh;
+}
