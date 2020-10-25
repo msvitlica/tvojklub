@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { Link } from 'react-router-dom';
-import { Button } from '@material-ui/core';
+import { Button,Grid, Table } from '@material-ui/core';
 export default function Members(props) {
   const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
@@ -30,10 +30,10 @@ export default function Members(props) {
       </Link>
       <DataGrid
         columns={[
-          { field: 'firstName', type: 'string', width: 140 },
-          { field: 'lastName', type: 'string', width: 140 },
-          { field: 'dateOfBirth', type: 'string', width: 140, },
-          { field: 'group', type: 'string', width: 140, },
+          { field: 'firstName', type: 'string', },
+          { field: 'lastName', type: 'string',  },
+          { field: 'dateOfBirth', type: 'string',},
+          { field: 'group', type: 'string',  },
         ]}
         rows={rows}
         checkboxSelection

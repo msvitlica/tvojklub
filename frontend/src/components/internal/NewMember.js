@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { TextField, Button, InputLabel, Select, MenuItem, FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme) => ({
             marginLeft: theme.spacing(3),
             marginRight: theme.spacing(3),
             width: 200,
-        },
-    },
+        }}
 }));
 export default function NewMember(props) {
     const classes = useStyles();
@@ -75,49 +74,49 @@ export default function NewMember(props) {
     }
     return (
         <div className={classes.root}>
-            <div>
-                <TextField
-                    name="firstName"
-                    value={member.firstName}
-                    label="FirstName"
-                    variant="filled"
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <TextField
-                    name="lastName"
-                    value={member.lastName}
-                    label="LastName"
-                    variant="filled"
-                    onChange={handleChange}
-                />
-            </div>
-            <div>
-                <TextField
-                    label="Birthday"
-                    type="date"
-                    name='dateOfBirth'
-                    value={member.dateOfBirth}
-                    onChange={handleChange}
-                    InputLabelProps={{
-                        shrink: true,
-                    }} />
-            </div>
-            <div>
-                <InputLabel className={classes.textField}>Group</InputLabel>
-                <Select
-                    name="group"
-                    value={member.group}
-                    onChange={handleChange}
-                >
-                    <MenuItem >
-                    </MenuItem>
-                    {groups.map(el => (
-                        <MenuItem key={el.id} value={el.name}>{el.name}</MenuItem>
-                    ))}
-                </Select>
-            </div>
+                
+                    <TextField
+                        name="firstName"
+                        value={member.firstName}
+                        label="FirstName"
+                        variant="filled"
+                        onChange={handleChange}
+                    />
+            
+                <div>
+                    <TextField
+                        name="lastName"
+                        value={member.lastName}
+                        label="LastName"
+                        variant="filled"
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <TextField
+                        label="Birthday"
+                        type="date"
+                        name='dateOfBirth'
+                        value={member.dateOfBirth}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }} />
+                </div>
+                <div >
+                <FormControl style= {{width:220,padding:13}}>
+                     <InputLabel shrink >Group</InputLabel> 
+                        <Select variant="filled"
+                            name="group"
+                            value={member.group}
+                            onChange={handleChange}
+                        >
+                            {groups.map(el => (
+                                <MenuItem key={el.id} value={el.name}>{el.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </div>
             <br></br>
             <div>
                 <Button variant="contained" onClick={onClickSave} color="primary">
