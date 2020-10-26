@@ -17,4 +17,26 @@ code {
   background-color: white;
   padding: 20px;
   margin: 20vh auto;
-} 
+}
+div.inputButtons {
+  width: 220;
+  max-width: 220;;
+
+}
+button.btn {
+  margin: 15px;
+  max-width: max-content;
+}
+button.cancelBtn {
+  margin: 15px;
+  max-width: min-content;
+}
+input.select {
+  width: 220; 
+  max-width: 220;
+  padding: 10px;
+}
+div.membersContainer {
+  height: 400;
+   width: '100%';
+}

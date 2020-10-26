@@ -26,7 +26,7 @@ export default function Members(props) {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Link to='members/newMember'>
-        <Button variant="contained">New Member</Button>
+        <Button className='btn' color="primary" variant= 'text'>New Member</Button>
       </Link>
       <DataGrid
         columns={[
