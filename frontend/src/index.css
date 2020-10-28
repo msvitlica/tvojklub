@@ -29,7 +29,7 @@ button.btn {
 }
 button.cancelBtn {
   margin: 15px;
-  max-width: min-content;
+  max-width: max-content;
 }
 input.select {
   width: 220; 
@@ -40,3 +40,7 @@ div.membersContainer {
   height: 400;
    width: '100%';
 }
+/* div.MuiFormControl-root.dropdown {
+  width: 220;
+  margin: 17px;
+} */

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         textField: {
             marginLeft: theme.spacing(3),
             marginRight: theme.spacing(3),
-            width: 200,
+            width: 220,
         }
     }
 }));
@@ -48,7 +48,7 @@ export default function NewMember(props) {
         const lastNameError = {};
         let isValid = true;
         if (member.firstName.trim().length < 2) {
-            firstNameError.shortInput = 'Type at least 2 charachters ';
+            firstNameError.shortInput = 'Type at least 2 charachters';
             firstNameError.notValid = true;
             isValid = false;
         }
@@ -93,16 +93,21 @@ export default function NewMember(props) {
         history.push('/members');
     }
     return (
+        <Grid container>
+            <Grid item xs={1} sm={4}></Grid>
+            <Grid item container xs={10} sm={4} >
                 <form className={classes.root} onSubmit={onSubmit} noValidate>
-                    <TextField
-                        name="firstName"
-                        value={member.firstName}
-                        label="FirstName"
-                        variant="filled"
-                        onChange={handleChange}
-                        helperText={firstNameError.shortInput}
-                        error={firstNameError.notValid}
-                    />
+                    <div>
+                        <TextField
+                            name="firstName"
+                            value={member.firstName}
+                            label="FirstName"
+                            variant="filled"
+                            onChange={handleChange}
+                            helperText={firstNameError.shortInput}
+                            error={firstNameError.notValid}
+                        />
+                    </div>
                     <div>
                         <TextField
                             name="lastName"
@@ -126,9 +131,9 @@ export default function NewMember(props) {
                             }} />
                     </div>
                     <div >
-                        <FormControl  style={{ width: 220, margin: 12 ,padding:-3}}>
-                            <InputLabel  >Group</InputLabel>
-                            <Select variant="filled" 
+                        <FormControl style={{ width: 220, margin: 17 }}>
+                            <InputLabel style={{ padding: 8 }} >Group</InputLabel>
+                            <Select variant="filled"
                                 name="group"
                                 value={member.group}
                                 onChange={handleChange}
@@ -149,5 +154,11 @@ export default function NewMember(props) {
                         </Button>
                     </div>
                 </form>
+            </Grid>
+            <Grid item xs={1} sm={4} ></Grid>
+        </Grid>
     )
 }
+
+
+

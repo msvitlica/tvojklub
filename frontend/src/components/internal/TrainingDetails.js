@@ -9,7 +9,6 @@ export default class TrainingDetails extends React.Component {
   }
   componentDidMount = () => {
     const { match: { params } } = this.props;
-
     fetch(`http://localhost:3001/trainings/${params.trainingId}`)
       .then(response => response.json())
       .then(data => {
@@ -17,7 +16,6 @@ export default class TrainingDetails extends React.Component {
         this.setState({ trainingInfo: data.trainingId })
       });
   }
-
   render() {
     if (!this.state.trainingInfo) {
       return null;
