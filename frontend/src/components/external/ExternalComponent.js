@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class ExternalComponent extends React.Component {
     render() {
         return(

@@ -5,11 +5,11 @@ var url = require("url");
 
 let trainings = [
   {
-    id:uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
+    id: uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
     membersInGroup: ["Sinisa Kovacevic", "Milan Svitlica", "Nada Jankovic", "Srecko Lazic"]
   },
   {
-    id:uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
+    id: uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
     membersInGroup: ['Rada Svitlica', 'Sofija Svitlica', 'Filip Svitlica']
   },
 ];
@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
   console.log(filteredFile);
   try {
     res.status(200).json({
-      trainingId:filteredFile
+      trainingId: filteredFile
     });
   } catch (err) {
     res.status(400).json({
