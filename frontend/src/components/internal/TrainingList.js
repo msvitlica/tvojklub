@@ -13,7 +13,6 @@ export default class TrainingList extends React.Component {
     fetch('http://localhost:3001/trainings')
       .then(response => response.json())
       .then(data => {
-        console.log(data.trainings)
         this.setState({ trainings: data.trainings });
       });
   }

@@ -6,7 +6,7 @@ import {
   Route 
 } from 'react-router-dom';
 import InternalComponent from './components/internal/InternalComponent';
-import ExternalComponent from './components/external/ExternalComponent'
+import ExternalComponent from './components/external/ExternalComponent';
 
 function App() {
   return (

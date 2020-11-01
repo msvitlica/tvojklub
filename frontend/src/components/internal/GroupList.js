@@ -37,4 +37,4 @@ class GroupList extends React.Component {
     }
 }
 
-export default GroupList; 
+export default GroupList;

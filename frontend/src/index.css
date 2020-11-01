@@ -44,3 +44,53 @@ div.membersContainer {
   width: 220;
   margin: 17px;
 } */
+div.MuiGrid-root.groupInfo {
+  align-content: center;
+}
+div.MuiGrid-root {
+  justify-content: center;
+}
+div.MuiGrid-root h3.MuiTypography-root {
+  font-size: 32px;
+  text-align: center;
+  margin: 5vh auto;
+}
+div.MuiGrid-root.modalInputTxt  {
+  display: flex;
+  width: 100%;
+}
+div.MuiTextField-root {
+  width: 500px;
+  max-width: 600px;
+}
+div.MuiGrid-root button.MuiButton-root {
+  margin: 20px 0;
+}
+div.MuiGrid-root button.MuiButton-root.modalBtn {
+  width: 100%;
+  font-weight: 600;
+  color: white;
+}
+div.MuiGrid-root button.MuiButton-root.saveModal {
+  background-color: #1976d2;
+}
+p.MuiTypography-root.closeModal {
+  color: #aaa;
+  align-self: flex-end;
+  font-size: 28px;
+  font-weight: bold;
+}
+p.MuiTypography-root.closeModal:hover,
+p.MuiTypography-root.closeModal:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+div.MuiGrid-root.groupInfo {
+  padding: 50px;
+}
+div.MuiGrid-item p.MuiTypography-root.modalMessage {
+  display: none;
+  padding: 10px;
+  background-color: wheat;
+}

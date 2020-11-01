@@ -10,4 +10,4 @@ class ExternalComponent extends React.Component {
     }
 }
 
-export default ExternalComponent; 
+export default ExternalComponent;
