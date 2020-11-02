@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, CardContent, FormGroup, FormControl, FormControlLabel, FormLabel, Card, TextField, Switch } from '@material-ui/core';
+import { Typography, CardContent, FormGroup, FormControl, FormControlLabel, FormLabel, Card, TextField, Switch, Grid } from '@material-ui/core';
 export default class TrainingDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -24,25 +24,38 @@ export default class TrainingDetails extends React.Component {
       <React.Fragment>
         <Card >
           <CardContent>
-            <Typography style={{ float: 'left' }} color="textPrimary" variant='h6'>
-              {this.state.trainingInfo.term}({this.state.trainingInfo.group})</Typography>
+            <Grid container>
+              <Grid item xs={12} sm={8}>
+                <Typography color="textPrimary" variant='h6'>
+                  {this.state.trainingInfo.term}({this.state.trainingInfo.group})</Typography>
+              </Grid>
+              <Grid item xs={12} sm={4} className='trainingSearchBar'>
+                <TextField id="outlined-basic"
+                  label="Search" />
+              </Grid>
+            </Grid>
           </CardContent>
-          <TextField style={{ float: 'right' }} id="outlined-basic"
-            label="Search" variant="filled" />
         </Card>
-        <FormControl style={{ float: 'left' }}  >
-          <FormLabel color='primary'>{this.state.trainingInfo.group}</FormLabel>
-          {this.state.trainingInfo.membersInGroup.map((el, index) => (
-            <FormControl key={index} style={{ float: 'left' }}  >
-              <FormGroup>
-                <FormControlLabel
-                  label={el}
-                  labelPlacement="start"
-                  control={<Switch />}
-                />
-              </FormGroup>
-            </FormControl>
-          ))}
+        <FormControl className='root' >
+          <Grid container className='trainingDetailsContainer'>
+            < Grid item >
+              <FormLabel className='trainingDetailsTitle' color='primary'>{this.state.trainingInfo.group}
+              </FormLabel>
+            </Grid>
+            <Grid item className='trainingDetailsMembers'>
+            {this.state.trainingInfo.membersInGroup.map((el, index) => (
+              <FormControl key={index}  >
+                <FormGroup>
+                  <FormControlLabel
+                    label={el}
+                    labelPlacement="start"
+                    control={<Switch />}
+                  />
+                </FormGroup>
+              </FormControl>
+            ))}
+            </Grid>
+          </Grid>
         </FormControl>
       </React.Fragment>
     )
