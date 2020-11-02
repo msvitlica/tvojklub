@@ -1,20 +1,22 @@
 import React from 'react';
-import Signup from './Signup';
+import Login from './Login';
 
-import { 
+import {
     Switch,
     Route
 } from 'react-router-dom';
 
 
 class ExternalComponent extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
     render() {
         return (
             <Switch>
-                <Route path="/login" component={Signup} />
+                <Route path="/login">
+                    <Login login={this.props.login} />
+                </Route>
                 <Route path="/signup" />
             </Switch>
         )

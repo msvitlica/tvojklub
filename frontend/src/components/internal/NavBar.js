@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles'
 
 // Navbar components
@@ -30,7 +30,8 @@ import {
 // Routing Component
 
 import {
-    Link
+    Link,
+    useHistory
 } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,15 +47,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar(props) {
+    const history = useHistory();
+
+    // Handle logout
+    const logout = () => props.logout(() => {
+        history.replace('/login');
+    });
+
+
     const classes = useStyles();
     const [state, setState] = React.useState({
         drawerState: false
     });
+    const [title, setTitle] = React.useState('Lista Treninga');
+
+    // Toggle Drawer 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
         setState({ ...state, drawerState: open });
+        setTitle(event.target.innerText);
     }
     return (
         <div>
@@ -64,8 +77,9 @@ export default function NavBar(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
+                        {title}
                     </Typography>
-                    <Button>
+                    <Button onClick={logout} >
                         <Avatar src="/broken-image.jpg" />
                     </Button>
                 </Toolbar>

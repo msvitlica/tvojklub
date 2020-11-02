@@ -16,6 +16,7 @@ export default class TrainingList extends React.Component {
         this.setState({ trainings: data.trainings });
       });
   }
+  
 
   handleClick = (id) => {
     const { match: { params }, history } = this.props;
