@@ -29,18 +29,47 @@ button.btn {
 }
 button.cancelBtn {
   margin: 15px;
-  max-width: max-content;
+  max-width: max-
+  content;
 }
 input.select {
   width: 220; 
   max-width: 220;
   padding: 10px;
 }
-div.membersContainer {
+/* div.membersContainer {
   height: 400;
    width: '100%';
-}
-/* div.MuiFormControl-root.dropdown {
-  width: 220;
-  margin: 17px;
 } */
+div.dropdown {
+  width: 220px;
+  margin: 17px;
+}
+label.p-8 {
+  padding : 8px;
+}
+/* div.dropdown label.p-8 {
+  padding : 8px;
+
+} */
+div.trainingSearchBar {
+  display: flex;
+  justify-content: flex-end;
+}
+p.validationGroup {
+  color: red;
+}
+div.trainingDetailsContainer{
+  display:grid;
+  justify-content: space-evenly;
+}
+label.trainingDetailsTitle {
+display: flex;
+justify-content: space-evenly;
+}
+div.root {
+  display: grid;
+}
+div.trainingDetailsMembers{
+  display: grid;
+}
