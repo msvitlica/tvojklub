@@ -113,3 +113,15 @@ div.root {
 div.trainingDetailsMembers{
   display: grid;
 }
+div.trainingDetailsButtons {
+padding-left: 600px;
+justify-content: space-between;
+}
+button.attendanceBtnY {
+  color:rgb(13, 18, 22);
+   background-color:rgb(93, 231, 208);
+}
+button.attendanceBtnN {
+  color:rgb(13, 18, 22);
+   background-color:rgb(219, 180, 51)
+}
