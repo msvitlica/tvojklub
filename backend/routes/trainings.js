@@ -6,11 +6,11 @@ var url = require("url");
 let trainings = [
   {
     id: uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
-    membersInGroup: ["Sinisa Kovacevic", "Milan Svitlica", "Nada Jankovic", "Srecko Lazic"]
+    membersInGroup: [{name:"Sinisa Kovacevic",id: uuid.v4()}, {name:"Milan Svitlica",id: uuid.v4()},{name:"Nada Jankovic",id: uuid.v4()}, {name:"Srecko Lazic",id: uuid.v4()}]
   },
   {
     id: uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
-    membersInGroup: ['Rada Svitlica', 'Sofija Svitlica', 'Filip Svitlica']
+    membersInGroup: [{name:'Rada Svitlica',id: uuid.v4()}, {name:'Sofija Svitlica',id: uuid.v4()}, {name:'Filip Svitlica',id: uuid.v4()}]
   },
 ];
 
