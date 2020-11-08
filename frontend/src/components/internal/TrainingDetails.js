@@ -27,10 +27,11 @@ export default class TrainingDetails extends React.Component {
         console.log(this.state.membersInGroup)
       });
   }
-  attend = (id) => {
+  processeMember = (id,member) => {
+    console.log(member)
     const deletedMember = this.state.membersInGroup.filter((el) => el.id === id);
     const movedMember = {
-      attended: 'Prisutan/na',
+      attended: member,
       name: deletedMember[0].name,
       id: deletedMember[0].id,
       date: new Date(),
@@ -40,19 +41,6 @@ export default class TrainingDetails extends React.Component {
     },
      ()=>{console.log(this.state.processedMembers)});
   }
-
-  notAttend=(id)=> {
-      const deletedMember = this.state.membersInGroup.filter((el) => el.id === id);
-      const movedMember = {
-        attended: 'Nije prisutan/na',
-        name: deletedMember[0].name,
-        id: deletedMember[0].id,
-        date: new Date(),
-      }
-      this.setState({ processedMembers: [movedMember, ...this.state.processedMembers],
-        membersInGroup: this.state.membersInGroup.filter(el => el.id !== id),},
-        ()=>{ console.log(this.state.processedMembers)})
-    }
   render() {
     if (!this.state.trainingInfo) {
       return null;
@@ -80,8 +68,8 @@ export default class TrainingDetails extends React.Component {
               <ListItemText primary={el.name} />
               <ListItemSecondaryAction>
                 <ButtonGroup variant="contained" >
-                  <Button className='attendanceBtnY' onClick={() => this.attend(el.id)}>Da</Button>
-                  <Button className='attendanceBtnN' onClick={() => this.notAttend(el.id)}>Ne</Button>
+                  <Button className='attendanceBtnY' size='large'  onClick={() => this.processeMember(el.id,'Prisutan/na')}>Da</Button>
+                  <Button className='attendanceBtnN' size='large' onClick={() => this.processeMember(el.id,'Nije Prisutan/na')}>Ne</Button>
                 </ButtonGroup>
               </ListItemSecondaryAction>
             </ListItem>

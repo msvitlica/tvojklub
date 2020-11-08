@@ -6,7 +6,7 @@ export class CostumList extends React.Component {
             <div>
                 <List subheader={<ListSubheader color='primary'>{'Processed Members'}
                 </ListSubheader>}>
-                    {this.props.processedMembers.reverse().map((el) => (
+                    {this.props.processedMembers.map((el) => (
                         <ListItem key={el.id}>
                             <ListItemText primary={el.name}
                             />
