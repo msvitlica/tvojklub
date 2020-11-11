@@ -5,14 +5,13 @@ import {
   Divider, Grid, Button
 } from '@material-ui/core';
 import CostumList from './CostumList'
-import AttendanceStatus from './AttendanceStatus';
+import AttendanceOptionButtons from './AttendanceStatus';
 export default class TrainingDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       trainingInfo: undefined,
-      membersInGroup: [],
-      processedMembers: [],
+      membersInGroup: []      
     }
   }
   componentDidMount = () => {
@@ -28,18 +27,35 @@ export default class TrainingDetails extends React.Component {
       });
   }
   processMember = (id, attendance) => {
-    const deletedMember = this.state.membersInGroup.filter((el) => el.id === id);
-    const movedMember = {
-      attendance: attendance === true ? 'Prisutan/na' : 'Nije prisutan/na',
-      name: deletedMember[0].name,
-      id: deletedMember[0].id,
-      date: new Date(),
+  
+    let attendanceStatus= {
+      attended: 'attended',
+      noAttended: 'noAttended',
+      unknown: 'unknown',
     }
-    this.setState({
-      processedMembers: [movedMember, ...this.state.processedMembers],
-      membersInGroup: this.state.membersInGroup.filter(el => el.id !== id),
+
+    const newMembersInGroup = [...this.state.membersInGroup];
+
+    if(attendance){
+      newMembersInGroup.forEach(member =>{
+        if(member.id === id){
+          member.attendance = attendanceStatus.attended
+        }
+      });
+    }
+    else{
+      newMembersInGroup.forEach(member =>{
+        if(member.id === id){
+          member.attendance = attendanceStatus.noAttended
+        }
+      });
+    }
+    
+    this.setState({      
+      trainingInfo: this.state.trainingInfo,
+      membersInGroup: newMembersInGroup,
     },
-      () => { console.log(this.state.processedMembers) });
+    () => { console.log(this.state.membersInGroup) });
   }
   submitGroup=(e)=>{
     e.preventDefault();
@@ -79,18 +95,17 @@ export default class TrainingDetails extends React.Component {
         <form onSubmit={this.submitGroup}>
         <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
         </ListSubheader>}>
-          {this.state.membersInGroup.map((el) => (
+          {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
             <ListItem key={el.id}>
               <ListItemText primary={el.name} />
               <ListItemSecondaryAction>
-                <AttendanceStatus attended={attended} notAttended={notAttended} member={el} processMember={this.processMember} />
+                <AttendanceOptionButtons member={el} processMember={this.processMember} />
               </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
         <Divider />
-        <CostumList membersInGroup={this.state.processedMembers}></CostumList>
-         <Button type='submit' variant='contained' color='primary'>Sačuvaj</Button>
+        <CostumList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')}></CostumList>         
         </form>
       </React.Fragment >
     )

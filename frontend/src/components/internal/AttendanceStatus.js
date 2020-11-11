@@ -1,15 +1,13 @@
 import React from 'react';
 import { ButtonGroup, Button } from '@material-ui/core'
-export default class AttendanceStatus extends React.Component {
-    buttonYClicked = () => {
-        let attended = this.props.attended;
+export default class AttendanceOptionButtons extends React.Component {
+    buttonYClicked = () => {        
         let memberId = this.props.member.id;
-        this.props.processMember(memberId, attended)
+        this.props.processMember(memberId, true)
     }
-    buttonNClicked = () => {
-        let notAttended = this.props.notAttended;
+    buttonNClicked = () => {        
         let memberId = this.props.member.id;
-        this.props.processMember(memberId, notAttended)
+        this.props.processMember(memberId, false)
     }
     render() {
         return (
