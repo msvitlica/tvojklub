@@ -52,6 +52,7 @@ export default function NavBar(props) {
     // Handle logout
     const logout = () => props.logout(() => {
         history.replace('/login');
+        localStorage.setItem('isAuthenticated', this.autheticated);
     });
 
 
