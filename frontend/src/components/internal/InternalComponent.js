@@ -26,6 +26,7 @@ export default class InternalComponent extends React.Component {
                     <Route exact path='/members' component={Members} />
                     <Route path='/members/newMember' component={NewMember} />
                     <Route path='/groups' component={Group} />
+                    <Route path='/processedGroups' component={TrainingDetails}/>
                 </Switch>
             </div>
         )

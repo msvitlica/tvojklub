@@ -1,16 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
-var url = require("url");
-
+const url = require("url");
+ 
+let attendanceStatus= {
+  attended: 'attended',
+  noAttended: 'noAttended',
+  unknown: 'unknown',
+}
 let trainings = [
   {
     id: uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
-    membersInGroup: [{name:"Sinisa Kovacevic",id: uuid.v4()}, {name:"Milan Svitlica",id: uuid.v4()},{name:"Nada Jankovic",id: uuid.v4()}, {name:"Srecko Lazic",id: uuid.v4()}]
+    membersInGroup: [{name:"Sinisa Kovacevic",id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:"Milan Svitlica",id: uuid.v4(),attendance:attendanceStatus.unknown},{name:"Nada Jankovic",id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:"Srecko Lazic",id: uuid.v4(),attendance:attendanceStatus.unknown}]
   },
   {
     id: uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
-    membersInGroup: [{name:'Rada Svitlica',id: uuid.v4()}, {name:'Sofija Svitlica',id: uuid.v4()}, {name:'Filip Svitlica',id: uuid.v4()}]
+    membersInGroup: [{name:'Rada Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:'Sofija Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:'Filip Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}]
   },
 ];
 
@@ -34,7 +39,7 @@ router.get('/:id', async (req, res) => {
   console.log(filteredFile);
   try {
     res.status(200).json({
-      trainingId: filteredFile
+      trainingId: filteredFile,
     });
   } catch (err) {
     res.status(400).json({
