@@ -18,6 +18,18 @@ code {
   padding: 20px;
   margin: 20vh auto;
 }
+div.inputButtons {
+  display: inline-flex;
+  justify-content: space-evenly;
+  padding: 15px;
+   width: 220px;
+  max-width: 220px;
+}
+input.select {
+  width: 220; 
+  max-width: 220;
+  padding: 10px;
+}
 div.MuiGrid-root.groupInfo {
   align-content: center;
 }
@@ -78,4 +90,37 @@ button.btn {
 }
 div.loginContainer {
   margin-top: 10vh;
+}
+input.select {
+  width: 220px; 
+  max-width: 220px;
+  padding: 10px;
+}
+div.dropdown {
+  width: 220px;
+  margin: 17px;
+} 
+label.p-8 {
+  padding : 8px;
+}
+div.trainingSearchBar {
+  display: flex;
+  justify-content: flex-end;
+}
+p.validationGroup {
+  color: red;
+}
+div.trainingDetailsContainer{
+  display:grid;
+  justify-content: left;
+}
+label.trainingDetailsTitle {
+display: flex;
+justify-content: space-evenly;
+}
+div.root {
+  display: grid;
+}
+div.trainingDetailsMembers{
+  display: grid;
 }

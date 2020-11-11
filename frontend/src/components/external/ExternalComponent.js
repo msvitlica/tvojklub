@@ -6,7 +6,6 @@ import {
     Route
 } from 'react-router-dom';
 
-
 class ExternalComponent extends React.Component {
     constructor(props) {
         super(props)
