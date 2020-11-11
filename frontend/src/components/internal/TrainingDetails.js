@@ -2,16 +2,16 @@ import React from 'react';
 import {
   Typography, CardContent, List, ListItem, ListSubheader,
   ListItemText, ListItemSecondaryAction, Card, TextField,
-  Divider, Grid, Button
+  Divider, Grid
 } from '@material-ui/core';
-import CostumList from './CostumList'
-import AttendanceOptionButtons from './AttendanceStatus';
+import ProcessedMembersList from './ProcessedMembersList'
+import AttendanceOptionButtons from './AttendanceOptionButtons';
 export default class TrainingDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       trainingInfo: undefined,
-      membersInGroup: []      
+      membersInGroup: []
     }
   }
   componentDidMount = () => {
@@ -27,8 +27,8 @@ export default class TrainingDetails extends React.Component {
       });
   }
   processMember = (id, attendance) => {
-  
-    let attendanceStatus= {
+
+    let attendanceStatus = {
       attended: 'attended',
       noAttended: 'noAttended',
       unknown: 'unknown',
@@ -36,39 +36,25 @@ export default class TrainingDetails extends React.Component {
 
     const newMembersInGroup = [...this.state.membersInGroup];
 
-    if(attendance){
-      newMembersInGroup.forEach(member =>{
-        if(member.id === id){
+    if (attendance) {
+      newMembersInGroup.forEach(member => {
+        if (member.id === id) {
           member.attendance = attendanceStatus.attended
         }
       });
     }
-    else{
-      newMembersInGroup.forEach(member =>{
-        if(member.id === id){
+    else {
+      newMembersInGroup.forEach(member => {
+        if (member.id === id) {
           member.attendance = attendanceStatus.noAttended
         }
       });
     }
-    
-    this.setState({      
-      trainingInfo: this.state.trainingInfo,
+    this.setState({
+      /* trainingInfo: this.state.trainingInfo, */
       membersInGroup: newMembersInGroup,
     },
-    () => { console.log(this.state.membersInGroup) });
-  }
-  submitGroup=(e)=>{
-    e.preventDefault();
-    this.postProcessedGroup();
-  }
-  postProcessedGroup= async ()=>{
-    fetch('http://localhost:3001/processedGroups',{
-    method:'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-  },body: JSON.stringify({processedMembers: this.state.processedMembers})  
-});
+      () => { console.log(this.state.membersInGroup) });
   }
   render() {
     const attended = true;
@@ -92,7 +78,6 @@ export default class TrainingDetails extends React.Component {
             </Grid>
           </CardContent>
         </Card>
-        <form onSubmit={this.submitGroup}>
         <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
         </ListSubheader>}>
           {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
@@ -105,8 +90,7 @@ export default class TrainingDetails extends React.Component {
           ))}
         </List>
         <Divider />
-        <CostumList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')}></CostumList>         
-        </form>
+        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} />
       </React.Fragment >
     )
   }
