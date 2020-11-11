@@ -15,10 +15,13 @@ import {
 
 
 export default class InternalComponent extends React.Component {
+    constructor(props) {
+        super(props)
+    }
     render() {
         return (
             <div>
-                <NavBar />
+                <NavBar logout={this.props.logout} />
                 <Switch>
                     <Route exact path="/" component={TrainingList} />
                     <Route path='/trainings/:trainingId' component={TrainingDetails} />
