@@ -11,7 +11,7 @@ export class ProcessedMembersList extends React.Component {
                         <ListItem key={el.id}>
                             <ListItemText primary={el.name}
                             />
-                           <AttendanceEditButton member={el}/>
+                           <AttendanceEditButton member={el} processMember={this.props.processMember}/>
                         </ListItem>
                     ))}
                 </List>

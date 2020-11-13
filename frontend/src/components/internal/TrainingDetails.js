@@ -11,7 +11,7 @@ export default class TrainingDetails extends React.Component {
     super(props);
     this.state = {
       trainingInfo: undefined,
-      membersInGroup: []
+      membersInGroup: [],
     }
   }
   componentDidMount = () => {
@@ -90,7 +90,7 @@ export default class TrainingDetails extends React.Component {
           ))}
         </List>
         <Divider />
-        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} />
+        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={this.processMember} />
       </React.Fragment >
     )
   }
