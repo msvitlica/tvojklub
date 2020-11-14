@@ -7,7 +7,6 @@ export default class AttendanceEditButton extends React.Component {
         super(props);
         this.state = {
             editButton: false,
-            member: this.props.member.attendance,
         }
     }
     edit = () => {
