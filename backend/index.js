@@ -18,6 +18,8 @@ app.use("/members", memebersRouter);
 
 const groupeRouter = require("./routes/groups");
 app.use("/groups", groupeRouter);
+const processedGroups= require ('./routes/processedGroups');
+app.use('/processedGroups',processedGroups);
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
