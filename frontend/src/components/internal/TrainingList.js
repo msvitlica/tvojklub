@@ -1,30 +1,42 @@
 import React from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import ScheduleBar from './ScheduleBar';
 
 export default class TrainingList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      trainings: []
+      trainings: [],
+      tabValue: 1,
     };
   }
   componentDidMount = () => {
-    fetch('http://localhost:3001/trainings')
+    let date = new Date();
+    date.setDate(date.getDate());
+    let currentDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+      fetch(`http://localhost:3001/trainings/${currentDate}`)
       .then(response => response.json())
       .then(data => {
-        this.setState({ trainings: data.trainings });
+        this.setState({ trainings: data.training });
       });
   }
-  
-
   handleClick = (id) => {
     const { match: { params }, history } = this.props;
     history.push(`trainings/${id}`);
   }
+  getTrainingByDate = (date)=>{
+fetch(`http://localhost:3001/trainings/${date}`)
+.then(response=> response.json())
+.then(data=>{
+  this.setState({ trainings:data.training},
+    ()=>{console.log(this.state.trainings)})
+})
+  }
   render() {
     return (
       <div>
+        <ScheduleBar tabValue={this.state.tabValue} getTrainingBydate= {this.getTrainingByDate}/>
         <Card>
           {this.state.trainings.map((el) => (
             <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >

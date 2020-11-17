@@ -1,7 +1,6 @@
 import React from 'react'
 import EditIcon from '@material-ui/icons/Edit';
-import { Button, Typography, ButtonGroup } from '@material-ui/core'
-import AttendanceOptionButtons from './AttendanceOptionButtons'
+import { Button, Typography, ButtonGroup } from '@material-ui/core';
 export default class AttendanceEditButton extends React.Component {
     constructor(props) {
         super(props);
