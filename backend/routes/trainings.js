@@ -45,10 +45,9 @@ let trainings = [
 }); */
 
 //get training by date
-router.get('/:date', async (req,res)=>{
-  let pathName= url.parse(req.url, true).pathname;
-  let pathDate=pathName.replace('/','');
-  let filteredByDate= trainings.filter(el=>el.date === pathDate);
+router.get('/', async (req,res)=>{
+  console.log(req.query.date); 
+  let filteredByDate= trainings.filter(el=>el.date === req.query.date);
   console.log(filteredByDate);
   try {
     res.status(200).json({
@@ -63,13 +62,12 @@ router.get('/:date', async (req,res)=>{
 })
 // get group by id
 router.get('/:id', async (req, res) => {
-  let pathName = url.parse(req.url, true).pathname;
-  let pathId = pathName.replace('/', '');
-  let filteredFile = trainings.filter(el => el.id=== pathId);
-  console.log(filteredFile);
+  const id = req.params.id;   
+  let training = trainings.filter(el => el.id === id)[0];
+  console.log(training);
   try {
     res.status(200).json({
-      trainingId: filteredFile,
+      trainingId: training,
     });
   } catch (err) {
     res.status(400).json({

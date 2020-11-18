@@ -62,6 +62,9 @@ export default class TrainingDetails extends React.Component {
     if (!this.state.trainingInfo) {
       return null;
     }
+    if(!this.state.membersInGroup){
+      return null;
+    }
     return (
       <React.Fragment>
         <Card >
@@ -77,7 +80,7 @@ export default class TrainingDetails extends React.Component {
               </Grid>
             </Grid>
           </CardContent>
-        </Card>
+        </Card>        
         <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
         </ListSubheader>}>
           {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (

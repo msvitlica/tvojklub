@@ -15,7 +15,7 @@ export default class TrainingList extends React.Component {
     let date = new Date();
     date.setDate(date.getDate());
     let currentDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-      fetch(`http://localhost:3001/trainings/${currentDate}`)
+      fetch(`http://localhost:3001/trainings?date=${currentDate}`)
       .then(response => response.json())
       .then(data => {
         this.setState({ trainings: data.training });
@@ -26,7 +26,7 @@ export default class TrainingList extends React.Component {
     history.push(`trainings/${id}`);
   }
   getTrainingByDate = (date)=>{
-fetch(`http://localhost:3001/trainings/${date}`)
+fetch(`http://localhost:3001/trainings?date=${date}`)
 .then(response=> response.json())
 .then(data=>{
   this.setState({ trainings:data.training},
