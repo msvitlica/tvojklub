@@ -5,7 +5,7 @@ export class ProcessedMembersList extends React.Component {
     render() {
         return (
             <div>
-                <List subheader={<ListSubheader color='primary'>{'Processed Members'}
+                <List subheader={<ListSubheader color='primary'>{'Obrađeni članovi'}
                 </ListSubheader>}>
                     {this.props.membersInGroup.map((el) => (
                         <ListItem key={el.id}>

@@ -17,10 +17,10 @@ export default function Members(props) {
   const rows = members.map(el => (
     {
       id: el.id,
-      firstName: el.firstName,
-      lastName: el.lastName,
-      dateOfBirth: el.dateOfBirth,
-      group: el.group
+      Ime: el.firstName,
+      Prezime: el.lastName,
+      DatumRođenja: el.dateOfBirth,
+      Grupa: el.group
     }
   ));
   return (
@@ -29,16 +29,16 @@ export default function Members(props) {
       <Grid item xs={3}
       >
         <Link to='members/newMember'>
-          <Button className='btn' color="primary" variant='text'>New Member</Button>
+          <Button className='btn' color="primary" variant='text'>Unos novog člana</Button>
         </Link>
       </Grid>
       <div style={{ width: '100%', height: 400 }}>
         <DataGrid
           columns={[
-            { field: 'firstName', type: 'string', },
-            { field: 'lastName', type: 'string', },
-            { field: 'dateOfBirth', type: 'string', },
-            { field: 'group', type: 'string', },
+            { field: 'Ime', type: 'string', },
+            { field: 'Prezime', type: 'string', },
+            { field: 'DatumRođenja', type: 'string', },
+            { field: 'Grupa', type: 'string', },
           ]}
           rows={rows}
           checkboxSelection

@@ -52,22 +52,22 @@ export default function NewMember(props) {
         const groupError = {};
         let isValid = true;
         if (member.firstName.trim().length < 2) {
-            firstNameError.shortInput = 'Type at least 2 charachters';
+            firstNameError.shortInput = 'Unesite najmanje 2 karaktera';
             firstNameError.notValid = true;
             isValid = false;
         }
         if (member.lastName.trim().length < 2) {
-            lastNameError.shortInput = 'Type at least 2 charachters ';
+            lastNameError.shortInput = 'Unesite najmanje 2 karaktera ';
             lastNameError.notValid = true;
             isValid = false;
         }
         if (member.dateOfBirth.trim().length === 0) {
-            birthDateError.emptyInput = 'Birth Date is required';
+            birthDateError.emptyInput = 'Unesite datum rođenja';
             birthDateError.notValid = true;
             isValid = false;
         }
         if (member.group.trim().length === 0) {
-            groupError.emptyInput = 'Group is required';
+            groupError.emptyInput = 'Izaberite grupu';
             groupError.notValid = true;
             isValid = false;
         }
@@ -117,7 +117,7 @@ export default function NewMember(props) {
                         <TextField
                             name="firstName"
                             value={member.firstName}
-                            label="FirstName"
+                            label="Ime"
                             variant="filled"
                             onChange={handleChange}
                             helperText={firstNameError.shortInput}
@@ -128,7 +128,7 @@ export default function NewMember(props) {
                         <TextField
                             name="lastName"
                             value={member.lastName}
-                            label="LastName"
+                            label="Prezime"
                             variant="filled"
                             onChange={handleChange}
                             helperText={lastNameError.shortInput}
@@ -137,7 +137,7 @@ export default function NewMember(props) {
                     </div>
                     <div>
                         <TextField
-                            label="Birthday"
+                            label="Datum rođenja"
                             type="date"
                             name='dateOfBirth'
                             value={member.dateOfBirth}
@@ -150,7 +150,7 @@ export default function NewMember(props) {
                     </div>
                     <div >
                         <FormControl className='dropdown'>
-                            <InputLabel className='p-8'>Group</InputLabel>
+                            <InputLabel className='p-8'>Grupa</InputLabel>
                             <Select variant="filled"
                                 name="group"
                                 value={member.group}
@@ -167,10 +167,10 @@ export default function NewMember(props) {
                     <br></br>
                     <div className='inputButtons'>
                         <Button variant="contained" type="submit" color="primary">
-                            Save
+                            Sačuvaj
                         </Button>
                         <Button variant="contained" onClick={onClickCancel} color="secondary">
-                            Cancel
+                            Otkaži
                         </Button>
                     </div>
                 </form>

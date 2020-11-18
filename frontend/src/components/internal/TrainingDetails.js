@@ -29,8 +29,8 @@ export default class TrainingDetails extends React.Component {
   processMember = (id, attendance) => {
 
     let attendanceStatus = {
-      attended: 'attended',
-      noAttended: 'noAttended',
+      attended: 'Prisutan/na',
+      noAttended: 'Nije Prisutan/na',
       unknown: 'unknown',
     }
 
@@ -51,7 +51,6 @@ export default class TrainingDetails extends React.Component {
       });
     }
     this.setState({
-      /* trainingInfo: this.state.trainingInfo, */
       membersInGroup: newMembersInGroup,
     },
       () => { console.log(this.state.membersInGroup) });
@@ -60,9 +59,6 @@ export default class TrainingDetails extends React.Component {
     const attended = true;
     const notAttended = false;
     if (!this.state.trainingInfo) {
-      return null;
-    }
-    if(!this.state.membersInGroup){
       return null;
     }
     return (
@@ -76,11 +72,11 @@ export default class TrainingDetails extends React.Component {
               </Grid>
               <Grid item xs={12} sm={4} className='trainingSearchBar'>
                 <TextField id="outlined-basic"
-                  label="Search" />
+                  label="Pretraga" />
               </Grid>
             </Grid>
           </CardContent>
-        </Card>        
+        </Card>
         <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
         </ListSubheader>}>
           {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
