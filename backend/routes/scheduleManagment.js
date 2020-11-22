@@ -20,26 +20,4 @@ router.get("/", async (req, res) => {
     }
 });
 
-// router.post('/', async (req, res) => {
-//     const data = req.body;
-//     const isValid = groups.filter(el => el.name === data.name.trim())[0] || data.name === '';
-//     try {
-//         if (!isValid) {
-//             groups.push({
-//                 id: uuid.v4(),
-//                 name: data.name.trim()
-//             });
-//             res.status(200).json({
-//                 msg: 'Item added'
-//             });
-//         } else {
-//             throw console.log('Err');
-//         }
-//     } catch (err) {
-//         res.status(400).json({
-//             msg: 'Bad Request'
-//         })
-//     }
-// });
-
 module.exports = router;
