@@ -40,7 +40,7 @@ function NewSchedule() {
     const fetchGroup = async () => {
         const res = await fetch('http://localhost:3001/groups');
         const data = await res.json();
-        setGroups(data.groups)
+        setGroups(data)
     }
 
     // Get groups from the server
