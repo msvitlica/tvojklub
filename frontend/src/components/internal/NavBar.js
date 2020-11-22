@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles'
 
 // Navbar components
@@ -16,6 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import GroupIcon from '@material-ui/icons/Group';
 import TrainingListIcon from '@material-ui/icons/FormatListNumbered';
 import MembersIcon from '@material-ui/icons/Person';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 
 // Drawer components
 
@@ -30,8 +31,7 @@ import {
 // Routing Component
 
 import {
-    Link,
-    useHistory
+    Link
 } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,13 +47,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar(props) {
-    const history = useHistory();
-
-    // Handle logout
-    const logout = () => props.logout(() => {
-        history.replace('/login');
-        localStorage.setItem('isAuthenticated', this.autheticated);
-    });
 
 
     const classes = useStyles();
@@ -80,7 +73,7 @@ export default function NavBar(props) {
                     <Typography variant="h6" className={classes.title}>
                         {title}
                     </Typography>
-                    <Button onClick={logout} >
+                    <Button onClick={props.logout} >
                         <Avatar src="/broken-image.jpg" />
                     </Button>
                 </Toolbar>
@@ -109,6 +102,14 @@ export default function NavBar(props) {
                             <ListItemIcon>
                                 <GroupIcon />
                                 <ListItemText primary='Grupe' />
+                            </ListItemIcon>
+                        </ListItem>
+                    </Link>
+                    <Link to='/schedule-management' onClick={toggleDrawer(false)}>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ScheduleIcon />
+                                <ListItemText primary='Raspored' />
                             </ListItemIcon>
                         </ListItem>
                     </Link>
