@@ -17,14 +17,15 @@ class GroupList extends React.Component {
         fetch('http://localhost:3001/groups')
             .then(response => response.json())
             .then(data => {
-                this.setState({ groups: data.groups });
+                this.setState({ groups: data });
             });
     }
-    render() {
+    render() {       
+        
         return (
             <div>
                 {this.state.groups.map(group => (
-                    <CardActionArea key={group.id}>
+                    <CardActionArea key={group._id}>
                         <CardContent>
                             <Typography>
                                 Grupa: {group.name}

@@ -16,7 +16,7 @@ export default function Members(props) {
   }, [])
   const rows = members.map(el => (
     {
-      id: el.id,
+      id: el._id,
       firstName: el.firstName,
       lastName: el.lastName,
       dateOfBirth: el.dateOfBirth,

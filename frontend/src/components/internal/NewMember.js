@@ -36,8 +36,7 @@ export default function NewMember(props) {
     const fetchGroup = async () => {
         const res = await fetch(APIurl);
         const data = await res.json();
-        setGroupList(data.groups)
-        console.log(data.groups);
+        setGroupList(data)        
     }
     useEffect(() => {
         fetchGroup()
