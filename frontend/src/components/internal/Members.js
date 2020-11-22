@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
+
+
 export default function Members(props) {
   const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
@@ -9,7 +11,6 @@ export default function Members(props) {
     const res = await fetch(APIurl);
     const data = await res.json()
     setMemberList(data.members)
-    console.log(data.members)
   }
   useEffect(() => {
     fetchData()
@@ -26,8 +27,7 @@ export default function Members(props) {
   return (
     <Grid container direction='column'>
       <Grid item xs={1} sm={2}></Grid>
-      <Grid item xs={3}
-      >
+      <Grid item xs={3}>
         <Link to='members/newMember'>
           <Button className='btn' color="primary" variant='text'>New Member</Button>
         </Link>

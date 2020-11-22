@@ -5,6 +5,8 @@ import NewMember from './NewMember';
 import TrainingList from './TrainingList';
 import Group from './Group';
 import TrainingDetails from './TrainingDetails';
+import ScheduleManagement from './ScheduleManagement';
+import NewSchedule from './AddNewSchedule';
 
 // Routing components 
 
@@ -15,8 +17,8 @@ import {
 
 
 export default class InternalComponent extends React.Component {
-    constructor(props) {
-        super(props)
+    constructor(props){
+        super(props);
     }
     render() {
         return (
@@ -30,6 +32,8 @@ export default class InternalComponent extends React.Component {
                     <Route path='/members/newMember' component={NewMember} />
                     <Route path='/groups' component={Group} />
                     <Route path='/processedGroups' component={TrainingDetails}/>
+                    <Route path='/schedule-management/new-schedule' component={NewSchedule} />
+                    <Route path='/schedule-management' component={ScheduleManagement} />
                 </Switch>
             </div>
         )

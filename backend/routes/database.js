@@ -3,4 +3,5 @@ let tranings = [
   { _id: 2, term: "15-16", groups: "Group3", coach:"Sinisa Kovacevic" },
   { _id: 3, term: "17-20", groups: "Group5", coach:"Sinisa Kovacevic" },
 ];
+
 module.exports = tranings;

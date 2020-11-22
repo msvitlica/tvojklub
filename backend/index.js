@@ -11,16 +11,21 @@ app.use(logger('dev'));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Trainings List route
 const trainingsRouter = require("./routes/trainings");
 app.use('/trainings', trainingsRouter);
 
+// Members route
 const memebersRouter = require("./routes/members");
 app.use("/members", memebersRouter);
 
+// Groupe route
 const groupeRouter = require("./routes/groups");
 app.use("/groups", groupeRouter);
-const processedGroups= require ('./routes/processedGroups');
-app.use('/processedGroups',processedGroups);
+
+const scheduleManagement = require('./routes/scheduleManagment');
+app.use('/schedule-management', scheduleManagement);
 
 const mongoose = require('mongoose');
 mongoose
