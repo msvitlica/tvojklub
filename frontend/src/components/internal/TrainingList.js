@@ -18,7 +18,6 @@ export default class TrainingList extends React.Component {
   componentDidMount = () => {
     let date = new Date();
     date.setDate(date.getDate());
-    /* let currentDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); */
     const formattedDate = format(date, "yyyy-MM-dd");
     fetch(`http://localhost:3001/trainings?date=${formattedDate}`)
       .then(response => response.json())
@@ -42,25 +41,25 @@ export default class TrainingList extends React.Component {
     return (
       <div>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ScheduleBar tabValue={this.state.tabValue}
-          getTrainingBydate={this.getTrainingByDate}
-        />
-        <Card>
-          {this.state.trainings.map((el) => (
-            <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
-              <CardContent>
-                <Typography> {el.term}{el.group}
-                </Typography>
-                <br></br>
-                <Typography variant='caption'> {el.groups}
-                </Typography>
-                <Typography>
-                  {el.coach}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          ))}
-        </Card>
+          <ScheduleBar tabValue={this.state.tabValue}
+            getTrainingBydate={this.getTrainingByDate}
+          />
+          <Card>
+            {this.state.trainings.map((el) => (
+              <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
+                <CardContent>
+                  <Typography> {el.term}{el.group}
+                  </Typography>
+                  <br></br>
+                  <Typography variant='caption'> {el.groups}
+                  </Typography>
+                  <Typography>
+                    {el.coach}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            ))}
+          </Card>
         </MuiPickersUtilsProvider>
       </div>
     )

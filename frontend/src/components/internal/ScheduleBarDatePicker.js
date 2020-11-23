@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 export default function MaterialUIPickers(props) {
     const getCurrentDate = () => {
         let date = new Date();
-       date.setDate(date.getDate());
+        date.setDate(date.getDate());
         const formattedDate = format(date, "yyy-MM-dd");
         return formattedDate;
     }

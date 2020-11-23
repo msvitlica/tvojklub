@@ -13,24 +13,18 @@ export default function ScheduleBar(props) {
         let date = new Date();
         date.setDate(date.getDate());
         const formattedDate = format(date, "yyyy-MM-dd");
-        console.log(formattedDate);
-        /*  let scheduleDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); */
         props.getTrainingBydate(formattedDate);
     }
     const getYesterdaysDate = () => {
         let date = new Date();
         date.setDate(date.getDate() - 1);
-        /* let scheduleDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); */
         const formattedDate = format(date, "yyyy-MM-dd");
-        console.log(formattedDate);
         props.getTrainingBydate(formattedDate);
     }
     const getTomorrowsDate = () => {
         let date = new Date();
         date.setDate(date.getDate() + 1);
-        /* let scheduleDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); */
         const formattedDate = format(date, "yyyy-MM-dd");
-        console.log(formattedDate);
         props.getTrainingBydate(formattedDate);
     }
     const handleChange = (event, newValue) => {
@@ -42,22 +36,22 @@ export default function ScheduleBar(props) {
     return (
         <div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Paper square >
-                <Tabs value={value}
-                    onChange={handleChange}
-                    variant='fullWidth'
-                    indicatorColor="primary"
-                    textColor="primary">
-                    <Tab label="Juče" onClick={getYesterdaysDate} />
-                    <Tab label="Danas" onClick={getCurrentDate} />
-                    <Tab label="Sutra" onClick={getTomorrowsDate} />
-                    {pickerState ?
-                        <ScheduleBarDatePicker getTrainingBydate={props.getTrainingBydate} setPickerState={setPickerState} /> :
-                        <Tab label='Kalendar Termina' onClick={openPicker}>
-                        </Tab>
-                    }
-                </Tabs>
-            </Paper>
+                <Paper square >
+                    <Tabs value={value}
+                        onChange={handleChange}
+                        variant='fullWidth'
+                        indicatorColor="primary"
+                        textColor="primary">
+                        <Tab label="Juče" onClick={getYesterdaysDate} />
+                        <Tab label="Danas" onClick={getCurrentDate} />
+                        <Tab label="Sutra" onClick={getTomorrowsDate} />
+                        {pickerState ?
+                            <ScheduleBarDatePicker getTrainingBydate={props.getTrainingBydate} setPickerState={setPickerState} /> :
+                            <Tab label='Kalendar Termina' onClick={openPicker}>
+                            </Tab>
+                        }
+                    </Tabs>
+                </Paper>
             </MuiPickersUtilsProvider>
         </div>
     )
