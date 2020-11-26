@@ -136,3 +136,6 @@ button.attendanceBtnN {
   color:rgb(13, 18, 22);
    background-color:rgb(219, 180, 51)
 }
+div.scheduleBar_datePicker {
+  width:fit-content;
+}

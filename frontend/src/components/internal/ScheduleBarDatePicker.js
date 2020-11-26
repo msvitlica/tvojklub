@@ -22,10 +22,9 @@ export default function MaterialUIPickers(props) {
     };
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <KeyboardDatePicker className= 'scheduleBar_datePicker'
                 margin="normal"
                 id="date-picker-dialog"
-                label="Date picker dialog"
                 format="yyyy-MM-dd"
                 value={selectedDate}
                 onChange={handleDateChange}
