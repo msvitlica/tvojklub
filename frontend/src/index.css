@@ -88,6 +88,7 @@ button.btn, a.btn{
   width: 300px;
   max-width: 300px;
   align-self: center;
+  margin-left: 8px;
 }
 div.loginContainer {
   margin-top: 10vh;

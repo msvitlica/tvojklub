@@ -2,16 +2,14 @@ const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
 
-let groups = [
-  { id: uuid.v4(), name: "Početna" },
-  { id: uuid.v4(), name: "Napredna" }
-];
+
+const Group = require('../models/groupModel')
+
 
 router.get("/", async (req, res) => {
   try {
-    res.status(200).json({
-      groups: groups
-    });
+    let groups = await Group.find();
+    return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({
       message: "Some error occured",
@@ -21,20 +19,12 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const data = req.body;
-  const isValid = groups.filter(el => el.name === data.name.trim())[0] || data.name === '';
   try {
-    if (!isValid) {
-      groups.push({
-        id: uuid.v4(),
-        name: data.name.trim()
-      });
-      res.status(200).json({
-        msg: 'Item added'
-      });
-    } else {
-      throw console.log('Err');
-    }
+    let newGroup = await Group.create(req.body);
+    return res.status(200).send({
+      error: false,
+      product: newGroup
+    });
   } catch (err) {
     res.status(400).json({
       msg: 'Bad Request'

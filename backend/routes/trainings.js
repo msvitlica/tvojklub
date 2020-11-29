@@ -36,7 +36,6 @@ router.get('/:id', async (req, res) => {
   let pathName = url.parse(req.url, true).pathname;
   let pathId = pathName.replace('/', '');
   let filteredFile = trainings.filter(el => el.id.toString() === pathId)[0];
-  console.log(filteredFile);
   try {
     res.status(200).json({
       trainingId: filteredFile,

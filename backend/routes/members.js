@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
-let members = [
-  { id: uuid.v4(), firstName: "Sinisa", lastName: 'Kovacevic', dateOfBirth: '12.04.1988.', group: 'Napredna' },
-  { id: uuid.v4(), firstName: "Milan", lastName: 'Svitlica', dateOfBirth: '20.06.1987.', group: 'Napredna' },
-];
+
+const Member = require('../models/memberModel');
+
 router.get("/", async (req, res) => {
   try {
+    const members = await Member.find();
     res.status(200).json({
       members: members
     });
@@ -19,25 +19,22 @@ router.get("/", async (req, res) => {
   }
 });
 router.post('/newMember', async (req, res) => {
-  const data = req.body;
-  console.log(data.member);
-  const filteredMembers = members.find((el) => el.id=== data.id);
+  
+  
   try {
-    if (!filteredMembers) {
-      members.push({
-        id: uuid.v4(),
-        firstName: data.member.firstName,
-        lastName: data.member.lastName,
-        dateOfBirth: data.member.dateOfBirth,
-        group: data.member.group,
-      });
+    const data = req.body;
+    let newMember = await Member.create(req.body.member);
+    // if (!filteredMembers) {
+    //   members.push({
+    //     id: uuid.v4(),
+    //     firstName: data.member.firstName,
+    //     lastName: data.member.lastName,
+    //     dateOfBirth: data.member.dateOfBirth,
+    //     group: data.member.group,
+    //   });
       res.status(200).json({
         msg: 'Member added'
-      });
-      console.log(members)
-    } else {
-      throw console.log('Err');
-    }
+      });        
   } catch (err) {
     res.status(400).json({
       msg: 'Bad Request'

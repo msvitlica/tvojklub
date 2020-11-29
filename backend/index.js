@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -23,13 +24,17 @@ app.use("/members", memebersRouter);
 const groupeRouter = require("./routes/groups");
 app.use("/groups", groupeRouter);
 
-// Processed Groups route
-const processedGroups= require ('./routes/processedGroups');
-app.use('/processedGroups',processedGroups);
-
-// Schedule Management route
 const scheduleManagement = require('./routes/scheduleManagment');
 app.use('/schedule-management', scheduleManagement);
+
+const mongoose = require('mongoose');
+mongoose
+  .connect(process.env.MONGO_DEV_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,   
+  })
+  .then(console.log("Database connecteed!"))
+  .catch(err => console.log(err));
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
