@@ -1,22 +1,74 @@
 const express = require("express");
 const router = express.Router();
-const uuid = require('uuid');
 
-let schedule = [
-    { _id: 1, startTime: 8, endTime: 10, duration: `${02} sat/a ${00} min`, groups: "Group1, Group2" }
-]
+const Schedule = require('../models/scheduleModel');
 
-
-router.get("/", async (req, res) => {
+router.get('/edit/:id', async (req, res) => {
     try {
-        res.status(200).json({
-            schedule
-        });
+        const scheduleId = req.params.id
+        const schedule = await Schedule.findById(scheduleId);
+        res.status(200).json(schedule);
     } catch (err) {
         res.status(400).json({
             message: "Some error occured",
             err
         });
+    }
+})
+
+router.get("/", async (req, res) => {
+    try {
+        const schedule = await Schedule.find();
+        res.status(200).json(schedule);
+    } catch (err) {
+        res.status(400).json({
+            message: "Some error occured",
+            err
+        });
+    }
+});
+
+router.post('/add', async (req, res) => {
+    try{
+        console.log(req.body);
+        let schedule = await Schedule.create(req.body.schedule);
+        return res.status(200).send({
+            error: false,
+            schedule
+        })
+    }catch (err) {
+        res.status(400).json({
+            message: 'Some error occured',
+            err
+        })
+    }
+});
+
+// router.put('/edit/:id', async (req, res) => {
+//     try {
+//         const id = req.params.id
+//         await Schedule.findById(id);
+//     } catch (err) {
+//         res.status(400).json({
+//             message: 'Some error occured',
+//             err
+//         })
+//     }
+// });
+
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        await Schedule.findByIdAndDelete(id);
+        return res.status(200).send({
+            error:false,
+            msg: 'Schedule deleted!'
+        })
+    } catch (err) {
+        res.status(400).json({
+            message: 'Some error occured',
+            err
+        })
     }
 });
 

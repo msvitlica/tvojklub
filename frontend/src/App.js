@@ -6,7 +6,7 @@ import {
   Route,
   useHistory,
 } from 'react-router-dom';
-import InternalComponent from './components/internal/InternalComponent';
+import InternalComponent from './components/internal/main.components/InternalComponent';
 import ExternalComponent from './components/external/ExternalComponent';
 import PrivateRoute from './components/external/PrivateRoute';
 

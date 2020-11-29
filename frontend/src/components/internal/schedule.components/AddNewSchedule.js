@@ -16,9 +16,10 @@ import {
     ListItem,
     ListItemText
 } from '@material-ui/core';
-import { calculateDuration } from '../../helpers/helpersMethods';
+import { calculateDuration } from '../../../helpers/helpersMethods';
 
-function NewSchedule() {
+function NewSchedule(props) {
+    const { history } = props;
     const [startTime, setStartTime] = React.useState('07:00');
     const [endTime, setEndTime] = React.useState('07:00');
     const [trainingDuration, setTrainingDuration] = React.useState('00:00');
@@ -35,7 +36,6 @@ function NewSchedule() {
     });
     const [aboutSchedule, setAboutSchedule] = React.useState('');
     const [attendedGroups, setAttendedGroups] = React.useState([]);
-    const [schedule, setNewSchedule] = React.useState({});
 
     const fetchGroup = async () => {
         const res = await fetch('http://localhost:3001/groups');
@@ -84,9 +84,51 @@ function NewSchedule() {
     }
 
     // Sets attended groups
-    const onsetAttendedGroup = (event) => {
+    const onSetAttendedGroup = (event) => {
         setAttendedGroups([...attendedGroups, { name: event.target.value }])
         setGroups(groups.filter(group => group.name !== event.target.value));
+    }
+
+    // Save schedule to database
+    const onSaveSchedule = () => {
+        const schedule = {
+            startTime,
+            endTime,
+            trainingDuration,
+            attendedGroups,
+            recurrance: { recurranceType, recurranceDays },
+            aboutSchedule
+        }
+
+        fetch('http://localhost:3001/schedule-management/add', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ schedule })
+        })
+        .catch((error) => {
+            alert(error.msg)
+        });
+        setStartTime('07:00');
+        setEndTime('07:00');
+        setTrainingDuration('');
+        setGroups([]);
+        setRecurranceType('weekly');
+        setRecurranceDays({
+            monday: false,
+            tuesday: false,
+            wednsday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false
+        });
+        setAboutSchedule('');
+        setAttendedGroups([]);
+        history.push('/schedule-management');
+        window.location.reload(true);
     }
     return (
         <Grid className="scheduleContainer" container>
@@ -140,17 +182,18 @@ function NewSchedule() {
                                 variant="outlined"
                                 className="timePicker"
                                 defaultValue="Izaberi Grupu"
-                                onChange={onsetAttendedGroup}
+                                onChange={onSetAttendedGroup}
                             >
+                                <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
                                 {groups.map(group => {
-                                    return <MenuItem key={group.id} value={group.name}>{group.name}</MenuItem>
+                                    return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
                                 })}
                             </Select>
                         </Grid>
                     </Grid>
                     <Divider />
                     <List>
-                        {attendedGroups.length != 0 ? attendedGroups.map(group => {
+                        {attendedGroups.length !== 0 ? attendedGroups.map(group => {
                             return (
                                 <ListItem key={group.name}>
                                     <ListItemText primary={group.name} />
@@ -184,7 +227,7 @@ function NewSchedule() {
                     </Grid>
                     <Divider />
                     <Grid item xs={12} sm={2}>
-                        <Button className="scheduleBtn" variant="contained" color="primary">Sačuvaj</Button>
+                        <Button className="scheduleBtn" variant="contained" color="primary" onClick={onSaveSchedule}>Sačuvaj</Button>
                     </Grid>
                 </Paper>
             </Grid>

@@ -19,10 +19,9 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const data = req.body;
-  try{
-  let newGroup = await Group.create(req.body);
-    return res.status(201).send({
+  try {
+    let newGroup = await Group.create(req.body);
+    return res.status(200).send({
       error: false,
       product: newGroup
     });
