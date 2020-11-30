@@ -193,7 +193,7 @@ function NewSchedule(props) {
                     <Divider />
                     <List>
                         {schedule.attendedGroups.length !== 0 ? schedule.attendedGroups.map(group => {
-                            return (
+a                            return (
                                 <ListItem key={group.name}>
                                     <ListItemText primary={group.name} />
                                 </ListItem>
