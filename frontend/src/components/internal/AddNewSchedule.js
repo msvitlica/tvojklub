@@ -150,7 +150,7 @@ function NewSchedule() {
                     </Grid>
                     <Divider />
                     <List>
-                        {attendedGroups.length != 0 ? attendedGroups.map(group => {
+                        {attendedGroups.length !== 0 ? attendedGroups.map(group => {
                             return (
                                 <ListItem key={group.name}>
                                     <ListItemText primary={group.name} />

@@ -6,12 +6,16 @@ import {
 } from '@material-ui/core';
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
+import SearchBar from './SearchBar';
+import SearchMember from './SearchMember';
 export default class TrainingDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      searchStatus:false,
       trainingInfo: undefined,
       membersInGroup: [],
+      searchResult:[],
     }
   }
   componentDidMount = () => {
@@ -51,14 +55,31 @@ export default class TrainingDetails extends React.Component {
       });
     }
     this.setState({
-      /* trainingInfo: this.state.trainingInfo, */
       membersInGroup: newMembersInGroup,
     },
       () => { console.log(this.state.membersInGroup) });
   }
+  searchMember = (inputValue,status) => {
+    const membersInGroup = [...this.state.membersInGroup];
+    let findMember= membersInGroup.filter(el=> el.name.toLowerCase().includes(inputValue.toLowerCase()));
+
+   console.log(inputValue.length);
+    if(findMember){
+      this.setState({
+        searchStatus:status,
+        searchResult:findMember,
+        membersInGroup
+      },()=>{console.log(this.state.searchResult,this.state.membersInGroup)});
+    }else {
+      this.setState({
+        searchStatus:!status,
+        membersInGroup:membersInGroup
+      });
+    }
+    }
+  
+    
   render() {
-    const attended = true;
-    const notAttended = false;
     if (!this.state.trainingInfo) {
       return null;
     }
@@ -72,12 +93,14 @@ export default class TrainingDetails extends React.Component {
                   {this.state.trainingInfo.term}({this.state.trainingInfo.group})</Typography>
               </Grid>
               <Grid item xs={12} sm={4} className='trainingSearchBar'>
-                <TextField id="outlined-basic"
-                  label="Search" />
+              <SearchBar  searchStatus={this.state.searchStatus} membersInGroup={this.state.membersInGroup.filter(el => el.attendance !=='unknown' || el.attendance == 'unknown')} searchMember= {this.searchMember}/>
               </Grid>
             </Grid>
           </CardContent>
         </Card>
+        {this.state.searchStatus ?
+          <SearchMember searchResult={this.state.searchResult} processMember={this.processMember}/>:
+        <div>
         <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
         </ListSubheader>}>
           {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
@@ -90,7 +113,9 @@ export default class TrainingDetails extends React.Component {
           ))}
         </List>
         <Divider />
-        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={this.processMember} />
+        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={this.processMember}/>
+        </div>
+          }
       </React.Fragment >
     )
   }

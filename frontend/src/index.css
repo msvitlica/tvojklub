@@ -156,3 +156,6 @@ div.timePicker {
 button.scheduleBtn {
   width: 100%;
 }
+div.searchMember {
+  width: fit-content;
+}
