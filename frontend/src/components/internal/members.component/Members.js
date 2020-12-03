@@ -35,13 +35,13 @@ export default function Members(props) {
       <div style={{ width: '100%', height: 400 }}>
         <DataGrid
           columns={[
-            { field: 'firstName', type: 'string', },
-            { field: 'lastName', type: 'string', },
-            { field: 'dateOfBirth', type: 'string', },
-            { field: 'group', type: 'string', },
+            { field: 'firstName', headerName: 'Ime', width: 160 },
+            { field: 'lastName', headerName: 'Prezime', width: 160 },
+            { field: 'dateOfBirth', headerName: 'Datum rođenja', width: 160 },
+            { field: 'group', headerName: 'Grupa', width: 160 },
           ]}
           rows={rows}
-          checkboxSelection
+          disableSelectionOnClick
           pageSize={5}
         />
       </div>
