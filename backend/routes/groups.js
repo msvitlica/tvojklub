@@ -9,6 +9,7 @@ const Group = require('../models/groupModel')
 router.get("/", async (req, res) => {
   try {
     let groups = await Group.find();
+    console.log(groups);
     return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({
@@ -21,9 +22,11 @@ router.get("/", async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     let newGroup = await Group.create(req.body);
+    console.log(newGroup);
     return res.status(200).send({
-      error: false,
-      product: newGroup
+      newGroup: newGroup
+      /* error: false,
+      product: newGroup */
     });
   } catch (err) {
     res.status(400).json({

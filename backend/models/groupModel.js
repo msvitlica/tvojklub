@@ -3,7 +3,6 @@ const {Schema} = mongoose;
 
 const groupSchema = new Schema({
     name: String,
-    description: String,
 })
 
 
