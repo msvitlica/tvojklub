@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { CardActionArea, CardContent, Grid, Typography } from '@material-ui/core';
+import { IconButton, Grid } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
-export default function GroupList() {
+export default function GroupList(props) {
     const [groups, setGroups] = useState([]);
     const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
@@ -13,12 +15,21 @@ export default function GroupList() {
     useEffect(() => {
         fetchData();
     }, []);
+    const onDeleteGroup = async (id) => {
+        await fetch(`http://localhost:3001/groups/${id}`, {
+            method: 'DELETE',
+        });
+        let filteredGroups = groups.filter(el => el._id !== id);
+        setGroups(filteredGroups);
+    }
     console.log(groups);
     const rows = groups.map(el => (
         {
             id: el._id,
-            name: el.name
+            name: el.name,
+            actions: el._id
         }
+
     ))
 
     return (
@@ -26,16 +37,27 @@ export default function GroupList() {
             <div style={{ width: '100%', height: 400 }}>
                 <DataGrid
                     columns={[
-                       {filed: 'id', headerName: 'ID Grupe', width:160},
-                       {filed: 'name', headerName: 'Naziv grupe', width:160}
-                    
+                        { field: 'name', headerName: 'Naziv grupe', width: 160 },
+                        {
+                            field: 'actions', headerName: 'Opcije', width: 160,
+                            renderCell: (params) => (
+                                <React.Fragment>
+                                    <IconButton  aria-label="modify">
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton onClick={(event) => onDeleteGroup(params.value)} aria-label="delete">
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </React.Fragment>
+                            )
+                        }
                     ]}
-                    rows= {rows}
+                    rows={rows}
                     disableSelectionOnClick
                     pageSize={5}
                 />
-                </div>
-            </Grid>
+            </div>
+        </Grid>
     )
 }
 
