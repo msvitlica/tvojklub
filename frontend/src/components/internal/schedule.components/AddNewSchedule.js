@@ -31,7 +31,7 @@ function NewSchedule(props) {
     const [groups, setGroups] = React.useState([]);
     const [recurranceType, setRecurranceType] = React.useState('weekly');
     const [recurranceDays, setRecurranceDays] = React.useState({
-        monday: schedule.recurrance.recurranceDays ? schedule.recurrance.recurranceDays : false,
+        monday: false,
         tuesday: false,
         wednsday: false,
         thursday: false,
@@ -39,29 +39,34 @@ function NewSchedule(props) {
         saturday: false,
         sunday: false
     });
-    console.log(recurranceDays)
+    console.log(schedule)
 
     const fetchGroup = async () => {
         const res = await fetch('http://localhost:3001/groups');
         const data = await res.json();
+        if(schedule.attendedGroups.length !== 0){
+            let filteredGroup;
+            schedule.attendedGroups.forEach(attendedGroup => {
+                filteredGroup = data.filter(group => group )
+            })
+        }
         setGroups(data)
     }
     const fetchSchedule = async () => {
         let req = await fetch(`http://localhost:3001/schedule-management/edit/${match.params.id}`);
         let data = await req.json();
         setSchedule(data);
-        console.log(data);
     }
 
     // Get groups from the server and sets schedule object 
     React.useEffect(() => {
         fetchGroup();
-        if (match.params.id) {
+        if (match.params.id && !schedule._id) {
             fetchSchedule();
         }
     }, []);
 
-    // Calculates training duration when user pick start and end time 
+    // Calculates training duration when user pick start-end time 
     React.useEffect(() => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
         const hours = duration.split(':')[0];
@@ -70,15 +75,8 @@ function NewSchedule(props) {
     }, [schedule.startTime, schedule.endTime]);
 
     // Sets start-end time 
-    const onSetTime = event => {
-        switch (event.target.name) {
-            case 'startTime':
-                setSchedule({ ...schedule, [event.target.name]: event.target.value });
-                break
-            case 'endTime':
-                setSchedule({ ...schedule, [event.target.name]: event.target.value });
-        }
-        setSchedule({ ...schedule, trainingDuration: calculateDuration(schedule.startTime, schedule.endTime) });
+    const onSetTime = (event) => {
+        setSchedule({ ...schedule, [event.target.name]: event.target.value, trainingDuration: calculateDuration(schedule.startTime, schedule.endTime) })
     }
 
     // Sets recurrance type
@@ -193,7 +191,7 @@ function NewSchedule(props) {
                     <Divider />
                     <List>
                         {schedule.attendedGroups.length !== 0 ? schedule.attendedGroups.map(group => {
-a                            return (
+                            return (
                                 <ListItem key={group.name}>
                                     <ListItemText primary={group.name} />
                                 </ListItem>
