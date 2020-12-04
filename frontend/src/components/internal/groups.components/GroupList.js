@@ -1,37 +1,42 @@
-import React from 'react';
-import { CardActionArea,CardContent,Typography } from '@material-ui/core';
-    
-export default class GroupList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            groups: []
-        }
-    }
-    fetchData = async () => {
+import React, { useEffect, useState } from 'react';
+import { CardActionArea, CardContent, Grid, Typography } from '@material-ui/core';
+import { DataGrid } from '@material-ui/data-grid';
+
+export default function GroupList() {
+    const [groups, setGroups] = useState([]);
+    const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
         const res = await fetch(APIurl)
         const data = await res.json();
-        this.setState({ groups: data })
-        console.log(this.state.groups);
+        setGroups(data)
     };
-    componentDidMount = () => {
-        this.fetchData()
-    };
-    render() {
-        return (
-            <div>
-            {this.state.groups.map(group => (
-                <CardActionArea key={group._id}>
-                    <CardContent>
-                        <Typography>
-                            Grupa: {group.name}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            ))}
-        </div>
-        )
-    }
+    useEffect(() => {
+        fetchData();
+    }, []);
+    console.log(groups);
+    const rows = groups.map(el => (
+        {
+            id: el._id,
+            name: el.name
+        }
+    ))
+
+    return (
+        <Grid container direction='column'>
+            <div style={{ width: '100%', height: 400 }}>
+                <DataGrid
+                    columns={[
+                       {filed: 'id', headerName: 'ID Grupe', width:160},
+                       {filed: 'name', headerName: 'Naziv grupe', width:160}
+                    
+                    ]}
+                    rows= {rows}
+                    disableSelectionOnClick
+                    pageSize={5}
+                />
+                </div>
+            </Grid>
+    )
 }
+
 
