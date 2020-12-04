@@ -25,8 +25,6 @@ router.post('/', async (req, res) => {
     console.log(newGroup);
     return res.status(200).send({
       newGroup: newGroup
-      /* error: false,
-      product: newGroup */
     });
   } catch (err) {
     res.status(400).json({
@@ -34,5 +32,20 @@ router.post('/', async (req, res) => {
     })
   }
 });
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const groupById= await Group.findByIdAndRemove(id);
+    res.status(200).send({
+      msg: `Group with id ${id} has been deleted`
+    })
+  } catch (err) {
+    res.status(400).json({
+      msg: 'Bad request',
+      err
+    })
+  }
+
+})
 
 module.exports = router;
