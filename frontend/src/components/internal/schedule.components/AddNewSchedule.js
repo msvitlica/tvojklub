@@ -19,6 +19,7 @@ import {
 import { calculateDuration } from '../../../helpers/helpersMethods';
 
 function NewSchedule(props) {
+    const backendUrl = 'http://localhost:3001';
     const { history, match } = props;
     const [schedule, setSchedule] = React.useState({
         startTime: '07:00',
@@ -39,21 +40,17 @@ function NewSchedule(props) {
         saturday: false,
         sunday: false
     });
-    console.log(schedule)
 
+    // Get all available groups on backend
     const fetchGroup = async () => {
-        const res = await fetch('http://localhost:3001/groups');
+        const res = await fetch(`${backendUrl}/groups`);
         const data = await res.json();
-        if(schedule.attendedGroups.length !== 0){
-            let filteredGroup;
-            schedule.attendedGroups.forEach(attendedGroup => {
-                filteredGroup = data.filter(group => group )
-            })
-        }
-        setGroups(data)
+        setGroups(data);
     }
+
+    // Get schedule with specific ID
     const fetchSchedule = async () => {
-        let req = await fetch(`http://localhost:3001/schedule-management/edit/${match.params.id}`);
+        let req = await fetch(`${backendUrl}/schedule-management/edit/${match.params.id}`);
         let data = await req.json();
         setSchedule(data);
     }
@@ -66,7 +63,7 @@ function NewSchedule(props) {
         }
     }, []);
 
-    // Calculates training duration when user pick start-end time 
+    // Calculates training duration when user picks start-end time 
     React.useEffect(() => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
         const hours = duration.split(':')[0];
@@ -104,17 +101,29 @@ function NewSchedule(props) {
     const onSaveSchedule = () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
 
-        fetch('http://localhost:3001/schedule-management/add', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ completeSchedule })
-        })
-            .catch((error) => {
-                alert(error.msg)
-            });
+        if (schedule._id) {
+            fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ completeSchedule })
+            })
+        }
+        else {
+            fetch(`${backendUrl}/schedule-management/add`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ completeSchedule })
+            })
+                .catch((error) => {
+                    alert(error.msg)
+                });
+        }
         setSchedule({
             startTime: '07:00',
             endTime: '07:00',
@@ -122,7 +131,7 @@ function NewSchedule(props) {
             attendedGroups: [],
             recurrance: {},
             aboutSchedule: ''
-        })
+        });
         history.push('/schedule-management');
         window.location.reload(true);
     }
@@ -211,7 +220,7 @@ function NewSchedule(props) {
                         <Grid item xs={12} md={9} container>
                             <Grid item xs={12}>
                                 <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} />} label="Ponedeljak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} />} label="Utorak" />
+                                <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange}  />} label="Utorak" />
                                 <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} />} label="Srijeda" />
                                 <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} />} label="Četvrtak" />
                             </Grid>
