@@ -1,7 +1,7 @@
 import React from 'react';
-import { 
-    Link, 
-    Route 
+import {
+    Link,
+    Route
 } from 'react-router-dom';
 import AddGroupModal from './AddGroupModal';
 import GroupList from './GroupList';
@@ -12,19 +12,19 @@ import {
     Button
 } from '@material-ui/core';
 
-
-class Group extends React.Component {
-    render() {
-        return (
+export default function Group(props) {
+    return (
+        <div>
             <div>
                 <Link to='/groups/new'>
                     <Button variant="contained">Nova Grupa</Button>
                 </Link>
                 <GroupList />
                 <Route path='/groups/new' component={AddGroupModal} />
+                <Route path='/groups/edit/:id' component={AddGroupModal} />
             </div>
-        )
-    }
+        </div>
+    )
 }
 
-export default Group;
+

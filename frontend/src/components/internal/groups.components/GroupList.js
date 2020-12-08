@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router";
 import { IconButton, Grid } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 export default function GroupList(props) {
+    const history = useHistory();
     const [groups, setGroups] = useState([]);
     const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
@@ -22,16 +24,16 @@ export default function GroupList(props) {
         let filteredGroups = groups.filter(el => el._id !== id);
         setGroups(filteredGroups);
     }
-    console.log(groups);
+    const onEditGroup = async (id) => {
+        history.push(`/groups/edit/${id}`);
+    }
     const rows = groups.map(el => (
         {
             id: el._id,
             name: el.name,
             actions: el._id
         }
-
     ))
-
     return (
         <Grid container direction='column'>
             <div style={{ width: '100%', height: 400 }}>
@@ -42,10 +44,10 @@ export default function GroupList(props) {
                             field: 'actions', headerName: 'Opcije', width: 160,
                             renderCell: (params) => (
                                 <React.Fragment>
-                                    <IconButton  aria-label="modify">
+                                    <IconButton onClick={() => onEditGroup(params.value)} aria-label="modify">
                                         <EditIcon />
                                     </IconButton>
-                                    <IconButton onClick={(event) => onDeleteGroup(params.value)} aria-label="delete">
+                                    <IconButton onClick={() => onDeleteGroup(params.value)} aria-label="delete">
                                         <DeleteIcon />
                                     </IconButton>
                                 </React.Fragment>

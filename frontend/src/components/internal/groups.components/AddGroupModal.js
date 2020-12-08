@@ -1,25 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router";
 import { Modal, Button, TextField, Grid, Typography } from '@material-ui/core';
 
 export default function AddGroupModal(props) {
+    const history = useHistory();
     const [open] = useState(true);
     const [groupName, setGroupName] = useState('');
+    const [groupId, setGroupId] = useState('');
     const [groupNameError, setGroupNameError] = useState({});
-    const { history } = props;
+    const { match } = props;
 
     const onInputChange = (e) => {
         setGroupName(e.target.value);
     }
+    const fetchTargetGroup = async () => {
+        const APIurl = `http://localhost:3001/groups/edit/${match.params.id}`;
+        const res = await fetch(APIurl);
+        const data = await res.json();
+        setGroupName(data.name);
+        setGroupId(data._id);
+    }
+    useEffect(() => {
+        if (match.params.id) {
+            fetchTargetGroup()
+        }
+    }, []);
 
     const postGroup = async () => {
-        fetch('http://localhost:3001/groups', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: groupName }),
-        })
+        if (groupId) {
+            fetch(`http://localhost:3001/groups/edit/${match.params.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: groupId, name: groupName })
+            })
+        } else {
+            fetch('http://localhost:3001/groups', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: groupName }),
+            })
+        }
         setGroupName('');
         closeModal();
     }
@@ -87,3 +113,4 @@ export default function AddGroupModal(props) {
         </Modal>
     )
 }
+
