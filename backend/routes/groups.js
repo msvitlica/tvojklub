@@ -9,7 +9,7 @@ const Group = require('../models/groupModel')
 router.get("/", async (req, res) => {
   try {
     let groups = await Group.find();
-    console.log(groups);
+    /* console.log(groups); */
     return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({
@@ -18,11 +18,15 @@ router.get("/", async (req, res) => {
     });
   }
 });
-
+router.get('/edit/:id', async (req, res) => {
+  const id = req.params.id;
+  const targetGroup = await Group.findById(id);
+  console.log(targetGroup);
+  return res.status(200).send(targetGroup);
+});
 router.post('/', async (req, res) => {
   try {
     let newGroup = await Group.create(req.body);
-    console.log(newGroup);
     return res.status(200).send({
       newGroup: newGroup
     });
@@ -32,10 +36,26 @@ router.post('/', async (req, res) => {
     })
   }
 });
+router.put ('/edit/:id', async(req,res)=>{
+  try{
+    const id = req.params.id;
+    const body= req.body;
+    console.log(body);
+    const updatedGroup= await Group.findByIdAndUpdate(id,body);
+    return res.status(200).send({
+      updatedGroup: updatedGroup
+    });
+  } catch (err){
+    res.status(400).json({
+      msg:'Bad Request'
+    })
+  }
+  
+});
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const groupById= await Group.findByIdAndRemove(id);
+    const groupById = await Group.findByIdAndRemove(id);
     res.status(200).send({
       msg: `Group with id ${id} has been deleted`
     })
@@ -46,6 +66,6 @@ router.delete('/:id', async (req, res) => {
     })
   }
 
-})
+});
 
 module.exports = router;
