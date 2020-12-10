@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-    Link,
-    Route
-} from 'react-router-dom';
-import AddGroupModal from './AddGroupModal';
+import {Link,} from 'react-router-dom';
 import GroupList from './GroupList';
 
 // MUI components 
@@ -20,8 +16,6 @@ export default function Group(props) {
                     <Button variant="contained">Nova Grupa</Button>
                 </Link>
                 <GroupList />
-                <Route path='/groups/new' component={AddGroupModal} />
-                <Route path='/groups/edit/:id' component={AddGroupModal} />
             </div>
         </div>
     )
