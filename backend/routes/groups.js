@@ -9,7 +9,6 @@ const Group = require('../models/groupModel')
 router.get("/", async (req, res) => {
   try {
     let groups = await Group.find();
-    /* console.log(groups); */
     return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({

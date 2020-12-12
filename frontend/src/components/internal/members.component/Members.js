@@ -42,12 +42,12 @@ export default function Members(props) {
         </Link>
       </Grid>
       <Grid item xs={12}>
-        <MaterialTable title={false}
+        <MaterialTable 
+         /*  title={''} */
           data={rows}
           columns={columns}
           options={{
-         /* search:false,  */
-
+            toolbar:false
           }}
         />
       </Grid>
