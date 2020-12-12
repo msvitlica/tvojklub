@@ -40,8 +40,7 @@ export default function GroupList(props) {
                 <DataGrid
                     columns={[
                         { field: 'name', headerName: 'Naziv grupe', width: 160 },
-                        {
-                            field: 'actions', headerName: 'Opcije', width: 160,
+                        { field: 'actions', headerName: 'Opcije', width: 160,
                             renderCell: (params) => (
                                 <React.Fragment>
                                     <IconButton onClick={() => onEditGroup(params.value)} aria-label="modify">

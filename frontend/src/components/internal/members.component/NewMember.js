@@ -84,7 +84,7 @@ export default function NewMember(props) {
                 firstName: member.firstName,
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
-                group: member.group,
+                group: groups.name,
             })
             postMember();
         }

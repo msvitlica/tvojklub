@@ -20,18 +20,9 @@ router.get("/", async (req, res) => {
 });
 router.post('/newMember', async (req, res) => {
   
-  
   try {
-    const data = req.body;
     let newMember = await Member.create(req.body.member);
-    // if (!filteredMembers) {
-    //   members.push({
-    //     id: uuid.v4(),
-    //     firstName: data.member.firstName,
-    //     lastName: data.member.lastName,
-    //     dateOfBirth: data.member.dateOfBirth,
-    //     group: data.member.group,
-    //   });
+    console.log(newMember);
       res.status(200).json({
         msg: 'Member added'
       });        

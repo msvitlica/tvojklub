@@ -22,7 +22,7 @@ export default function AddGroupModal(props) {
     }
     useEffect(() => {
         if (match.params.id) {
-            fetchTargetGroup()
+            fetchTargetGroup();
         }
     }, []);
 

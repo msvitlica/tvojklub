@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
+import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
@@ -7,23 +8,31 @@ import { Button, Grid } from '@material-ui/core';
 export default function Members(props) {
   const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
-  const fetchData = async () => {
+  const fetchMembers = async () => {
     const res = await fetch(APIurl);
     const data = await res.json()
     setMemberList(data.members)
-  }
+  };
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchMembers()
+  }, []);
+
   const rows = members.map(el => (
-    {
-      id: el._id,
-      firstName: el.firstName,
-      lastName: el.lastName,
-      dateOfBirth: el.dateOfBirth,
-      group: el.group
-    }
+      {
+        id: el._id,
+        firstName: el.firstName,
+        lastName: el.lastName,
+        dateOfBirth: el.dateOfBirth,
+        group:el.group
+      }
+  
   ));
+  const columns = [
+    { field: 'firstName', title: 'Ime' },
+    { field: 'lastName', title: 'Prezime' },
+    { field: 'dateOfBirth', title: 'Datum rođenja' },
+    { field: 'group', title: 'Grupa' }
+  ]
   return (
     <Grid container direction='column'>
       <Grid item xs={1} sm={2}></Grid>
@@ -32,19 +41,30 @@ export default function Members(props) {
           <Button className='btn' color="primary" variant='text'>New Member</Button>
         </Link>
       </Grid>
-      <div style={{ width: '100%', height: 400 }}>
+      <Grid item xs={12}>
+        <MaterialTable title={false}
+          data={rows}
+          columns={columns}
+          options={{
+         /* search:false,  */
+
+          }}
+        />
+      </Grid>
+
+      {/*   <div style={{width:'100%', height: 400 }}>
         <DataGrid
           columns={[
-            { field: 'firstName', headerName: 'Ime', width: 160 },
-            { field: 'lastName', headerName: 'Prezime', width: 160 },
-            { field: 'dateOfBirth', headerName: 'Datum rođenja', width: 160 },
-            { field: 'group', headerName: 'Grupa', width: 160 },
+            { field: 'firstName', headerName: 'Ime',width:160 },
+            { field: 'lastName', headerName: 'Prezime',width:160 },
+            { field: 'dateOfBirth', headerName: 'Datum rođenja',width:160 },
+            { field: 'group', headerName: 'Grupa',width:160 },
           ]}
           rows={rows}
           disableSelectionOnClick
           pageSize={5}
         />
-      </div>
+      </div> */}
       <Grid item xs={1} sm={2}></Grid>
     </Grid>
   )
