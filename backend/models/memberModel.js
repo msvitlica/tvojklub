@@ -5,6 +5,7 @@ const membercSchema = new Schema({
     firstName: String,
     lastName: String,
     dateOfBirth: Date,
+    group: String,
     groupId: Schema.Types.ObjectId
 })
 
