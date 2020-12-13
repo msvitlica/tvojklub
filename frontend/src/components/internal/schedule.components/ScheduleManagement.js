@@ -50,16 +50,11 @@ class ScheduleManagement extends React.Component {
             { field: 'term', headerName: 'Vrijeme Termina', width: 160 },
             { field: 'duration', headerName: 'Dužina Treninga', width: 160 },
             { field: 'description', headerName: 'Opis', width: 160 },
-            {
-                field: 'groups',
-                headerName: 'Grupe',
-                description: 'This column has a value getter and is not sortable.',
-                sortable: false,
-                width: 160,
-            },
+            { field: 'groups', headerName: 'Grupe', width: 160, },
             {
                 field: 'actions',
                 headerName: 'Opcije',
+                sortable: false,
                 width: 160,
                 renderCell: (params) => (
                     <React.Fragment>

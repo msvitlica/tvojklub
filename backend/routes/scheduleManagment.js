@@ -48,7 +48,7 @@ router.put('/edit/:id', async (req, res) => {
     try {
         const id = req.body.completeSchedule._id;
         const schedule = req.body.completeSchedule;
-        await Schedule.findByIdAndUpdate(id, schedule)
+        await Schedule.findByIdAndUpdate(id, schedule);
     } catch (err) {
         res.status(400).json({
             message: 'Some error occured',

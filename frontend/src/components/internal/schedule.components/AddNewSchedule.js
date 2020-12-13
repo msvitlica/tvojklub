@@ -49,17 +49,22 @@ function NewSchedule(props) {
     }
 
     // Get schedule with specific ID
-    const fetchSchedule = async () => {
-        let req = await fetch(`${backendUrl}/schedule-management/edit/${match.params.id}`);
+    const fetchSchedule = async (controller) => {
+        let req = await fetch(`${backendUrl}/schedule-management/edit/${match.params.id}`, controller);
         let data = await req.json();
         setSchedule(data);
+        setRecurranceDays(data.recurrance.recurranceDays);
     }
 
     // Get groups from the server and sets schedule object 
     React.useEffect(() => {
+        const abortController = new AbortController();
         fetchGroup();
         if (match.params.id && !schedule._id) {
-            fetchSchedule();
+            fetchSchedule({singal: abortController.signal});
+        }
+        return () => {
+            abortController.abort();
         }
     }, []);
 
@@ -132,8 +137,13 @@ function NewSchedule(props) {
             recurrance: {},
             aboutSchedule: ''
         });
-        history.push('/schedule-management');
+        goBack();
         window.location.reload(true);
+    }
+
+    // Link to schedule-management page
+    const goBack = () => {
+        history.push('/schedule-management');
     }
     return (
         <Grid className="scheduleContainer" container>
@@ -219,21 +229,26 @@ function NewSchedule(props) {
                         </Grid>
                         <Grid item xs={12} md={9} container>
                             <Grid item xs={12}>
-                                <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} />} label="Ponedeljak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange}  />} label="Utorak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} />} label="Srijeda" />
-                                <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} />} label="Četvrtak" />
+                                <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday}/>} label="Ponedeljak" />
+                                <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
+                                <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
+                                <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
                             </Grid>
                             <Grid item xs={12}>
-                                <FormControlLabel control={<Checkbox color="primary" name="friday" onChange={onCheckboxChange} />} label="Petak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="saturday" onChange={onCheckboxChange} />} label="Subota" />
-                                <FormControlLabel control={<Checkbox color="primary" name="sunday" onChange={onCheckboxChange} />} label="Nedelja" />
+                                <FormControlLabel control={<Checkbox color="primary" name="friday" onChange={onCheckboxChange} checked={recurranceDays.friday} />} label="Petak" />
+                                <FormControlLabel control={<Checkbox color="primary" name="saturday" onChange={onCheckboxChange} checked={recurranceDays.saturday} />} label="Subota" />
+                                <FormControlLabel control={<Checkbox color="primary" name="sunday" onChange={onCheckboxChange} checked={recurranceDays.sunday} />} label="Nedelja" />
                             </Grid>
                         </Grid>
                     </Grid>
                     <Divider />
-                    <Grid item xs={12} sm={2}>
-                        <Button className="scheduleBtn" variant="contained" color="primary" onClick={onSaveSchedule}>Sačuvaj</Button>
+                    <Grid item container className="btnContainer" spacing={2}>
+                        <Grid item xs={12} sm={2}>
+                            <Button className="scheduleBtn" variant="contained" color="primary" onClick={onSaveSchedule}>Sačuvaj</Button>
+                        </Grid>
+                        <Grid item xs={12} sm={2}>
+                            <Button className="scheduleBtn" variant="contained" color="secondary" onClick={goBack}>Nazad</Button>
+                        </Grid>
                     </Grid>
                 </Paper>
             </Grid>
