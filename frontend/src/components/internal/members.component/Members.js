@@ -17,12 +17,12 @@ export default function Members(props) {
     fetchMembers()
   }, []);
 
-  const rows = members.map(el => (
+  const rows = member.map(el => (
       {
         id: el._id,
-        firstName: el.firstName,
+        firstName: el.firstNamet,
         lastName: el.lastName,
-        dateOfBirth: el.dateOfBirth,
+        dateOfBirth: new Date(el.dateOfBirth).toLocaleDateString(),
         group:el.group
       }
   

@@ -4,8 +4,7 @@ const {Schema} = mongoose;
 const membercSchema = new Schema({
     firstName: String,
     lastName: String,
-    dateOfBirth: Date,
-    group: String,
+    dateOfBirth: Date,    
     groupId: Schema.Types.ObjectId
 })
 
