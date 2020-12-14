@@ -1,13 +1,13 @@
 import React from 'react';
 import NavBar from './NavBar';
-import Members from './Members';
-import NewMember from './NewMember';
-import TrainingList from './TrainingList';
-import Group from './Group';
-import TrainingDetails from './TrainingDetails';
-import ScheduleManagement from './ScheduleManagement';
-import NewSchedule from './AddNewSchedule';
-
+import Members from '../members.component/Members';
+import NewMember from '../members.component/NewMember';
+import TrainingList from '../traininglist.components/TrainingList';
+import Group from '../groups.components/Group';
+import AddGroupModal from '../groups.components/AddGroupModal';
+import TrainingDetails from '../traininglist.components/TrainingDetails';
+import ScheduleManagement from '../schedule.components/ScheduleManagement';
+import NewSchedule from '../schedule.components/AddNewSchedule';
 // Routing components 
 
 import {
@@ -15,9 +15,8 @@ import {
     Route
 } from 'react-router-dom';
 
-
 export default class InternalComponent extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
     }
     render() {
@@ -30,8 +29,11 @@ export default class InternalComponent extends React.Component {
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />
                     <Route path='/members/newMember' component={NewMember} />
-                    <Route path='/groups' component={Group} />
-                    <Route path='/processedGroups' component={TrainingDetails}/>
+                    <Route exact path='/groups' component={Group} />
+                    <Route exact path='/groups/new' component={AddGroupModal} />
+                    <Route path='/groups/edit/:id' component={AddGroupModal} />
+                    <Route path='/processedGroups' component={TrainingDetails} />
+                    <Route path='/schedule-management/edit/:id' component={NewSchedule} />
                     <Route path='/schedule-management/new-schedule' component={NewSchedule} />
                     <Route path='/schedule-management' component={ScheduleManagement} />
                 </Switch>

@@ -16,16 +16,22 @@ import {
     ListItem,
     ListItemText
 } from '@material-ui/core';
-import { calculateDuration } from '../../helpers/helpersMethods';
+import { calculateDuration } from '../../../helpers/helpersMethods';
 
-function NewSchedule() {
-    const [startTime, setStartTime] = React.useState('07:00');
-    const [endTime, setEndTime] = React.useState('07:00');
-    const [trainingDuration, setTrainingDuration] = React.useState('00:00');
+function NewSchedule(props) {
+    const { history, match } = props;
+    const [schedule, setSchedule] = React.useState({
+        startTime: '07:00',
+        endTime: '07:00',
+        trainingDuration: '',
+        attendedGroups: [],
+        recurrance: {},
+        aboutSchedule: ''
+    });
     const [groups, setGroups] = React.useState([]);
     const [recurranceType, setRecurranceType] = React.useState('weekly');
     const [recurranceDays, setRecurranceDays] = React.useState({
-        monday: false,
+        monday: schedule.recurrance.recurranceDays ? schedule.recurrance.recurranceDays : false,
         tuesday: false,
         wednsday: false,
         thursday: false,
@@ -33,39 +39,46 @@ function NewSchedule() {
         saturday: false,
         sunday: false
     });
-    const [aboutSchedule, setAboutSchedule] = React.useState('');
-    const [attendedGroups, setAttendedGroups] = React.useState([]);
-    const [schedule, setNewSchedule] = React.useState({});
+    console.log(recurranceDays)
 
     const fetchGroup = async () => {
         const res = await fetch('http://localhost:3001/groups');
         const data = await res.json();
         setGroups(data)
     }
+    const fetchSchedule = async () => {
+        let req = await fetch(`http://localhost:3001/schedule-management/edit/${match.params.id}`);
+        let data = await req.json();
+        setSchedule(data);
+        console.log(data);
+    }
 
-    // Get groups from the server
+    // Get groups from the server and sets schedule object 
     React.useEffect(() => {
         fetchGroup();
+        if (match.params.id) {
+            fetchSchedule();
+        }
     }, []);
 
     // Calculates training duration when user pick start and end time 
     React.useEffect(() => {
-        const duration = calculateDuration(startTime, endTime)
+        const duration = calculateDuration(schedule.startTime, schedule.endTime)
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
-        setTrainingDuration(`${hours} sat/a ${minutes} min`);
-    }, [startTime, endTime]);
+        setSchedule({ ...schedule, trainingDuration: `${hours} sat/a ${minutes} min` });
+    }, [schedule.startTime, schedule.endTime]);
 
     // Sets start-end time 
     const onSetTime = event => {
         switch (event.target.name) {
             case 'startTime':
-                setStartTime(event.target.value);
+                setSchedule({ ...schedule, [event.target.name]: event.target.value });
                 break
             case 'endTime':
-                setEndTime(event.target.value);
+                setSchedule({ ...schedule, [event.target.name]: event.target.value });
         }
-        setTrainingDuration(calculateDuration(startTime, endTime));
+        setSchedule({ ...schedule, trainingDuration: calculateDuration(schedule.startTime, schedule.endTime) });
     }
 
     // Sets recurrance type
@@ -80,13 +93,40 @@ function NewSchedule() {
 
     // Sets about text
     const onAboutChange = (event) => {
-        setAboutSchedule(event.target.value);
+        setSchedule({ ...schedule, aboutSchedule: event.target.value });
     }
 
     // Sets attended groups
-    const onsetAttendedGroup = (event) => {
-        setAttendedGroups([...attendedGroups, { name: event.target.value }])
+    const onSetAttendedGroup = (event) => {
+        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { name: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
+    }
+
+    // Save schedule to database
+    const onSaveSchedule = () => {
+        const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
+
+        fetch('http://localhost:3001/schedule-management/add', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ completeSchedule })
+        })
+            .catch((error) => {
+                alert(error.msg)
+            });
+        setSchedule({
+            startTime: '07:00',
+            endTime: '07:00',
+            trainingDuration: '',
+            attendedGroups: [],
+            recurrance: {},
+            aboutSchedule: ''
+        })
+        history.push('/schedule-management');
+        window.location.reload(true);
     }
     return (
         <Grid className="scheduleContainer" container>
@@ -99,7 +139,7 @@ function NewSchedule() {
                                 label="Početak"
                                 type="time"
                                 name="startTime"
-                                defaultValue="07:00"
+                                value={schedule.startTime}
                                 variant="outlined"
                                 className="timePicker"
                                 onChange={onSetTime}
@@ -110,7 +150,7 @@ function NewSchedule() {
                                 label="Kraj"
                                 type="time"
                                 name='endTime'
-                                defaultValue="07:00"
+                                value={schedule.endTime}
                                 variant="outlined"
                                 className="timePicker"
                                 onChange={onSetTime}
@@ -121,7 +161,7 @@ function NewSchedule() {
                                 label="Trajanje treninga"
                                 variant="outlined"
                                 className="timePicker"
-                                value={trainingDuration}
+                                value={schedule.trainingDuration}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -131,6 +171,7 @@ function NewSchedule() {
                                 label="Opis"
                                 variant="outlined"
                                 className="timePicker"
+                                value={schedule.aboutSchedule}
                                 rows={10}
                                 onChange={onAboutChange}
                             />
@@ -140,17 +181,18 @@ function NewSchedule() {
                                 variant="outlined"
                                 className="timePicker"
                                 defaultValue="Izaberi Grupu"
-                                onChange={onsetAttendedGroup}
+                                onChange={onSetAttendedGroup}
                             >
+                                <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
                                 {groups.map(group => {
-                                    return <MenuItem key={group.id} value={group.name}>{group.name}</MenuItem>
+                                    return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
                                 })}
                             </Select>
                         </Grid>
                     </Grid>
                     <Divider />
                     <List>
-                        {attendedGroups.length != 0 ? attendedGroups.map(group => {
+                        {schedule.attendedGroups.length !== 0 ? schedule.attendedGroups.map(group => {
                             return (
                                 <ListItem key={group.name}>
                                     <ListItemText primary={group.name} />
@@ -184,7 +226,7 @@ function NewSchedule() {
                     </Grid>
                     <Divider />
                     <Grid item xs={12} sm={2}>
-                        <Button className="scheduleBtn" variant="contained" color="primary">Sačuvaj</Button>
+                        <Button className="scheduleBtn" variant="contained" color="primary" onClick={onSaveSchedule}>Sačuvaj</Button>
                     </Grid>
                 </Paper>
             </Grid>
