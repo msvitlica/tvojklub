@@ -3,7 +3,7 @@ import NavBar from './NavBar';
 import Members from '../members.component/Members';
 import NewMember from '../members.component/NewMember';
 import TrainingList from '../traininglist.components/TrainingList';
-import Group from '../groups.components/Group';
+import GroupList from '../groups.components/GroupList';
 import AddGroupModal from '../groups.components/AddGroupModal';
 import TrainingDetails from '../traininglist.components/TrainingDetails';
 import ScheduleManagement from '../schedule.components/ScheduleManagement';
@@ -29,7 +29,7 @@ export default class InternalComponent extends React.Component {
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />
                     <Route path='/members/newMember' component={NewMember} />
-                    <Route exact path='/groups' component={Group} />
+                    <Route exact path='/groups' component={GroupList} />
                     <Route exact path='/groups/new' component={AddGroupModal} />
                     <Route path='/groups/edit/:id' component={AddGroupModal} />
                     <Route path='/processedGroups' component={TrainingDetails} />

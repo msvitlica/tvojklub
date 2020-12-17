@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
     res.status(200).json({
       members: members.map(m => {
-        return {...m.toObject(), group: allGroups.find(g => g._id.toString() === m.groupId.toString()).name }})
+        return {...m,group: allGroups.find(g => g._id.toString() === m.groupId.toString()).name }})
     });
     console.log(members)
   } catch (err) {
