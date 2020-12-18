@@ -2,7 +2,8 @@ import React from 'react'
 import Button from '@material-ui/core/Button';
 function NewGroupButton(props) {
     const handleClickOpen = () => {
-        props.handleClickOpen();
+        let groupId= props.groupId;
+        props.handleClickOpen(groupId);
     };
     return (
         <div>

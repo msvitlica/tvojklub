@@ -7,14 +7,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AddGroupModal(props) {
-  
-    const [groupName, setGroupName] = useState('');
+    const [draftGroupName, setDraftGroupName] = useState('');
     const [groupNameError, setGroupNameError] = useState('');
+    const [groupMessage, setGroupMessage] = useState('');
+
     const handleClose = () => {
         props.handleClose();
     };
     const onInputChange = (e) =>{
-        setGroupName(e.target.value);
+        setDraftGroupName(e.target.value);
     }
     const postGroup = async () => {
         if (props.groupId) {
@@ -24,7 +25,7 @@ export default function AddGroupModal(props) {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: props.groupId, name: groupName })
+                body: JSON.stringify({ id: props.groupId, name: draftGroupName })
             })
         } else {
             fetch('http://localhost:3001/groups', {
@@ -33,16 +34,16 @@ export default function AddGroupModal(props) {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: groupName }),
+                body: JSON.stringify({ name:draftGroupName }),
             })
         }
-        setGroupName('');
+       setDraftGroupName('');
         handleClose();
     }
     const validate = () => {
         let isValid = true;
         const groupNameError = {};
-        if (groupName.trim().length < 2) {
+        if (draftGroupName.trim().length < 2) {
             groupNameError.emptyInput = 'Naziv grupe treba da sadrzi najmanje dva karaktera.';
             groupNameError.notValid = true;
             isValid = false;
@@ -54,7 +55,7 @@ export default function AddGroupModal(props) {
         e.preventDefault();
         const err = validate();
         if (err) {
-            setGroupName(groupName);
+            setDraftGroupName(draftGroupName);
             postGroup();
         }
     }
@@ -62,7 +63,7 @@ export default function AddGroupModal(props) {
         <div>
             <Dialog open={props.open}>
                 <DialogTitle id="form-dialog-title">Unesite Novu Grupu</DialogTitle>
-                <form onSubmit={submitGroup} >
+                <form onSubmit={submitGroup}key={props.groupId}>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -70,7 +71,7 @@ export default function AddGroupModal(props) {
                             onChange={onInputChange}
                             margin="dense"
                             name="groupName"
-                            value={groupName}
+                            value={draftGroupName}
                             label="Naziv Grupe"
                             helperText={groupNameError.emptyInput}
                             error={groupNameError.notValid}

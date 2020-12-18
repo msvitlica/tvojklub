@@ -33,7 +33,8 @@ export default function GroupList(props) {
     };
     const handleClickOpen = () => {
         setOpen(true);
-    };
+    }
+   
     const fetchTargetGroup = async (id) => {
         const APIurl = `http://localhost:3001/groups/edit/${id}`;
         const res = await fetch(APIurl);
@@ -50,7 +51,6 @@ export default function GroupList(props) {
         fetchTargetGroup(id);
         setOpen(true);
     }
-
     const rows = groups.map(el => (
         {
             id: el._id,
@@ -62,7 +62,8 @@ export default function GroupList(props) {
         <Grid container direction='column'>
             <Grid item>
                 <NewGroupButton handleClickOpen={handleClickOpen}></NewGroupButton>
-                <AddGroupModal groupId={groupId} groupName={groupName} open={open} handleClickOpen={handleClickOpen} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
+                <AddGroupModal groupId={groupId} groupName={groupName} open={open} 
+                handleClickOpen={handleClickOpen} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
             </Grid>
             <div style={{ width: '100%', height: 400 }}>
                 <DataGrid
