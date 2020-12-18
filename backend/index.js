@@ -34,7 +34,7 @@ mongoose
     useUnifiedTopology: true,
     useFindAndModify: false    
   })
-  .then(console.log("Database connecteed!"))
+  .then(console.log("Database connected!"))
   .catch(err => console.log(err));
 
 app.listen(port, function () {
