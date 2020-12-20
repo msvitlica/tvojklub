@@ -6,11 +6,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddGroupModal from './AddGroupModal';
 import NewGroupButton from './NewGroupButton';
 
-export default function GroupList(props) {
+export default function GroupList(props) {    
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
-    const [groupName, setGroupName] = useState('');
-    const [groupId, setGroupId] = useState('');
+    const [group, setGroup] = useState('');    
+    
     const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
         const res = await fetch(APIurl)
@@ -20,6 +20,7 @@ export default function GroupList(props) {
     useEffect(() => {
         fetchData();
     }, []);
+
     const onDeleteGroup = async (id) => {
         await fetch(`http://localhost:3001/groups/${id}`, {
             method: 'DELETE',
@@ -27,10 +28,16 @@ export default function GroupList(props) {
         let filteredGroups = groups.filter(el => el._id !== id);
         setGroups(filteredGroups);
     }
-    const handleClose = () => {
+    
+    const handleClose = async () => {
         setOpen(false);
-        window.location.reload(true);
+
+        var millisecondsToWait = 1000;
+        setTimeout(function () {
+            fetchData();            
+        }, millisecondsToWait);      
     };
+
     const handleClickOpen = () => {
         setOpen(true);
     }
@@ -39,16 +46,15 @@ export default function GroupList(props) {
         const APIurl = `http://localhost:3001/groups/edit/${id}`;
         const res = await fetch(APIurl);
         const data = await res.json();
-        setGroupName(data.name);
-        setGroupId(data._id);
+        setGroup(data);        
     }
     useEffect(() => {
-        if (groupId) {
-            fetchTargetGroup(groupId);
+        if (group._id) {
+            fetchTargetGroup(group._id);
         }
     }, [])
-    const onEditGroup = (id) => {
-        fetchTargetGroup(id);
+    const onEditGroup = async (id) => {
+        await fetchTargetGroup(id);
         setOpen(true);
     }
     const rows = groups.map(el => (
@@ -62,8 +68,7 @@ export default function GroupList(props) {
         <Grid container direction='column'>
             <Grid item>
                 <NewGroupButton handleClickOpen={handleClickOpen}></NewGroupButton>
-                <AddGroupModal groupId={groupId} groupName={groupName} open={open} 
-                handleClickOpen={handleClickOpen} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
+                <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
             </Grid>
             <div style={{ width: '100%', height: 400 }}>
                 <DataGrid

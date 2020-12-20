@@ -7,9 +7,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function AddGroupModal(props) {
-    const [draftGroupName, setDraftGroupName] = useState('');
-    const [groupNameError, setGroupNameError] = useState('');
-    const [groupMessage, setGroupMessage] = useState('');
+    const [draftGroupName, setDraftGroupName] = useState(props.group.name);
+    const [groupNameError, setGroupNameError] = useState('');   
+
+    useEffect(() => {
+        setDraftGroupName(props.group.name);
+    }, [props.group.name]);
 
     const handleClose = () => {
         props.handleClose();
@@ -18,14 +21,14 @@ export default function AddGroupModal(props) {
         setDraftGroupName(e.target.value);
     }
     const postGroup = async () => {
-        if (props.groupId) {
-            fetch('http://localhost:3001/groups/edit/' + props.groupId, {
+        if (props.group._id) {
+            fetch('http://localhost:3001/groups/edit/' + props.group._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: props.groupId, name: draftGroupName })
+                body: JSON.stringify({ _id: props.group._id, name: draftGroupName })
             })
         } else {
             fetch('http://localhost:3001/groups', {
@@ -62,8 +65,7 @@ export default function AddGroupModal(props) {
     return (
         <div>
             <Dialog open={props.open}>
-                <DialogTitle id="form-dialog-title">Unesite Novu Grupu</DialogTitle>
-                <form onSubmit={submitGroup}key={props.groupId}>
+                <DialogTitle id="form-dialog-title">Unesite Novu Grupu</DialogTitle>                
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -78,10 +80,9 @@ export default function AddGroupModal(props) {
                         />
                     </DialogContent>
                     <DialogActions /* className='dialogButtons' */ style={{ display: 'flex', justifyContent: 'center' }}>
-                        <Button type='submit' variant='contained' color="primary"> Sačuvaj </Button>
+                        <Button onClick={submitGroup} variant='contained' color="primary"> Sačuvaj </Button>
                         <Button onClick={handleClose} variant='contained' color="secondary"> Otkaži </Button>
-                    </DialogActions>
-                </form>
+                    </DialogActions>              
             </Dialog>
         </div>
     )
