@@ -10,13 +10,11 @@ const Group = require('../models/groupModel')
 router.get("/", async (req, res) => {
   try {
     const allGroups = await Group.find()
-    const members = await Member.find();         
-
-    console.log(members[0].firstName);
+    const members = await Member.find();    
 
     res.status(200).json({
       members: members.map(m => {
-        return {...m,group: allGroups.find(g => g._id.toString() === m.groupId.toString()).name }})
+        return {...m.toObject(),group: allGroups.find(g => g._id.toString() === m.groupId.toString()).name }})
     });
     console.log(members)
   } catch (err) {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { DataGrid } from '@material-ui/data-grid';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
@@ -15,7 +16,7 @@ export default function Members(props) {
   useEffect(() => {
     fetchMembers()
   }, []);
- console.log(members);
+
   const rows = members.map(el => (
       {
         id: el._id,
@@ -42,6 +43,7 @@ export default function Members(props) {
       </Grid>
       <Grid item xs={12}>
         <MaterialTable 
+         /*  title={''} */
           data={rows}
           columns={columns}
           options={{

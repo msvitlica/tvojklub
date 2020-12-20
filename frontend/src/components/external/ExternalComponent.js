@@ -6,10 +6,7 @@ import {
     Route
 } from 'react-router-dom';
 
-class ExternalComponent extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+class ExternalComponent extends React.Component {    
     render() {
         return (
             <Switch>
