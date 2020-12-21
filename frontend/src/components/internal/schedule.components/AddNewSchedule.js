@@ -14,9 +14,12 @@ import {
     Divider,
     List,
     ListItem,
-    ListItemText
+    ListItemText,
+    FormHelperText
 } from '@material-ui/core';
-import { calculateDuration } from '../../../helpers/helpersMethods';
+import {
+    calculateDuration
+} from '../../../helpers/helpersMethods';
 
 function NewSchedule(props) {
     const backendUrl = 'http://localhost:3001';
@@ -41,6 +44,11 @@ function NewSchedule(props) {
         sunday: false
     });
 
+    // Validation errors 
+    const [durationError, setDurationError] = React.useState({});
+    const [groupError, setGroupError] = React.useState({});
+    const [recurranceError, setRecurranceError] = React.useState({});
+
     // Get all available groups on backend
     const fetchGroup = async () => {
         const res = await fetch(`${backendUrl}/groups`);
@@ -49,7 +57,8 @@ function NewSchedule(props) {
     }
 
     // Get schedule with specific ID
-    const fetchSchedule = async (controller) => {
+
+    const fetchSchedule = async (controller) => { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
         let req = await fetch(`${backendUrl}/schedule-management/edit/${match.params.id}`, controller);
         let data = await req.json();
         setSchedule(data);
@@ -61,7 +70,7 @@ function NewSchedule(props) {
         const abortController = new AbortController();
         fetchGroup();
         if (match.params.id && !schedule._id) {
-            fetchSchedule({singal: abortController.signal});
+            fetchSchedule({ singal: abortController.signal });
         }
         return () => {
             abortController.abort();
@@ -105,45 +114,87 @@ function NewSchedule(props) {
     // Save schedule to database
     const onSaveSchedule = () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
+        const err = fieldsValidation();
 
-        if (schedule._id) {
-            fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ completeSchedule })
-            })
+        if (err) {
+            if (schedule._id) {
+                fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ completeSchedule })
+                })
+            }
+            else {
+                fetch(`${backendUrl}/schedule-management/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ completeSchedule })
+                })
+                    .catch((error) => {
+                        alert(error.msg)
+                    });
+            }
+            setSchedule({
+                startTime: '07:00',
+                endTime: '07:00',
+                trainingDuration: '',
+                attendedGroups: [],
+                recurrance: {},
+                aboutSchedule: ''
+            });
+            goBack();
+            window.location.reload(true);
         }
-        else {
-            fetch(`${backendUrl}/schedule-management/add`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ completeSchedule })
-            })
-                .catch((error) => {
-                    alert(error.msg)
-                });
-        }
-        setSchedule({
-            startTime: '07:00',
-            endTime: '07:00',
-            trainingDuration: '',
-            attendedGroups: [],
-            recurrance: {},
-            aboutSchedule: ''
-        });
-        goBack();
-        window.location.reload(true);
     }
 
     // Link to schedule-management page
     const goBack = () => {
         history.push('/schedule-management');
+    }
+
+    const fieldsValidation = () => {
+        const duration = calculateDuration(schedule.startTime, schedule.endTime)
+        const hours = duration.split(':')[0];
+        const minutes = duration.split(':')[1];
+
+        const durationError = {};
+        const groupError = {};
+        const recurranceError = {};
+        let isValid = true;
+
+        const daysValues = Object.values(recurranceDays)
+        const recurranceValidation = daysValues.filter(el => el);
+
+        if (hours === '00' && minutes === '00') {
+            durationError.message = 'Select valid training duration!';
+            durationError.notValid = true;
+            isValid = false;
+        }
+        if (schedule.attendedGroups.length === 0) {
+            groupError.message = 'Select group from list above!';
+            groupError.notValid = true;
+            isValid = false;
+        }
+        if (recurranceValidation.length === 0) {
+            recurranceError.message = 'Select at least one day of week!';
+            recurranceError.notValid = true;
+            isValid = false;
+        }
+        setDurationError(durationError);
+        setGroupError(groupError);
+        setRecurranceError(recurranceError);
+        setTimeout(() => {
+            setDurationError({});
+            setGroupError({});
+            setRecurranceError({});
+        }, 6000)
+        return isValid;
     }
     return (
         <Grid className="scheduleContainer" container>
@@ -156,6 +207,7 @@ function NewSchedule(props) {
                                 label="Početak"
                                 type="time"
                                 name="startTime"
+                                error={durationError.notValid}
                                 value={schedule.startTime}
                                 variant="outlined"
                                 className="timePicker"
@@ -167,6 +219,7 @@ function NewSchedule(props) {
                                 label="Kraj"
                                 type="time"
                                 name='endTime'
+                                error={durationError.notValid}
                                 value={schedule.endTime}
                                 variant="outlined"
                                 className="timePicker"
@@ -178,6 +231,8 @@ function NewSchedule(props) {
                                 label="Trajanje treninga"
                                 variant="outlined"
                                 className="timePicker"
+                                error={durationError.notValid}
+                                helperText={durationError.message}
                                 value={schedule.trainingDuration}
                             />
                         </Grid>
@@ -194,17 +249,20 @@ function NewSchedule(props) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Select
-                                variant="outlined"
-                                className="timePicker"
-                                defaultValue="Izaberi Grupu"
-                                onChange={onSetAttendedGroup}
-                            >
-                                <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
-                                {groups.map(group => {
-                                    return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
-                                })}
-                            </Select>
+                            <FormControl error={groupError.notValid} className="scheduleContainer">
+                                <Select
+                                    variant="outlined"
+                                    className="timePicker"
+                                    defaultValue="Izaberi Grupu"
+                                    onChange={onSetAttendedGroup}
+                                >
+                                    <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
+                                    {groups.map(group => {
+                                        return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
+                                    })}
+                                </Select>
+                                <FormHelperText>{groupError.message}</FormHelperText>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Divider />
@@ -228,17 +286,20 @@ function NewSchedule(props) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} md={9} container>
-                            <Grid item xs={12}>
-                                <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday}/>} label="Ponedeljak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
-                                <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel control={<Checkbox color="primary" name="friday" onChange={onCheckboxChange} checked={recurranceDays.friday} />} label="Petak" />
-                                <FormControlLabel control={<Checkbox color="primary" name="saturday" onChange={onCheckboxChange} checked={recurranceDays.saturday} />} label="Subota" />
-                                <FormControlLabel control={<Checkbox color="primary" name="sunday" onChange={onCheckboxChange} checked={recurranceDays.sunday} />} label="Nedelja" />
-                            </Grid>
+                            <FormControl error={recurranceError.notValid}>
+                                <Grid item xs={12}>
+                                    <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday} />} label="Ponedeljak" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControlLabel control={<Checkbox color="primary" name="friday" onChange={onCheckboxChange} checked={recurranceDays.friday} />} label="Petak" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="saturday" onChange={onCheckboxChange} checked={recurranceDays.saturday} />} label="Subota" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="sunday" onChange={onCheckboxChange} checked={recurranceDays.sunday} />} label="Nedelja" />
+                                </Grid>
+                                <FormHelperText>{recurranceError.message}</FormHelperText>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Divider />
