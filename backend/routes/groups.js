@@ -29,11 +29,13 @@ router.post('/', (req, res, next) => {
       if (err) console.log(err);
       if (group) {
         console.log('Group already exists');
+        res.status(200).send({msg:'Group already exists'});
       } else {
         let group = new Group(req.body);
         group.save(function (err, group) {
           if (err) console.log(err);
           console.log('New group created');
+          res.status(200).send({msg:'New group created'});
         });
       }
     });
@@ -51,6 +53,7 @@ router.put('/edit/:id', (req, res) => {
       if (err) console.log(err);
       if (group) {
         console.log('Group already exists');
+        res.status(200).send({msg:'Group already exists'});
       } else {
         Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {
@@ -58,7 +61,9 @@ router.put('/edit/:id', (req, res) => {
               console.log(err)
             }
             else {
-              console.log("Updated Group : ", group);
+              console.log("Updated Group");
+              res.status(200).send({msg:'Group already exists'});
+              
             }
           });
       }

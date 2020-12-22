@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, Grid } from '@material-ui/core';
+import { IconButton, Grid, Button } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddGroupModal from './AddGroupModal';
-import NewGroupButton from './NewGroupButton';
-
-export default function GroupList(props) {    
+import GroupSnackbar from './GroupSnackbar';
+export default function GroupList(props) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
-    const [group, setGroup] = useState('');    
-    
+    const [group, setGroup] = useState('');
+
     const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
         const res = await fetch(APIurl)
@@ -28,25 +27,25 @@ export default function GroupList(props) {
         let filteredGroups = groups.filter(el => el._id !== id);
         setGroups(filteredGroups);
     }
-    
+
     const handleClose = async () => {
         setOpen(false);
 
         var millisecondsToWait = 1000;
-        setTimeout(function () {
-            fetchData();            
-        }, millisecondsToWait);      
+        setTimeout(() => {
+            fetchData();
+        }, millisecondsToWait);
     };
 
     const handleClickOpen = () => {
         setOpen(true);
     }
-   
+
     const fetchTargetGroup = async (id) => {
         const APIurl = `http://localhost:3001/groups/edit/${id}`;
         const res = await fetch(APIurl);
         const data = await res.json();
-        setGroup(data);        
+        setGroup(data);
     }
     useEffect(() => {
         if (group._id) {
@@ -66,8 +65,9 @@ export default function GroupList(props) {
     ))
     return (
         <Grid container direction='column'>
-            <Grid item>
-                <NewGroupButton handleClickOpen={handleClickOpen}></NewGroupButton>
+            < Grid item>
+                <Grid item>
+                    <Button variant='outlined' color='primary' onClick={handleClickOpen}>Dodaj Novu Grupu</Button></Grid>
                 <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
             </Grid>
             <div style={{ width: '100%', height: 400 }}>
