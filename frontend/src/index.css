@@ -150,3 +150,6 @@ div.timePicker {
 button.scheduleBtn {
   width: 100%;
 }
+div.btnContainer {
+  justify-content: flex-start;
+}

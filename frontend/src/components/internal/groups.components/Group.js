@@ -20,5 +20,3 @@ export default function Group(props) {
         </div>
     )
 }
-
-
