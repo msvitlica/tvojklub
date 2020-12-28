@@ -24,19 +24,19 @@ export default function NewMember(props) {
         firstName: '',
         lastName: '',
         dateOfBirth: '',
-        group: '',
+        groupId: '',
     });
     const [firstNameError, setFirstNameError] = useState({});
     const [lastNameError, setLastNameError] = useState({});
     const [birthDateError, setBirthDateError] = useState({});
     const [groupError, setGroupError] = useState({});
-    const [groups, setGroupList] = useState([]);
+    const [groups, setGroupList] = useState([]);  
     const { history } = props;
     const APIurl = 'http://localhost:3001/groups';
     const fetchGroup = async () => {
         const res = await fetch(APIurl);
         const data = await res.json();
-        setGroupList(data)
+        setGroupList(data)        
     }
     useEffect(() => {
         fetchGroup()
@@ -65,7 +65,7 @@ export default function NewMember(props) {
             birthDateError.notValid = true;
             isValid = false;
         }
-        if (member.group.trim().length === 0) {
+        if (!member.groupId) {
             groupError.emptyInput = 'Group is required';
             groupError.notValid = true;
             isValid = false;
@@ -84,7 +84,7 @@ export default function NewMember(props) {
                 firstName: member.firstName,
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
-                group: member.group,
+                group: groups.name,
             })
             postMember();
         }
@@ -151,13 +151,13 @@ export default function NewMember(props) {
                         <FormControl className='dropdown'>
                             <InputLabel className='p-8'>Group</InputLabel>
                             <Select variant="filled"
-                                name="group"
-                                value={member.group}
+                                name="groupId"
+                                value={member.groupId}
                                 onChange={handleChange}
                                 error={groupError.notValid}
                             >
                                 {groups.map(el => (
-                                    <MenuItem key={el.id} value={el.name}>{el.name}</MenuItem>
+                                    <MenuItem key={el._id} value={el._id}>{el.name}</MenuItem>
                                 ))}
                             </Select>
                             <FormHelperText className='validationGroup'>{groupError.emptyInput}</FormHelperText>
