@@ -20,22 +20,23 @@ router.get("/", async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
   const id = req.params.id;
   const targetGroup = await Group.findById(id);
-  return res.status(200).send(targetGroup);
+  console.log(targetGroup);
+   res.status(200).send(targetGroup);
 });
-router.post('/', (req, res, next) => {
+router.post('/', async(req, res) => {
   try {
     const body = req.body;
-    Group.findOne({ name: body.name }, function (err, group) {
+   await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
       if (group) {
         console.log('Group already exists');
-        res.status(200).send({msg:'Group already exists'});
+        res.status(200).send({ msg: 'Group already exists' });
       } else {
-        let group = new Group(req.body);
-        group.save(function (err, group) {
-          if (err) console.log(err);
-          console.log('New group created');
-          res.status(200).send({msg:'New group created'});
+       new Group(req.body).save(function (err, group) {
+          if (err) { console.log(err) } else {
+            console.log('New group created');
+            res.status(200).send({ msg: 'New group created' });
+          }
         });
       }
     });
@@ -45,25 +46,25 @@ router.post('/', (req, res, next) => {
     })
   }
 });
-router.put('/edit/:id', (req, res) => {
+router.put('/edit/:id', async(req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
-    Group.findOne({ name: body.name }, function (err, group) {
+   await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
       if (group) {
         console.log('Group already exists');
-        res.status(200).send({msg:'Group already exists'});
+        res.status(200).send({ msg: 'Group already exists' });
       } else {
-        Group.findByIdAndUpdate(id, { name: body.name },
+       Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {
             if (err) {
               console.log(err)
             }
             else {
               console.log("Updated Group");
-              res.status(200).send({msg:'Group already exists'});
-              
+              res.status(200).send({ msg: 'Updated group' });
+
             }
           });
       }
