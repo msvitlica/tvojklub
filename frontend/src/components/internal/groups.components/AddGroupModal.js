@@ -4,13 +4,13 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import GroupSnackbar from './GroupSnackbar';
 
 export default function AddGroupModal(props) {
     const [draftGroupName, setDraftGroupName] = useState(props.group.name);
     const [groupNameError, setGroupNameError] = useState('');
-    const [actionDraftMessage, setActionDraftMessage] = useState('');
+    const [actionPostMessage, setActionPostMessage] = useState('');
+    const [actionPutMessage, setActionPutMessage] = useState('');
     const [open, setOpen] = useState(false);
     useEffect(() => {
         setDraftGroupName(props.group.name);
@@ -24,13 +24,14 @@ export default function AddGroupModal(props) {
     }
     const openSnackbar = () => {
         setOpen(true);
-      };
-    const closeSnackbar = ()=> {
+    };
+    const closeSnackbar = () => {
         setOpen(false);
     }
+
     const postGroup = async () => {
         if (props.group._id) {
-           fetch('http://localhost:3001/groups/edit/'+props.group._id , {
+            const editedData = await fetch('http://localhost:3001/groups/edit/' + props.group._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -38,6 +39,10 @@ export default function AddGroupModal(props) {
                 },
                 body: JSON.stringify({ _id: props.group._id, name: draftGroupName })
             });
+            const res = await editedData.json();
+            setActionPutMessage(res);
+            handleClose();
+            setDraftGroupName(draftGroupName);
         } else {
             const postedData = await fetch('http://localhost:3001/groups', {
                 method: 'POST',
@@ -48,16 +53,16 @@ export default function AddGroupModal(props) {
                 body: JSON.stringify({ name: draftGroupName }),
             });
             const res = await postedData.json();
-            setActionDraftMessage(res);
+            setActionPostMessage(res);
+            handleClose();
+            setDraftGroupName('');
         }
-        setDraftGroupName('');
-        handleClose();
     }
     const validate = () => {
         let isValid = true;
         const groupNameError = {};
         if (draftGroupName.trim().length < 2) {
-            groupNameError.emptyInput = 'Naziv grupe treba da sadrzi najmanje dva karaktera.';
+            groupNameError.emptyInput = /* 'Popunite prazno polje.' */ 'Naziv grupe treba da sadrzi bar 2 karaktera.';
             groupNameError.notValid = true;
             isValid = false;
         }
@@ -71,12 +76,12 @@ export default function AddGroupModal(props) {
             setDraftGroupName(draftGroupName);
             postGroup();
             openSnackbar();
+            console.log(draftGroupName);
         }
     }
     return (
         <div>
             <Dialog open={props.open}>
-                {/*  <DialogTitle id="form-dialog-title">Unesite Novu Grupu</DialogTitle>     */}
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -95,7 +100,7 @@ export default function AddGroupModal(props) {
                 </DialogActions>
             </Dialog>
             <div>
-                <GroupSnackbar open={open} actionDraftMessage={actionDraftMessage} closeSnackbar={closeSnackbar}></GroupSnackbar>
+                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage : actionPostMessage} closeSnackbar={closeSnackbar}></GroupSnackbar>
             </div>
         </div>
     )

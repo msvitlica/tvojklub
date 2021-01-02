@@ -4,7 +4,6 @@ import { DataGrid } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddGroupModal from './AddGroupModal';
-import GroupSnackbar from './GroupSnackbar';
 export default function GroupList(props) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
@@ -30,22 +29,23 @@ export default function GroupList(props) {
 
     const handleClose = async () => {
         setOpen(false);
-
-        var millisecondsToWait = 1000;
+        let millisecondsToWait = 1000;
         setTimeout(() => {
             fetchData();
         }, millisecondsToWait);
     };
 
-    const handleClickOpen = () => {
+    const handleClickOpen =  async() => {
+        setGroup('')
         setOpen(true);
     }
 
     const fetchTargetGroup = async (id) => {
-        const APIurl = `http://localhost:3001/groups/edit/${id}`;
+        const APIurl = 'http://localhost:3001/groups/edit/' + id;
         const res = await fetch(APIurl);
         const data = await res.json();
         setGroup(data);
+        console.log(data)
     }
     useEffect(() => {
         if (group._id) {
@@ -68,7 +68,7 @@ export default function GroupList(props) {
             < Grid item>
                 <Grid item>
                     <Button variant='outlined' color='primary' onClick={handleClickOpen}>Dodaj Novu Grupu</Button></Grid>
-                <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup}></AddGroupModal>
+                <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup} ></AddGroupModal>
             </Grid>
             <div style={{ width: '100%', height: 400 }}>
                 <DataGrid
