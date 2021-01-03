@@ -3,29 +3,32 @@ import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
+// Including member service in app
+import MemberService from './../../../services/members-service';
 
 export default function Members(props) {
-  const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
+  
+  // Gets data from backend
   const fetchMembers = async () => {
-    const res = await fetch(APIurl);
-    const data = await res.json()
-    setMemberList(data.members)
-  };
+    const res = await MemberService.getAllMembers();
+    setMemberList(res);
+  }
+
   useEffect(() => {
     fetchMembers()
   }, []);
 
   const rows = members.map(el => (
-      {
-        id: el._id,
-        firstName: el.firstName,
-        lastName: el.lastName,
-        dateOfBirth: new Date(el.dateOfBirth).toLocaleDateString(),
-        group:el.group
-      }
-  
+    {
+      id: el._id,
+      firstName: el.firstName,
+      lastName: el.lastName,
+      dateOfBirth: new Date(el.dateOfBirth).toLocaleDateString(),
+      group: el.group
+    }
   ));
+
   const columns = [
     { field: 'firstName', title: 'Ime' },
     { field: 'lastName', title: 'Prezime' },
@@ -41,11 +44,11 @@ export default function Members(props) {
         </Link>
       </Grid>
       <Grid item xs={12}>
-        <MaterialTable 
+        <MaterialTable
           data={rows}
           columns={columns}
           options={{
-            toolbar:false
+            toolbar: false
           }}
         />
       </Grid>
