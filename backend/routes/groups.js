@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
     const body = req.body;
    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
-      if (group) {
+      if (group ) {
         console.log('Group already exists');
         res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
@@ -46,13 +46,13 @@ router.post('/', async(req, res) => {
     })
   }
 });
-router.put('/edit/:id', async(req, res) => {
+router.put('/:id', async(req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
-      if (group) {
+      if (group && group.id !== id) {
         console.log('Group already exists');
         res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {

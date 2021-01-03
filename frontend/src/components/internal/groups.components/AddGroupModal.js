@@ -23,7 +23,7 @@ export default function AddGroupModal(props) {
         setDraftGroupName(e.target.value);
     }
     const openSnackbar = () => {
-        setOpen(true);
+            setOpen(true);  
     };
     const closeSnackbar = () => {
         setOpen(false);
@@ -31,7 +31,7 @@ export default function AddGroupModal(props) {
 
     const postGroup = async () => {
         if (props.group._id) {
-            const editedData = await fetch('http://localhost:3001/groups/edit/' + props.group._id, {
+            const editedData = await fetch('http://localhost:3001/groups/' + props.group._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -100,7 +100,7 @@ export default function AddGroupModal(props) {
                 </DialogActions>
             </Dialog>
             <div>
-                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage : actionPostMessage} closeSnackbar={closeSnackbar}></GroupSnackbar>
+                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage  : actionPostMessage}  closeSnackbar={closeSnackbar}></GroupSnackbar>
             </div>
         </div>
     )
