@@ -8,6 +8,7 @@ import AddGroupModal from '../groups.components/AddGroupModal';
 import TrainingDetails from '../traininglist.components/TrainingDetails';
 import ScheduleManagement from '../schedule.components/ScheduleManagement';
 import NewSchedule from '../schedule.components/AddNewSchedule';
+
 // Routing components 
 
 import {

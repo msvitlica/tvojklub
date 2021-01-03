@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
@@ -38,12 +37,11 @@ export default function Members(props) {
       <Grid item xs={1} sm={2}></Grid>
       <Grid item xs={3}>
         <Link to='members/newMember'>
-          <Button className='btn' color="primary" variant='text'>New Member</Button>
+          <Button className='btn' color="primary" variant='text'>Dodaj novog člana</Button>
         </Link>
       </Grid>
       <Grid item xs={12}>
         <MaterialTable 
-         /*  title={''} */
           data={rows}
           columns={columns}
           options={{
@@ -51,20 +49,6 @@ export default function Members(props) {
           }}
         />
       </Grid>
-
-      {/*   <div style={{width:'100%', height: 400 }}>
-        <DataGrid
-          columns={[
-            { field: 'firstName', headerName: 'Ime',width:160 },
-            { field: 'lastName', headerName: 'Prezime',width:160 },
-            { field: 'dateOfBirth', headerName: 'Datum rođenja',width:160 },
-            { field: 'group', headerName: 'Grupa',width:160 },
-          ]}
-          rows={rows}
-          disableSelectionOnClick
-          pageSize={5}
-        />
-      </div> */}
       <Grid item xs={1} sm={2}></Grid>
     </Grid>
   )

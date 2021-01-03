@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 router.post('/add', async (req, res) => {
     try{
         console.log(req.body);
-        let schedule = await Schedule.create(req.body.schedule);
+        let schedule = await Schedule.create(req.body.completeSchedule);
         return res.status(200).send({
             error: false,
             schedule
@@ -44,17 +44,18 @@ router.post('/add', async (req, res) => {
     }
 });
 
-// router.put('/edit/:id', async (req, res) => {
-//     try {
-//         const id = req.params.id
-//         await Schedule.findById(id);
-//     } catch (err) {
-//         res.status(400).json({
-//             message: 'Some error occured',
-//             err
-//         })
-//     }
-// });
+router.put('/edit/:id', async (req, res) => {
+    try {
+        const id = req.body.completeSchedule._id;
+        const schedule = req.body.completeSchedule;
+        await Schedule.findByIdAndUpdate(id, schedule);
+    } catch (err) {
+        res.status(400).json({
+            message: 'Some error occured',
+            err
+        })
+    }
+});
 
 router.delete('/delete/:id', async (req, res) => {
     try {
