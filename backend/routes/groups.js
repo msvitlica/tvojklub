@@ -28,14 +28,14 @@ router.post('/', async(req, res) => {
     const body = req.body;
    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
-      if (group) {
+      if (group ) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Group already exists' });
+        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
        new Group(req.body).save(function (err, group) {
           if (err) { console.log(err) } else {
             console.log('New group created');
-            res.status(200).send({ msg: 'New group created' });
+            res.status(200).send({ msg: 'Grupa je kreirana.' });
           }
         });
       }
@@ -46,15 +46,15 @@ router.post('/', async(req, res) => {
     })
   }
 });
-router.put('/edit/:id', async(req, res) => {
+router.put('/:id', async(req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
-      if (group) {
+      if (group && group.id !== id) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Group already exists' });
+        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
        Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {
@@ -63,7 +63,7 @@ router.put('/edit/:id', async(req, res) => {
             }
             else {
               console.log("Updated Group");
-              res.status(200).send({ msg: 'Updated group' });
+              res.status(200).send({ msg: 'Izmijenjen naziv grupe.' });
 
             }
           });
@@ -80,7 +80,7 @@ router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     await Group.findByIdAndRemove(id);
     res.status(200).send({
-      msg: `Group with id ${id} has been deleted`
+      msg: `Grupa je obrisana.`
     })
   } catch (err) {
     res.status(400).json({

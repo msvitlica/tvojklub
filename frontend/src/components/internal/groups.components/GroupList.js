@@ -4,10 +4,15 @@ import { DataGrid } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddGroupModal from './AddGroupModal';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+
 export default function GroupList(props) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [group, setGroup] = useState('');
+    const [actionDeleteMessage, setActionDeleteMessage] = useState('');
+    const [snackOpen, setSnackOpen] = useState(false);
 
     const fetchData = async () => {
         let APIurl = 'http://localhost:3001/groups';
@@ -20,13 +25,18 @@ export default function GroupList(props) {
     }, []);
 
     const onDeleteGroup = async (id) => {
-        await fetch(`http://localhost:3001/groups/${id}`, {
+        const fetchedGroup = await fetch(`http://localhost:3001/groups/${id}`, {
             method: 'DELETE',
         });
+        const res = await fetchedGroup.json();
+        setActionDeleteMessage(res);
+        setSnackOpen(true);
         let filteredGroups = groups.filter(el => el._id !== id);
         setGroups(filteredGroups);
     }
-
+    const closeSnackBar = () => {
+        setSnackOpen(false);
+    }
     const handleClose = async () => {
         setOpen(false);
         let millisecondsToWait = 1000;
@@ -35,7 +45,7 @@ export default function GroupList(props) {
         }, millisecondsToWait);
     };
 
-    const handleClickOpen =  async() => {
+    const handleClickOpen = async () => {
         setGroup('')
         setOpen(true);
     }
@@ -67,8 +77,28 @@ export default function GroupList(props) {
         <Grid container direction='column'>
             < Grid item>
                 <Grid item>
-                    <Button variant='outlined' color='primary' onClick={handleClickOpen}>Dodaj Novu Grupu</Button></Grid>
+                    <Button variant='outlined' color='primary' onClick={handleClickOpen}>Dodaj Novu Grupu</Button>
+                </Grid>
                 <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup} ></AddGroupModal>
+                <div>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        open={snackOpen}
+                        autoHideDuration={6000}
+                        onClose={closeSnackBar}
+                        message={actionDeleteMessage.msg}
+                        action={
+                            <React.Fragment>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
+                                    <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </React.Fragment>
+                        }
+                    />
+                </div>
             </Grid>
             <div style={{ width: '100%', height: 400 }}>
                 <DataGrid

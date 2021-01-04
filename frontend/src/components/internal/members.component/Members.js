@@ -45,7 +45,7 @@ export default function Members(props) {
         </Link>
       </Grid>
       <Grid item xs={12}>
-        <MaterialTable
+        <MaterialTable 
           data={rows}
           columns={columns}
           options={{
