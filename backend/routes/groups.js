@@ -8,7 +8,7 @@ const Group = require('../models/groupModel')
 
 router.get("/", async (req, res) => {
   try {
-    let groups = await Group.find();
+    const groups = await Group.find();
     return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({
@@ -21,13 +21,24 @@ router.get('/edit/:id', async (req, res) => {
   const id = req.params.id;
   const targetGroup = await Group.findById(id);
   console.log(targetGroup);
-  return res.status(200).send(targetGroup);
+   res.status(200).send(targetGroup);
 });
-router.post('/', async (req, res) => {
+router.post('/', async(req, res) => {
   try {
-    let newGroup = await Group.create(req.body);
-    return res.status(200).send({
-      newGroup: newGroup
+    const body = req.body;
+   await Group.findOne({ name: body.name }, function (err, group) {
+      if (err) console.log(err);
+      if (group ) {
+        console.log('Group already exists');
+        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+      } else {
+       new Group(req.body).save(function (err, group) {
+          if (err) { console.log(err) } else {
+            console.log('New group created');
+            res.status(200).send({ msg: 'Grupa je kreirana.' });
+          }
+        });
+      }
     });
   } catch (err) {
     res.status(400).json({
@@ -35,28 +46,41 @@ router.post('/', async (req, res) => {
     })
   }
 });
-router.put ('/edit/:id', async(req,res)=>{
-  try{
+router.put('/:id', async(req, res) => {
+  try {
     const id = req.params.id;
-    const body= req.body;
-    console.log(body);
-    const updatedGroup= await Group.findByIdAndUpdate(id,body);
-    return res.status(200).send({
-      updatedGroup: updatedGroup
+    const body = req.body;
+   await Group.findOne({ name: body.name }, function (err, group) {
+      if (err) console.log(err);
+      if (group && group.id !== id) {
+        console.log('Group already exists');
+        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+      } else {
+       Group.findByIdAndUpdate(id, { name: body.name },
+          function (err, group) {
+            if (err) {
+              console.log(err)
+            }
+            else {
+              console.log("Updated Group");
+              res.status(200).send({ msg: 'Izmijenjen naziv grupe.' });
+
+            }
+          });
+      }
     });
-  } catch (err){
+  } catch (err) {
     res.status(400).json({
-      msg:'Bad Request'
+      msg: 'Bad Request'
     })
   }
-  
 });
 router.delete('/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const groupById = await Group.findByIdAndRemove(id);
+    await Group.findByIdAndRemove(id);
     res.status(200).send({
-      msg: `Group with id ${id} has been deleted`
+      msg: `Grupa je obrisana.`
     })
   } catch (err) {
     res.status(400).json({

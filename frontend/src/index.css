@@ -26,6 +26,10 @@ div.inputButtons {
   width: 220px;
   max-width: 220px;
 }
+div.dialogButtons{
+  display: 'flex';
+  justify-content: 'center'
+}
 input.select {
   width: 220; 
   max-width: 220;

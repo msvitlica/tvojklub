@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, InputLabel, Select, MenuItem, FormControl, FormHelperText, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Members from './Members';
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
@@ -84,7 +85,7 @@ export default function NewMember(props) {
                 firstName: member.firstName,
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
-                group: groups.name,
+                groupId: member.groupId,
             })
             postMember();
         }

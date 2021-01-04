@@ -32,9 +32,9 @@ mongoose
   .connect(process.env.MONGO_DEV_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false   
+    useFindAndModify: false    
   })
-  .then(console.log("Database connecteed!"))
+  .then(console.log("Database connected!"))
   .catch(err => console.log(err));
 
 app.listen(port, function () {

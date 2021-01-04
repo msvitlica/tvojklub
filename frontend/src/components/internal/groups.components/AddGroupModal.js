@@ -1,64 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router";
-import { Modal, Button, TextField, Grid, Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import GroupSnackbar from './GroupSnackbar';
 
 export default function AddGroupModal(props) {
-    const history = useHistory();
-    const [open] = useState(true);
-    const [groupName, setGroupName] = useState('');
-    const [groupId, setGroupId] = useState('');
-    const [groupNameError, setGroupNameError] = useState({});
-    const { match } = props;
-
-    const onInputChange = (e) => {
-        setGroupName(e.target.value);
-    }
-    const fetchTargetGroup = async () => {
-        const APIurl = `http://localhost:3001/groups/edit/${match.params.id}`;
-        const res = await fetch(APIurl);
-        const data = await res.json();
-        setGroupName(data.name);
-        setGroupId(data._id);
-    }
+    const [draftGroupName, setDraftGroupName] = useState(props.group.name);
+    const [groupNameError, setGroupNameError] = useState('');
+    const [actionPostMessage, setActionPostMessage] = useState('');
+    const [actionPutMessage, setActionPutMessage] = useState('');
+    const [open, setOpen] = useState(false);
     useEffect(() => {
-        if (match.params.id) {
-            fetchTargetGroup();
-        }
-    }, []);
+        setDraftGroupName(props.group.name);
+    }, [props.group.name]);
+
+    const handleClose = () => {
+        props.handleClose();
+    };
+    const onInputChange = (e) => {
+        setDraftGroupName(e.target.value);
+    }
+    const openSnackbar = () => {
+            setOpen(true);  
+    };
+    const closeSnackbar = () => {
+        setOpen(false);
+    }
 
     const postGroup = async () => {
-        if (groupId) {
-            fetch(`http://localhost:3001/groups/edit/${match.params.id}`, {
+        if (props.group._id) {
+            const editedData = await fetch('http://localhost:3001/groups/' + props.group._id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: groupId, name: groupName })
-            })
+                body: JSON.stringify({ _id: props.group._id, name: draftGroupName })
+            });
+            const res = await editedData.json();
+            setActionPutMessage(res);
+            handleClose();
+            setDraftGroupName(draftGroupName);
         } else {
-            fetch('http://localhost:3001/groups', {
+            const postedData = await fetch('http://localhost:3001/groups', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: groupName }),
-            })
+                body: JSON.stringify({ name: draftGroupName }),
+            });
+            const res = await postedData.json();
+            setActionPostMessage(res);
+            handleClose();
+            setDraftGroupName('');
         }
-        setGroupName('');
-        closeModal();
-    }
-
-    const closeModal = () => {
-        history.push('/groups');
-        window.location.reload(true);
     }
     const validate = () => {
         let isValid = true;
         const groupNameError = {};
-        if (groupName.trim().length < 2) {
-            groupNameError.emptyInput = 'Naziv grupe treba da sadrzi najmanje dva karaktera.';
+        if (draftGroupName.trim().length < 2) {
+            groupNameError.emptyInput = /* 'Popunite prazno polje.' */ 'Naziv grupe treba da sadrzi bar 2 karaktera.';
             groupNameError.notValid = true;
             isValid = false;
         }
@@ -69,47 +73,35 @@ export default function AddGroupModal(props) {
         e.preventDefault();
         const err = validate();
         if (err) {
-            setGroupName(groupName);
+            setDraftGroupName(draftGroupName);
             postGroup();
+            openSnackbar();
+            console.log(draftGroupName);
         }
     }
-    const body = (
-        <div className="modalDialog">
-            <Grid container direction="column">
-                <Typography className="closeModal" onClick={closeModal}>x</Typography>
-                <Grid xs={12} item>
-                    <Typography className="modalHeader" variant='h5'>Unos Nove Grupe</Typography>
-                </Grid>
-                <form onSubmit={submitGroup} noValidate>
-                    <Grid xs={12} item container>
-                        <Grid className="modalInputTxt" xs={10} item>
-                            <TextField onChange={onInputChange}
-                                label="Naziv Grupe"
-                                name="groupName"
-                                variant="outlined"
-                                value={groupName}
-                                helperText={groupNameError.emptyInput}
-                                error={groupNameError.notValid}
-                            />
-                        </Grid>
-                        <Grid xs={12} item>
-                            <Grid xs={12} item container className='saveModal'>
-                                <Grid xs={12} sm={4} item >
-                                    <Button variant='contained' type='submit' color='primary' >Sačuvaj</Button>
-                                </Grid>
-                                <Grid xs={12} sm={4} item>
-                                    <Button variant='contained' color='secondary' onClick={closeModal}>Otkaži</Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </form>
-            </Grid>
-        </div>
-    )
     return (
-        <Modal open={open}>
-            {body}
-        </Modal>
+        <div>
+            <Dialog open={props.open}>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        fullWidth
+                        onChange={onInputChange}
+                        margin="dense"
+                        defaultValue={draftGroupName}
+                        label="Naziv Grupe"
+                        helperText={groupNameError.emptyInput}
+                        error={groupNameError.notValid}
+                    />
+                </DialogContent>
+                <DialogActions /* className='dialogButtons' */ style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button onClick={submitGroup} variant='contained' color="primary"> Sačuvaj </Button>
+                    <Button onClick={handleClose} variant='contained' color="secondary"> Otkaži </Button>
+                </DialogActions>
+            </Dialog>
+            <div>
+                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage  : actionPostMessage}  closeSnackbar={closeSnackbar}></GroupSnackbar>
+            </div>
+        </div>
     )
 }
