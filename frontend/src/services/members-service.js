@@ -1,18 +1,28 @@
-import BaseService from './base-service';
-const baseService = new BaseService('http://localhost:3001/members');
-
-class MemeberService extends BaseService {
+class MemeberService {
     constructor(url) {
-        super(url)
-        this.members = [];
+        this.backendUrl = url;
     }
 
     async getAllMembers() {
-        const res = await fetch(this.url);
-        const data = await res.json();
-        this.members = data.members;
-        return Promise.resolve(this.members);
+        try {
+            const res = await fetch(`${this.backendUrl}/members`);
+            const data = await res.json();
+            return data.members;
+        } catch (err) {
+            
+        }
+    }
+
+    async postMember(newMember) {
+        await fetch(`${this.backendUrl}/members/newMember`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newMember)
+        })
     }
 }
 
-export default new MemeberService('http://localhost:3001/members');
+export default MemeberService;

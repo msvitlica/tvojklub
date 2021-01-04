@@ -7,6 +7,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { DataGrid } from '@material-ui/data-grid';
+import { ServiceContext } from '../../../services/ServiceContext';
 
 
 
@@ -17,31 +18,35 @@ class ScheduleManagement extends React.Component {
             schedule: []
         }
     }
+    static contextType = ServiceContext;
+
+    abortController = new AbortController();
 
     fetchData = async () => {
-        let response = await fetch('http://localhost:3001/schedule-management');
-        let data = await response.json();
+        const { scheduleServices } = this.context;
+        const schedule = await scheduleServices.getAllSchedule({ signal: this.abortController.signal });
         this.setState({
-            schedule: data
-        })
+            schedule: schedule
+        });
+        this.abortController.abort();
     }
 
     componentDidMount = () => {
         this.fetchData();
     }
 
+    componentDidUpdate = () => {
+        this.fetchData();
+    }
+
+    componentWillUnmount = () => this.abortController.abort();
+
     onDeleteSchedule = async (id) => {
-        let req = await fetch(`http://localhost:3001/schedule-management/delete/${id}`, {
-            method: 'DELETE'
-        });
-        this.setState({
-            schedule: this.state.schedule.filter(el => el._id !== id)
-        })
+        const { scheduleServices } = this.context;
+        await scheduleServices.deleteSchedule(id)
     }
 
     onEditSchedule = async (id) => {
-        // let req = await fetch(`http://localhost:3001/schedule-management/edit/${id}`);
-        // let data = await req.json();
         this.props.history.push(`/schedule-management/edit/${id}`);
     }
 

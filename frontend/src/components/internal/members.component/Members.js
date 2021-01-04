@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
-// Including member service in app
-import MemberService from './../../../services/members-service';
+// Including Service Context
+import { ServiceContext } from './../../../services/ServiceContext';
 
 export default function Members(props) {
   const [members, setMemberList] = useState([]);
+  const services = useContext(ServiceContext);
   
-  // Gets data from backend
+  // Get data from backend
   const fetchMembers = async () => {
-    const res = await MemberService.getAllMembers();
-    setMemberList(res);
+    const allMembers = await services.memberService.getAllMembers();
+    setMemberList(allMembers);
   }
 
   useEffect(() => {
