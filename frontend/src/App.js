@@ -10,7 +10,10 @@ import InternalComponent from './components/internal/main.components/InternalCom
 import ExternalComponent from './components/external/ExternalComponent';
 import PrivateRoute from './components/external/PrivateRoute';
 
+// Including services
+import ServiceContextProvider from './services/ServiceContext';
 import auth from './services/auth-service';
+
 
 function App() {
   const history = useHistory();
@@ -31,15 +34,18 @@ function App() {
   }
 
   return (
-    <StylesProvider>
-      <Switch>
-        <Route path="/login" >
-          <ExternalComponent login={login} />
-        </Route>
-        <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
-      </Switch>
-    </StylesProvider>
+    <ServiceContextProvider>
+      <StylesProvider>
+        <Switch>
+          <Route path="/login" >
+            <ExternalComponent login={login} />
+          </Route>
+          <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
+        </Switch>
+      </StylesProvider>
+    </ServiceContextProvider>
   );
 }
 
 export default App;
+// export { ServiceContext };

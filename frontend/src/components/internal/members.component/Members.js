@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
+// Including Service Context
+import { ServiceContext } from './../../../services/ServiceContext';
 
 export default function Members(props) {
-  const APIurl = 'http://localhost:3001/members';
   const [members, setMemberList] = useState([]);
+  const services = useContext(ServiceContext);
+  
+  // Get data from backend
   const fetchMembers = async () => {
-    const res = await fetch(APIurl);
-    const data = await res.json()
-    setMemberList(data.members)
-  };
+    const allMembers = await services.memberService.getAllMembers();
+    setMemberList(allMembers);
+  }
+
   useEffect(() => {
     fetchMembers()
   }, []);
 
   const rows = members.map(el => (
-      {
-        id: el._id,
-        firstName: el.firstName,
-        lastName: el.lastName,
-        dateOfBirth: new Date(el.dateOfBirth).toLocaleDateString(),
-        group:el.group
-      }
-  
+    {
+      id: el._id,
+      firstName: el.firstName,
+      lastName: el.lastName,
+      dateOfBirth: new Date(el.dateOfBirth).toLocaleDateString(),
+      group: el.group
+    }
   ));
+
   const columns = [
     { field: 'firstName', title: 'Ime' },
     { field: 'lastName', title: 'Prezime' },
@@ -45,7 +49,7 @@ export default function Members(props) {
           data={rows}
           columns={columns}
           options={{
-            toolbar:false
+            toolbar: false
           }}
         />
       </Grid>

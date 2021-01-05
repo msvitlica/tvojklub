@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     Grid,
     TextField,
@@ -20,8 +20,11 @@ import {
 import {
     calculateDuration
 } from '../../../helpers/helpersMethods';
+import { ServiceContext } from './../../../services/ServiceContext';
+
 
 function NewSchedule(props) {
+    const services = useContext(ServiceContext);
     const backendUrl = 'http://localhost:3001';
     const { history, match } = props;
     const [schedule, setSchedule] = React.useState({
@@ -59,10 +62,9 @@ function NewSchedule(props) {
     // Get schedule with specific ID
 
     const fetchSchedule = async (controller) => { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
-        let req = await fetch(`${backendUrl}/schedule-management/edit/${match.params.id}`, controller);
-        let data = await req.json();
-        setSchedule(data);
-        setRecurranceDays(data.recurrance.recurranceDays);
+        const schedule = await services.scheduleServices.getScheduleById(match.params.id, controller);
+        setSchedule(schedule);
+        setRecurranceDays(schedule.recurrance.recurranceDays);
     }
 
     // Get groups from the server and sets schedule object 
