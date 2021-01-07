@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const groupSchema = new Schema({
-    name: String,
+    name: {
+        type:String,required:true
+    }
 })
 
 

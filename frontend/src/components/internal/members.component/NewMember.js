@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TextField, Button, InputLabel, Select, MenuItem, FormControl, FormHelperText, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { ServiceContext } from '../../../services/ServiceContext';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .MuiTextField-root': {
@@ -30,13 +32,15 @@ export default function NewMember(props) {
     const [lastNameError, setLastNameError] = useState({});
     const [birthDateError, setBirthDateError] = useState({});
     const [groupError, setGroupError] = useState({});
-    const [groups, setGroupList] = useState([]);  
+    const [groups, setGroupList] = useState([]);
     const { history } = props;
+
+    const services = useContext(ServiceContext);
     const APIurl = 'http://localhost:3001/groups';
     const fetchGroup = async () => {
         const res = await fetch(APIurl);
         const data = await res.json();
-        setGroupList(data)        
+        setGroupList(data)
     }
     useEffect(() => {
         fetchGroup()
@@ -84,23 +88,17 @@ export default function NewMember(props) {
                 firstName: member.firstName,
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
-                group: groups.name,
+                groupId: member.groupId,
             })
             postMember();
         }
     }
     const postMember = async () => {
-        fetch('http://localhost:3001/members/newMember', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ member: member }),
-        });
+        await services.memberService.postMember({ member })
         setMember('');
         displayMemberList()
     }
+    
     const onClickCancel = () => {
         displayMemberList();
     }
