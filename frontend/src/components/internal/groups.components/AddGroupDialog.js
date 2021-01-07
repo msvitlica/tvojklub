@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import GroupSnackbar from './GroupSnackbar';
+import  {ServiceContext} from './../../../services/ServiceContext'
 
-export default function AddGroupModal(props) {
+export default function AddGroupDialog(props) {
     const [draftGroupName, setDraftGroupName] = useState(props.group.name);
     const [groupNameError, setGroupNameError] = useState('');
     const [actionPostMessage, setActionPostMessage] = useState('');
     const [actionPutMessage, setActionPutMessage] = useState('');
     const [open, setOpen] = useState(false);
+    const services=useContext(ServiceContext);
     useEffect(() => {
         setDraftGroupName(props.group.name);
     }, [props.group.name]);
@@ -29,31 +31,15 @@ export default function AddGroupModal(props) {
         setOpen(false);
     }
 
-    const postGroup = async () => {
+    const add_edit_Group = async () => {
         if (props.group._id) {
-            const editedData = await fetch('http://localhost:3001/groups/' + props.group._id, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ _id: props.group._id, name: draftGroupName })
-            });
-            const res = await editedData.json();
-            setActionPutMessage(res);
+            const editedData = await services.groupService.editGroup(props.group._id,draftGroupName);
+            setActionPutMessage(editedData);
             handleClose();
             setDraftGroupName(draftGroupName);
         } else {
-            const postedData = await fetch('http://localhost:3001/groups', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: draftGroupName }),
-            });
-            const res = await postedData.json();
-            setActionPostMessage(res);
+            const postedData = await services.groupService.addGroup(draftGroupName)
+            setActionPostMessage(postedData);
             handleClose();
             setDraftGroupName('');
         }
@@ -62,7 +48,7 @@ export default function AddGroupModal(props) {
         let isValid = true;
         const groupNameError = {};
         if (draftGroupName.trim().length < 2) {
-            groupNameError.emptyInput = /* 'Popunite prazno polje.' */ 'Naziv grupe treba da sadrzi bar 2 karaktera.';
+            groupNameError.emptyInput ='Naziv grupe treba da sadrzi bar 2 karaktera.';
             groupNameError.notValid = true;
             isValid = false;
         }
@@ -74,7 +60,7 @@ export default function AddGroupModal(props) {
         const err = validate();
         if (err) {
             setDraftGroupName(draftGroupName);
-            postGroup();
+            add_edit_Group();
             openSnackbar();
             console.log(draftGroupName);
         }
