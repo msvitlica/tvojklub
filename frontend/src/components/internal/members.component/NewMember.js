@@ -36,11 +36,10 @@ export default function NewMember(props) {
     const { history } = props;
 
     const services = useContext(ServiceContext);
-    const APIurl = 'http://localhost:3001/groups';
+
     const fetchGroup = async () => {
-        const res = await fetch(APIurl);
-        const data = await res.json();
-        setGroupList(data)
+        const allGroups = await services.groupService.getAllGroups();
+        setGroupList(allGroups);
     }
     useEffect(() => {
         fetchGroup()
@@ -55,22 +54,22 @@ export default function NewMember(props) {
         const groupError = {};
         let isValid = true;
         if (member.firstName.trim().length < 2) {
-            firstNameError.shortInput = 'Type at least 2 charachters';
+            firstNameError.shortInput = 'Ime treba da sadrži bar 2 karaktera';
             firstNameError.notValid = true;
             isValid = false;
         }
         if (member.lastName.trim().length < 2) {
-            lastNameError.shortInput = 'Type at least 2 charachters ';
+            lastNameError.shortInput = 'Prezime treba da sadrži bar 2 karaktera';
             lastNameError.notValid = true;
             isValid = false;
         }
         if (member.dateOfBirth.trim().length === 0) {
-            birthDateError.emptyInput = 'Birth Date is required';
+            birthDateError.emptyInput = 'Unesite datum rođenja.';
             birthDateError.notValid = true;
             isValid = false;
         }
         if (!member.groupId) {
-            groupError.emptyInput = 'Group is required';
+            groupError.emptyInput = 'Unesite grupu.';
             groupError.notValid = true;
             isValid = false;
         }
