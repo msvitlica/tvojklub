@@ -23,7 +23,7 @@ export default function AddGroupModal(props) {
         setDraftGroupName(e.target.value);
     }
     const openSnackbar = () => {
-            setOpen(true);  
+        setOpen(true);
     };
     const closeSnackbar = () => {
         setOpen(false);
@@ -61,7 +61,7 @@ export default function AddGroupModal(props) {
     const validate = () => {
         let isValid = true;
         const groupNameError = {};
-        if (draftGroupName.trim().length < 2) {
+        if (!draftGroupName || draftGroupName.trim().length < 2) {
             groupNameError.emptyInput = /* 'Popunite prazno polje.' */ 'Naziv grupe treba da sadrzi bar 2 karaktera.';
             groupNameError.notValid = true;
             isValid = false;
@@ -100,7 +100,7 @@ export default function AddGroupModal(props) {
                 </DialogActions>
             </Dialog>
             <div>
-                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage  : actionPostMessage}  closeSnackbar={closeSnackbar}></GroupSnackbar>
+                <GroupSnackbar open={open} actionMessage={props.group._id ? actionPutMessage : actionPostMessage} closeSnackbar={closeSnackbar}></GroupSnackbar>
             </div>
         </div>
     )
