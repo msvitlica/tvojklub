@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { IconButton, Grid, Button } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import AddGroupModal from './AddGroupModal';
+import AddGroupDialog from './AddGroupDialog';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
-
+// Including Service Context
+import { ServiceContext } from './../../../services/ServiceContext';
 export default function GroupList(props) {
     const [open, setOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [group, setGroup] = useState('');
     const [actionDeleteMessage, setActionDeleteMessage] = useState('');
     const [snackOpen, setSnackOpen] = useState(false);
+    const services = useContext(ServiceContext);
 
     const fetchData = async () => {
-        let APIurl = 'http://localhost:3001/groups';
-        const res = await fetch(APIurl)
-        const data = await res.json();
-        setGroups(data)
+        const allGroups = await services.groupService.getAllGroups();
+        setGroups(allGroups)
     };
     useEffect(() => {
         fetchData();
     }, []);
 
     const onDeleteGroup = async (id) => {
-        const fetchedGroup = await fetch(`http://localhost:3001/groups/${id}`, {
-            method: 'DELETE',
-        });
-        const res = await fetchedGroup.json();
-        setActionDeleteMessage(res);
+       const deletedGroup= await services.groupService.deleteGroup(id);
+        setActionDeleteMessage(deletedGroup);
         setSnackOpen(true);
         let filteredGroups = groups.filter(el => el._id !== id);
         setGroups(filteredGroups);
@@ -51,11 +48,9 @@ export default function GroupList(props) {
     }
 
     const fetchTargetGroup = async (id) => {
-        const APIurl = 'http://localhost:3001/groups/edit/' + id;
-        const res = await fetch(APIurl);
-        const data = await res.json();
-        setGroup(data);
-        console.log(data)
+        const fetchedGroup= await services.groupService.getGroupById(id);
+        setGroup(fetchedGroup);
+        console.log(fetchedGroup)
     }
     useEffect(() => {
         if (group._id) {
@@ -79,7 +74,7 @@ export default function GroupList(props) {
                 <Grid item>
                     <Button variant='outlined' color='primary' onClick={handleClickOpen}>Dodaj Novu Grupu</Button>
                 </Grid>
-                <AddGroupModal group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup} ></AddGroupModal>
+                <AddGroupDialog group={group} open={open} handleClose={handleClose} onEditGroup={onEditGroup} ></AddGroupDialog>
                 <div>
                     <Snackbar
                         anchorOrigin={{
@@ -125,5 +120,5 @@ export default function GroupList(props) {
             </div>
         </Grid>
     )
-
 }
+
