@@ -3,6 +3,7 @@ import MemberService from './members-service';
 import ScheduleServices from './schedule-services';
 import GroupService from './group-service';
 import TrainingService from './training-service';
+import { MessageService } from './messageService';
 
 
 // Import all services and backendUrl
@@ -16,7 +17,14 @@ const scheduleServices = new ScheduleServices(backendUrl);
 const groupService= new GroupService(backendUrl);
 const trainingService= new TrainingService(backendUrl);
 
+
 class ServiceContextProvider extends Component {
+    constructor(props){
+        super(props);
+        this.messageService = new MessageService(props.onShowMessage);
+        this.state.messageService = this.messageService;
+        this.state.groupService.messageService = this.messageService;
+    }
     state = {
         memberService,
         scheduleServices,

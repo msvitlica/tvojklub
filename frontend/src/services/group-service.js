@@ -1,7 +1,7 @@
 class GroupService {
     constructor(url) {
-        this.backendUrl = url;
-    }
+        this.backendUrl = url;       
+    }    
     async getAllGroups(abortController) {
         try {
             const groupsRequest = await fetch(`${this.backendUrl}/groups`, abortController);
@@ -26,15 +26,31 @@ class GroupService {
     }
     async addGroup(groupName) {
         try {
-            let postedGroup = await fetch(`${this.backendUrl}/groups`, {
+            await fetch(`${this.backendUrl}/groups`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: groupName }),
+            }).then(async response =>{
+                const data = await response.json();
+                if(response.ok){
+                    return data;
+                }
+                else{
+                    
+                    const error = (data) || response.statusText;
+                    console.log(error);
+                    return Promise.reject(error);
+                }
+                return data;
+            }).catch(error =>{
+                this.messageService.showError(error.msg);
+                console.log(error);      
+                return;          
             });
-            return await postedGroup.json();
+            //return await postedGroup.json();
         } catch (err) {
             console.log(err);
         }

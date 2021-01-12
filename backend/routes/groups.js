@@ -30,7 +30,7 @@ router.post('/', async(req, res) => {
       if (err) console.log(err);
       if (group ) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+        res.status(400).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
        new Group(req.body).save(function (err, group) {
           if (err) { console.log(err) } else {
