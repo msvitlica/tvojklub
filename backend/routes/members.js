@@ -16,7 +16,6 @@ router.get("/", async (req, res) => {
       members: members.map(m => {
         return {...m.toObject(),group: allGroups.find(g => g._id.toString() === m.groupId.toString()).name }})
     });
-    console.log(members)
   } catch (err) {
     res.status(400).json({
       message: "Some error occured",

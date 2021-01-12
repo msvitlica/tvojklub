@@ -109,7 +109,7 @@ function NewSchedule(props) {
 
     // Sets attended groups
     const onSetAttendedGroup = (event) => {
-        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { name: event.target.value }] })
+        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { [event.target.name]: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
     }
 
@@ -255,12 +255,13 @@ function NewSchedule(props) {
                                 <Select
                                     variant="outlined"
                                     className="timePicker"
+                                    name="groupId"
                                     defaultValue="Izaberi Grupu"
                                     onChange={onSetAttendedGroup}
                                 >
                                     <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
                                     {groups.map(group => {
-                                        return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
+                                        return <MenuItem key={group._id} value={group._id}>{group.name}</MenuItem>
                                     })}
                                 </Select>
                                 <FormHelperText>{groupError.message}</FormHelperText>

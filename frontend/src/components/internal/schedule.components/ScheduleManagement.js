@@ -67,7 +67,7 @@ function ScheduleManagement(props) {
             id: term._id,
             term: `${term.startTime} - ${term.endTime}`,
             duration: term.trainingDuration,
-            groups: term.attendedGroups.map(group => group.name),
+            groups: term.attendedGroups.map(group => group.groupId),
             description: term.aboutSchedule,
             actions: term._id
         }

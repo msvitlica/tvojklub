@@ -1,47 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import { ServiceContext }from './../../../services/ServiceContext';
 
-export default class TrainingList extends React.Component {
+export default function TrainingList(props) {
+  const [trainings, setTrainings] = useState([]);
+  const abortController = new AbortController();
+  const service = useContext(ServiceContext);
+  useEffect(() => {
+    fetchTrainings();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      trainings: []
-    };
+    return () => {
+      abortController.abort();
   }
-  componentDidMount = () => {
-    fetch('http://localhost:3001/trainings')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ trainings: data.trainings });
-      });
-  }
-  
+  }, [])
+  const fetchTrainings = async() => {
+    const currentDay = new Date().toLocaleDateString();
+    const trainingSchedule = await service.trainingService.getAllTrainings(currentDay, { signal: abortController.signal });
+    setTrainings(trainingSchedule);
 
-  handleClick = (id) => {
-    const { match: { params }, history } = this.props;
+  }
+
+
+  const handleClick = (id) => {
+    const { match: { params }, history } = props;
     history.push(`trainings/${id}`);
   }
-  render() {
-    return (
-      <div>
-        <Card>
-          {this.state.trainings.map((el) => (
-            <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
-              <CardContent>
-                <Typography> {el.term}{el.group}
-                </Typography>
-                <br></br>
-                <Typography variant='caption'> {el.groups}
-                </Typography>
-                <Typography>
-                  {el.coach}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          ))}
-        </Card>
-      </div>
-    )
-  }
+
+  return (
+    <div>
+      <Card>
+        {trainings.map((el) => (
+          <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
+            <CardContent>
+              <Typography> {el.term}
+              </Typography>
+              <br></br>
+              <Typography > {el.group.name}
+              </Typography>
+              <Typography>
+                {el.coach}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        ))}
+      </Card>
+    </div>
+  )
 }
