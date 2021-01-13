@@ -19,11 +19,13 @@ let attendanceStatus = {
 
 router.get("/", async (req, res) => {
   const date = req.query.date;
-  const today = helperMethods.convertDayNumberToString(new Date(date).getDay());
+  console.log(date)
+  const dayName = helperMethods.convertDayNumberToString(new Date(date).getDay());
+  console.log(dayName)
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
-  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today]);
+  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[dayName]);
   const todayTrainings = todaySchedules.map(training => {
     return {
       id: uuid.v1(),
@@ -33,6 +35,7 @@ router.get("/", async (req, res) => {
       membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId)
     }
   });
+  console.log(todayTrainings)
   try {
     res.status(200).json({
       trainings: todayTrainings,
