@@ -35,7 +35,6 @@ router.get("/", async (req, res) => {
       membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId)
     }
   });
-  console.log(todayTrainings)
   try {
     res.status(200).json({
       trainings: todayTrainings,
