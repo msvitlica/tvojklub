@@ -17,8 +17,8 @@ export default function ScheduleBar(props) {
     return (
         <div>
             <Paper variant="outlined" >
-                <div style={{ display: 'flex', justifyContent: 'flex-end', justify: 'space-around' }}>
-                    <Button variant='outlined' color='primary' onClick={handleCurrentDate}>Today</Button>
+                <div className='scheduleBar'>
+                    <Button className='today-btn' variant='outlined' color='primary' onClick={handleCurrentDate}>Danas</Button>
                     <IconButton onClick={handleYesterdaysDate}><ChevronLeftIcon color='primary' /></IconButton>
                     <IconButton onClick={handleTomorrowsDates} > <ChevronRightIcon color='primary' /> </IconButton>
                     <DatePicker selectedDate={props.selectedDate} handleDateChange={props.handleDateChange} />

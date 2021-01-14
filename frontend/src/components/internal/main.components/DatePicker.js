@@ -5,10 +5,11 @@ import DateFnsUtils from '@date-io/date-fns';
 export default function DatePicker(props) {
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-                margin="none"
+            <KeyboardDatePicker className ='date-datePicker'  
                 color='primary'
-                size='small'
+                InputProps={{
+                    disableUnderline: true,
+                }}
                 variant='outlined'
                 format="MM/dd/yyyy"
                 value={props.selectedDate}

@@ -157,3 +157,27 @@ button.scheduleBtn {
 div.btnContainer {
   justify-content: flex-start;
 }
+div.MuiInput-root ,
+div.MuiInputBase-formControl ,
+div.MuiInput-formControl ,
+input.MuiInputBase-adornedEnd.date-datePicker {
+  padding-left: 90px;
+  padding-top: 20px;
+}
+
+button.MuiButtonBase-root ,
+button.MuiButton-root,
+button.MuiButton-outlined,
+a.MuiButton-outlinedPrimary,
+button.MuiButton-outlinedPrimary.btn{
+  text-transform: capitalize;
+  content: inherit;
+}
+div.scheduleBar{
+  display: flex; 
+  justify-content: flex-end;
+   justify-items: space-around
+}
+button.today-btn {
+  margin: 20px;
+}
