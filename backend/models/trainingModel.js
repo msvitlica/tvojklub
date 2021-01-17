@@ -6,6 +6,7 @@ const trainingSchema = new Schema({
     group: String,
     coach: String,
     membersInGroup: Array,
+    recurranceDay: String
 })
 
 module.exports = mongoose.model('training', trainingSchema);

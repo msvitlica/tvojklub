@@ -161,8 +161,8 @@ div.MuiInput-root ,
 div.MuiInputBase-formControl ,
 div.MuiInput-formControl ,
 input.MuiInputBase-adornedEnd.date-datePicker {
-  padding-left: 90px;
-  padding-top: 20px;
+ padding-top: 20px;
+ padding-left: 30px;
 }
 
 button.MuiButtonBase-root ,
@@ -175,7 +175,7 @@ button.MuiButton-outlinedPrimary.btn{
 }
 div.scheduleBar{
   display: flex; 
-  justify-content: flex-end;
+  justify-content: flex-start;
    justify-items: space-around
 }
 button.today-btn {
