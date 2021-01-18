@@ -21,18 +21,18 @@ router.get('/edit/:id', async (req, res) => {
   const id = req.params.id;
   const targetGroup = await Group.findById(id);
   console.log(targetGroup);
-   res.status(200).send(targetGroup);
+  res.status(200).send(targetGroup);
 });
-router.post('/', async(req, res) => {
+router.post('/', async (req, res) => {
   try {
     const body = req.body;
-   await Group.findOne({ name: body.name }, function (err, group) {
+    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
-      if (group ) {
+      if (group) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+        res.status(400).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
-       new Group(req.body).save(function (err, group) {
+        new Group(req.body).save(function (err, group) {
           if (err) { console.log(err) } else {
             console.log('New group created');
             res.status(200).send({ msg: 'Grupa je kreirana.' });
@@ -46,17 +46,17 @@ router.post('/', async(req, res) => {
     })
   }
 });
-router.put('/:id', async(req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
-   await Group.findOne({ name: body.name }, function (err, group) {
+    await Group.findOne({ name: body.name }, function (err, group) {
       if (err) console.log(err);
       if (group && group.id !== id) {
         console.log('Group already exists');
         res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
-       Group.findByIdAndUpdate(id, { name: body.name },
+        Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {
             if (err) {
               console.log(err)

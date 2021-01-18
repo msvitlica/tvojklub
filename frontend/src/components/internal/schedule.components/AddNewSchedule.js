@@ -40,7 +40,7 @@ function NewSchedule(props) {
     const [recurranceDays, setRecurranceDays] = React.useState({
         monday: false,
         tuesday: false,
-        wednsday: false,
+        wednesday: false,
         thursday: false,
         friday: false,
         saturday: false,
@@ -109,7 +109,7 @@ function NewSchedule(props) {
 
     // Sets attended groups
     const onSetAttendedGroup = (event) => {
-        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { name: event.target.value }] })
+        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { [event.target.name]: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
     }
 
@@ -255,12 +255,13 @@ function NewSchedule(props) {
                                 <Select
                                     variant="outlined"
                                     className="timePicker"
+                                    name="groupId"
                                     defaultValue="Izaberi Grupu"
                                     onChange={onSetAttendedGroup}
                                 >
                                     <MenuItem value="Izaberi Grupu" disabled selected>Izaberi Grupu</MenuItem>
                                     {groups.map(group => {
-                                        return <MenuItem key={group._id} value={group.name}>{group.name}</MenuItem>
+                                        return <MenuItem key={group._id} value={group._id}>{group.name}</MenuItem>
                                     })}
                                 </Select>
                                 <FormHelperText>{groupError.message}</FormHelperText>
@@ -292,7 +293,7 @@ function NewSchedule(props) {
                                 <Grid item xs={12}>
                                     <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday} />} label="Ponedeljak" />
                                     <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
-                                    <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="wednesday" onChange={onCheckboxChange} checked={recurranceDays.wednesday} />} label="Srijeda" />
                                     <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
                                 </Grid>
                                 <Grid item xs={12}>

@@ -2,27 +2,40 @@ const express = require("express");
 const router = express.Router();
 const uuid = require('uuid');
 const url = require("url");
- 
-let attendanceStatus= {
+const helperMethods = require('../../frontend/src/helpers/helpersMethods');
+
+
+// Includes all required models
+const Training = require('../models/trainingModel');
+const Members = require('../models/memberModel');
+const Schedule = require('../models/scheduleModel');
+const Group = require('../models/groupModel');
+
+let attendanceStatus = {
   attended: 'attended',
   noAttended: 'noAttended',
   unknown: 'unknown',
 }
-let trainings = [
-  {
-    id: uuid.v4(), term: "13-14", group: "Group1", coach: "Sinisa Kovacevic",
-    membersInGroup: [{name:"Sinisa Kovacevic",id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:"Milan Svitlica",id: uuid.v4(),attendance:attendanceStatus.unknown},{name:"Nada Jankovic",id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:"Srecko Lazic",id: uuid.v4(),attendance:attendanceStatus.unknown}]
-  },
-  {
-    id: uuid.v4(), term: "15-16", group: "Group3", coach: "Sinisa Kovacevic",
-    membersInGroup: [{name:'Rada Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:'Sofija Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}, {name:'Filip Svitlica',id: uuid.v4(),attendance:attendanceStatus.unknown}]
-  },
-];
 
 router.get("/", async (req, res) => {
+  const date = req.query.date;
+  const today = helperMethods.convertDayNumberToString(new Date(date).getDay());
+  const allMembers = await Members.find();
+  const allSchedule = await Schedule.find();
+  const allGroups = await Group.find();
+  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today]);
+  const todayTrainings = todaySchedules.map(training => {
+    return {
+      id: uuid.v1(),
+      term: `${training.startTime} - ${training.endTime}`,
+      group: allGroups.filter(group=> group._id.toString() === training.attendedGroups[0].groupId)[0],
+      coach: 'Sinisa Kovacevic',
+      membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId)
+    }
+  });
   try {
     res.status(200).json({
-      trainings: trainings,
+      trainings: todayTrainings,
     });
   } catch (err) {
     res.status(400).json({

@@ -4,17 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Snackbar from './../snackbar.components/Snackbar';
-import { ServiceContext } from './../../../services/ServiceContext'
+import  {ServiceContext} from './../../../services/ServiceContext'
+import { MessageService } from '../../../services/messageService';
 
 export default function AddGroupDialog(props) {
     const [draftGroupName, setDraftGroupName] = useState(props.group.name);
-    const [groupNameError, setGroupNameError] = useState('');
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSeverity] = useState(null);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-
+    const [groupNameError, setGroupNameError] = useState('');        
     const services = useContext(ServiceContext);
+
     useEffect(() => {
         setDraftGroupName(props.group.name);
     }, [props.group.name]);
@@ -23,34 +20,27 @@ export default function AddGroupDialog(props) {
     }
     const onInputChange = (e) => {
         setDraftGroupName(e.target.value);
-    }
-    const closeSnackbar = () => {
-        setOpenSnackbar(false);
-        setSnackbarMessage('');
-    }
+    }  
 
     const add_edit_Group = async () => {
         if (props.group._id) {
-            const editedData = await services.groupService.editGroup(props.group._id, draftGroupName);
-            const { showSnackbar, msg, severity } = services.snackbarService.showSuccess('Grupa uspješno izmjenjena!');
-            setSnackbarMessage(msg);
-            setSeverity(severity);
-            setOpenSnackbar(showSnackbar);
+            const editedData = await services.groupService.editGroup(props.group._id,draftGroupName);                        
+            handleClose();
             setDraftGroupName(draftGroupName);
+            services.messageService.showSuccessMessage('Grupa uspješno izmjenjena!');
         } else {
-            const postedData = await services.groupService.addGroup(draftGroupName)
-            const { showSnackbar, msg, severity } = services.snackbarService.showSuccess('Grupa uspješno dodana!');
-            setSnackbarMessage(msg);
-            setSeverity(severity);
-            setOpenSnackbar(showSnackbar);
+            const postedData = await services.groupService.addGroup(draftGroupName)            
+            handleClose();
             setDraftGroupName('');
+            services.messageService.showSuccessMessage('Grupa uspješno sačuvana!');
         }
+        
     }
     const validate = () => {
         let isValid = true;
         const groupNameError = {};
-        if (draftGroupName.trim().length < 2) {
-            groupNameError.emptyInput = 'Naziv grupe treba da sadrzi bar 2 karaktera.';
+        if (!draftGroupName || draftGroupName.trim().length < 2) {
+            groupNameError.emptyInput ='Naziv grupe treba da sadrzi bar 2 karaktera.';
             groupNameError.notValid = true;
             isValid = false;
         }
@@ -62,8 +52,7 @@ export default function AddGroupDialog(props) {
         const err = validate();
         if (err) {
             setDraftGroupName(draftGroupName);
-            add_edit_Group();
-            handleClose();
+            add_edit_Group();                       
         }
     }
     return (
@@ -85,10 +74,7 @@ export default function AddGroupDialog(props) {
                     <Button onClick={submitGroup} variant='contained' color="primary"> Sačuvaj </Button>
                     <Button onClick={handleClose} variant='contained' color="secondary"> Otkaži </Button>
                 </DialogActions>
-            </Dialog>
-            <div>
-                <Snackbar open={openSnackbar} severity={snackbarSeverity} message={snackbarMessage} onClose={closeSnackbar} />
-            </div>
+            </Dialog>            
         </div>
     )
 }

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import MemberService from './members-service';
 import ScheduleServices from './schedule-services';
 import GroupService from './group-service';
-import SnackbarService from './snackbar-service';
+import TrainingService from './training-service';
+import { MessageService } from './messageService';
 
 
 // Import all services and backendUrl
@@ -14,14 +15,21 @@ export const ServiceContext = React.createContext();
 const memberService = new MemberService(backendUrl);
 const scheduleServices = new ScheduleServices(backendUrl);
 const groupService= new GroupService(backendUrl);
-const snackbarService = new SnackbarService();
+const trainingService= new TrainingService(backendUrl);
+
 
 class ServiceContextProvider extends Component {
+    constructor(props){
+        super(props);
+        this.messageService = new MessageService(props.onShowMessage);
+        this.state.messageService = this.messageService;
+        this.state.groupService.messageService = this.messageService;
+    }
     state = {
         memberService,
         scheduleServices,
         groupService,
-        snackbarService
+        trainingService
     }
     render() {
         return (

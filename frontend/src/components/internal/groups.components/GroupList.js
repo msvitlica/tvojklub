@@ -33,12 +33,9 @@ export default function GroupList(props) {
     }, []);
 
     const onDeleteGroup = async (id) => {
-        const { showSnackbar, msg, severity } = services.snackbarService.showSuccess('Grupa uspješno obrisana!');
         const deletedGroup = await services.groupService.deleteGroup(id);
         let filteredGroups = groups.filter(el => el._id !== id);
-        setSnackbarMessage(msg);
-        setSeverity(severity);
-        setSnackOpen(showSnackbar);
+        services.messageService.showSuccessMessage('Grupa uspješno obrisana!')
         setGroups(filteredGroups);
     }
     const closeSnackbar = () => {
@@ -61,7 +58,6 @@ export default function GroupList(props) {
     const fetchTargetGroup = async (id) => {
         const fetchedGroup = await services.groupService.getGroupById(id);
         setGroup(fetchedGroup);
-        console.log(fetchedGroup)
     }
     useEffect(() => {
         if (group._id) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import { StylesProvider } from "@material-ui/core/styles";
 import {
@@ -10,14 +10,23 @@ import InternalComponent from './components/internal/main.components/InternalCom
 import ExternalComponent from './components/external/ExternalComponent';
 import PrivateRoute from './components/external/PrivateRoute';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 // Including services
 import ServiceContextProvider from './services/ServiceContext';
 import auth from './services/auth-service';
 
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function App() {
   const history = useHistory();
   const [isAuthenticated, setAuth] = React.useState(auth.isAuthenticated());
+  const [open, setOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
+  const [severity, setSeverity] = useState('');
 
   const login = () => {
     auth.login(() => {
@@ -33,8 +42,22 @@ function App() {
     setAuth(auth.isAuthenticated());
   }
 
+  const onShowMessage = (message, svt) => {
+    setSeverity(svt);
+    setSnackMessage(message);
+    setOpen(true);
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
-    <ServiceContextProvider>
+    <ServiceContextProvider onShowMessage={onShowMessage}>
       <StylesProvider>
         <Switch>
           <Route path="/login" >
@@ -42,6 +65,13 @@ function App() {
           </Route>
           <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
         </Switch>
+        <div>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={severity}>
+              {snackMessage}
+            </Alert>
+          </Snackbar>
+        </div>
       </StylesProvider>
     </ServiceContextProvider>
   );
