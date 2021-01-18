@@ -9,6 +9,7 @@ import {
 import InternalComponent from './components/internal/main.components/InternalComponent';
 import ExternalComponent from './components/external/ExternalComponent';
 import PrivateRoute from './components/external/PrivateRoute';
+import ErrorBoundary from './components/internal/error-boundary.component/ErrorBoundary';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -59,12 +60,14 @@ function App() {
   return (
     <ServiceContextProvider onShowMessage={onShowMessage}>
       <StylesProvider>
-        <Switch>
-          <Route path="/login" >
-            <ExternalComponent login={login} />
-          </Route>
-          <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
-        </Switch>
+        <ErrorBoundary>
+          <Switch>
+            <Route path="/login" >
+              <ExternalComponent login={login} />
+            </Route>
+            <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
+          </Switch>
+        </ErrorBoundary>
         <div>
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity={severity}>
