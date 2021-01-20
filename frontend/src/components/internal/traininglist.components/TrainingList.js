@@ -1,41 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, CardActionArea, CardContent,Typography} from '@material-ui/core';
-import { ServiceContext }from './../../../services/ServiceContext';
-import ScheduleBar from './../main.components/ScheduleBar';
-import helperMethods from './../../../helpers/helpersMethods';
+import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import { ServiceContext } from './../../../services/ServiceContext';
+import TrainingListFilter from '../main.components/TrainingListFilter';
 
 export default function TrainingList(props) {
+
   const [trainings, setTrainings] = useState([]);
-  const abortController = new AbortController();
   const service = useContext(ServiceContext);
   const [selectedDate, setSelectedDate] = React.useState(new Date().toLocaleDateString());
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-    };
-    const getTomorrowsDate= (currentDate)=>{
-    setSelectedDate(helperMethods.calculateDate(new Date(currentDate),1) );
-    fetchTrainings();
-    };
-    const getCurrentDate= ()=>{
-      setSelectedDate(new Date().toLocaleDateString());
-      fetchTrainings();
-    }
-    const getYesterdaystDate= (currentDate)=>{
-      setSelectedDate(helperMethods.calculateDate(new Date(currentDate),-1));
-      fetchTrainings();
-    }
-  useEffect(() => {
-    fetchTrainings();
+  const handleDateChange = (date) => {
+    setSelectedDate(new Date(date).toLocaleDateString());
+  };
 
-   /*  return () => {
-      abortController.abort();
-  } */
-  }, [selectedDate])
-  const fetchTrainings = async() => {
-    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate/* , { signal: abortController.signal } */);
+  const fetchTrainingByDate = (date) => {
+    setSelectedDate(date);
+    fetchTrainings();
+  }
+
+  const fetchTrainings = async () => {
+    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
     setTrainings(trainingSchedule);
   }
+  useEffect(() => {
+    fetchTrainings();
+  }, [selectedDate]);
 
   const handleClick = (id) => {
     const { match: { params }, history } = props;
@@ -45,7 +34,7 @@ export default function TrainingList(props) {
   return (
     <div>
       <div>
-        <ScheduleBar selectedDate={selectedDate} handleDateChange={handleDateChange} getCurrentDate={getCurrentDate} getTomorrowsDate={getTomorrowsDate} getYesterdaysDate={getYesterdaystDate}></ScheduleBar>
+        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange} fetchTrainingByDate={fetchTrainingByDate}></TrainingListFilter>
       </div>
       <Card>
         {trainings.map((el) => (
