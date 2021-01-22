@@ -2,26 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Paper, Button, IconButton } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import TrainingDatePicker from './DatePicker';
+import TrainingDatePicker from './TrainingDatePicker';
 import helperMethods from '../../../helpers/helpersMethods';
 
 export default function TrainingListFilter(props) {
-    const [datePlaceholder, setDatePlaceholder] = useState(new Date().toLocaleDateString())
-
-    const handleTomorrowsDates = () => {
-        setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), 1));
-    };
+    const [datePlaceholder, setDatePlaceholder] = useState(new Date().toLocaleDateString());
 
     const handleCurrentDate = () => {
         setDatePlaceholder(new Date().toLocaleDateString());
     }
-
+    const handleTomorrowsDates = () => {
+        setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), 1));
+    };
     const handleYesterdaysDate = () => {
         setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), -1));
-    }
+    };
 
     useEffect(() => {
-        props.fetchTrainingByDate(datePlaceholder)
+        props.handleDateChange(datePlaceholder)
     }, [datePlaceholder]);
 
     return (
@@ -32,7 +30,6 @@ export default function TrainingListFilter(props) {
                     <IconButton onClick={handleYesterdaysDate}><ChevronLeftIcon color='primary' /></IconButton>
                     <IconButton onClick={handleTomorrowsDates} > <ChevronRightIcon color='primary' /> </IconButton>
                     <TrainingDatePicker selectedDate={props.selectedDate} handleDateChange={props.handleDateChange} />
-
                 </div>
             </Paper>
         </div>

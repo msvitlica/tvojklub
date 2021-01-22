@@ -11,12 +11,8 @@ export default function TrainingList(props) {
 
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).toLocaleDateString());
-  };
-
-  const fetchTrainingByDate = (date) => {
-    setSelectedDate(date);
     fetchTrainings();
-  }
+  };
 
   const fetchTrainings = async () => {
     const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
@@ -34,7 +30,7 @@ export default function TrainingList(props) {
   return (
     <div>
       <div>
-        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange} fetchTrainingByDate={fetchTrainingByDate}></TrainingListFilter>
+        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange}></TrainingListFilter>
       </div>
       <Card>
         {trainings.map((el) => (
