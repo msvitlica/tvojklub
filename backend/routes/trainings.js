@@ -19,13 +19,14 @@ let attendanceStatus = {
 
 router.get("/", async (req, res) => {
   const date = Number(req.query.date);
-  console.log(date);
   const today = helperMethods.convertDayNumberToString(new Date(date).getDay());
-  const todaysDate = new Date(date);
-  console.log(todaysDate)
+  const todayDate = new Date(date);
+  console.log(todayDate)
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
+  const todaysTrainings = await Training.find({ trainingDate: todayDate }).exec();
+  console.log(todaysTrainings);
   const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today]);
   const todayTrainings = todaySchedules.map(training => {
     return {
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
       group: allGroups.filter(group => group._id.toString() === training.attendedGroups[0].groupId)[0],
       coach: 'Sinisa Kovacevic',
       membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId),
-      trainingDate: todaysDate
+      trainingDate: todayDate
     }
   });
   try {

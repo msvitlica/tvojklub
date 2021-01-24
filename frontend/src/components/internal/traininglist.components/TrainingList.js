@@ -1,32 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-import { ServiceContext }from './../../../services/ServiceContext';
+import { ServiceContext } from './../../../services/ServiceContext';
+import TrainingListFilter from '../main.components/TrainingListFilter';
 
 export default function TrainingList(props) {
+  const abortController = new AbortController;
   const [trainings, setTrainings] = useState([]);
-  const abortController = new AbortController();
   const service = useContext(ServiceContext);
-  useEffect(() => {
-    fetchTrainings();
+  const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
 
-    return () => {
-      abortController.abort();
-  }
-  }, []);
-  console.log(trainings);
+  const handleDateChange = (date) => {
+    setSelectedDate(new Date(date).getTime());
+    fetchTrainings();
+  };
+
   const fetchTrainings = async() => {
-    const currentDay = new Date().getTime();
-    const trainingSchedule = await service.trainingService.getAllTrainings(currentDay, { signal: abortController.signal });
+    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate, { signal: abortController.signal });
     setTrainings(trainingSchedule);
   }
   const onSaveTrainig = async (newTraining) => {
     return await service.trainingService.saveTraining(newTraining);
   }
-
+  useEffect(() => {
+    fetchTrainings();
+  }, [selectedDate]);
 
   const showTrainingDetails = async (training) => {
     const { match: { params }, history } = props;
-    console.log(training)
     if(!training._id) {
       const trainingId = await onSaveTrainig(training);
       history.push(`trainings/${trainingId}`);
@@ -37,6 +37,9 @@ export default function TrainingList(props) {
 
   return (
     <div>
+      <div>
+        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange}></TrainingListFilter>
+      </div>
       <Card>
         {trainings.map((el) => (
           <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
