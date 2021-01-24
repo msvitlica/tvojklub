@@ -12,25 +12,34 @@ export default function TrainingList(props) {
     return () => {
       abortController.abort();
   }
-  }, [])
+  }, []);
+  console.log(trainings);
   const fetchTrainings = async() => {
-    const currentDay = new Date().toLocaleDateString();
+    const currentDay = new Date().getTime();
     const trainingSchedule = await service.trainingService.getAllTrainings(currentDay, { signal: abortController.signal });
     setTrainings(trainingSchedule);
-
+  }
+  const onSaveTrainig = async (newTraining) => {
+    return await service.trainingService.saveTraining(newTraining);
   }
 
 
-  const handleClick = (id) => {
+  const showTrainingDetails = async (training) => {
     const { match: { params }, history } = props;
-    history.push(`trainings/${id}`);
+    console.log(training)
+    if(!training._id) {
+      const trainingId = await onSaveTrainig(training);
+      history.push(`trainings/${trainingId}`);
+    } else {
+      history.push(`trainings/${training._id}`);
+    }
   }
 
   return (
     <div>
       <Card>
         {trainings.map((el) => (
-          <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
+          <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
               <Typography> {el.term}
               </Typography>

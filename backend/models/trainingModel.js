@@ -3,9 +3,12 @@ const { Schema } = mongoose;
 
 const trainingSchema = new Schema({
     term: String,
-    group: String,
+    group: Object,
     coach: String,
     membersInGroup: Array,
+    trainingDate: Date,
+    scheduleId: Schema.Types.ObjectId
+
 })
 
 module.exports = mongoose.model('training', trainingSchema);
