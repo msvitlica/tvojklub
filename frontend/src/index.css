@@ -157,12 +157,16 @@ button.scheduleBtn {
 div.btnContainer {
   justify-content: flex-start;
 }
-div.MuiInput-root ,
-div.MuiInputBase-formControl ,
-div.MuiInput-formControl ,
-input.MuiInputBase-adornedEnd.date-datePicker {
-  padding-left: 90px;
+div.date-datePicker {
+  padding-left: 20px;
   padding-top: 20px;
+  display:inline-block;
+}
+div.date-datePicker:hover {
+  background-color:#ebebeb;
+  border-radius: 20%;
+  width: 100px;
+  max-width: 600px;
 }
 
 button.MuiButtonBase-root ,

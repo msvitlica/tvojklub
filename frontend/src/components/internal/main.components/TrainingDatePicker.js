@@ -11,7 +11,7 @@ export default function TrainingDatePicker(props) {
                     disableUnderline: true,
                 }}
                 variant='outlined'
-                format="MM/dd/yyyy"
+                format="dd/MM/yyyy"
                 value={props.selectedDate}
                 onChange={props.handleDateChange}
             />
