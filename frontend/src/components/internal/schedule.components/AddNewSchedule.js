@@ -40,7 +40,7 @@ function NewSchedule(props) {
     const [recurranceDays, setRecurranceDays] = React.useState({
         monday: false,
         tuesday: false,
-        wednsday: false,
+        wednesday: false,
         thursday: false,
         friday: false,
         saturday: false,
@@ -293,7 +293,7 @@ function NewSchedule(props) {
                                 <Grid item xs={12}>
                                     <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday} />} label="Ponedeljak" />
                                     <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
-                                    <FormControlLabel control={<Checkbox color="primary" name="wednsday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="wednesday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
                                     <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
                                 </Grid>
                                 <Grid item xs={12}>

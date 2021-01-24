@@ -1,25 +1,26 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-import { ServiceContext }from './../../../services/ServiceContext';
+import { ServiceContext } from './../../../services/ServiceContext';
+import TrainingListFilter from '../main.components/TrainingListFilter';
 
 export default function TrainingList(props) {
+
   const [trainings, setTrainings] = useState([]);
-  const abortController = new AbortController();
   const service = useContext(ServiceContext);
+  const [selectedDate, setSelectedDate] = React.useState(new Date().toLocaleDateString());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(new Date(date).toLocaleDateString());
+    fetchTrainings();
+  };
+
+  const fetchTrainings = async () => {
+    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
+    setTrainings(trainingSchedule);
+  }
   useEffect(() => {
     fetchTrainings();
-
-    return () => {
-      abortController.abort();
-  }
-  }, [])
-  const fetchTrainings = async() => {
-    const currentDay = new Date().toLocaleDateString();
-    const trainingSchedule = await service.trainingService.getAllTrainings(currentDay, { signal: abortController.signal });
-    setTrainings(trainingSchedule);
-
-  }
-
+  }, [selectedDate]);
 
   const handleClick = (id) => {
     const { match: { params }, history } = props;
@@ -28,6 +29,9 @@ export default function TrainingList(props) {
 
   return (
     <div>
+      <div>
+        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange}></TrainingListFilter>
+      </div>
       <Card>
         {trainings.map((el) => (
           <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
