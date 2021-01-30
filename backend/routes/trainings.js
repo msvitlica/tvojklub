@@ -35,7 +35,15 @@ router.get("/", async (req, res) => {
         membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
         trainingDate: todayDate
       }
+    })
+    .filter(scheduleTraining => {
+      for(let training = 0; training < trainingsFromDatabase.length; training++){
+        if(scheduleTraining.scheduleId.toString() !== trainingsFromDatabase[training].scheduleId.toString()){
+          return scheduleTraining;
+        }
+      }
     });
+
   const allTrainings = todaySchedules.concat(trainingsFromDatabase);
   try {
     res.status(200).json({
