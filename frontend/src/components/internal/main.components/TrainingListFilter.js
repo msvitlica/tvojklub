@@ -6,10 +6,11 @@ import TrainingDatePicker from './TrainingDatePicker';
 import helperMethods from '../../../helpers/helpersMethods';
 
 export default function TrainingListFilter(props) {
-    const [datePlaceholder, setDatePlaceholder] = useState(new Date().getTime());
+    const date = new Date().getTime();
+    const [datePlaceholder, setDatePlaceholder] = useState(new Date(date));
 
     const handleCurrentDate = () => {
-        setDatePlaceholder(new Date().getTime());
+        setDatePlaceholder(new Date(date));
     }
     const handleTomorrowsDates = () => {
         setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), 1));

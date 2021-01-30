@@ -21,26 +21,25 @@ router.get("/", async (req, res) => {
   const date = Number(req.query.date);
   const today = helperMethods.convertDayNumberToString(new Date(date).getDay());
   const todayDate = new Date(date);
-  console.log(todayDate)
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
-  const todaysTrainings = await Training.find({ trainingDate: todayDate }).exec();
-  console.log(todaysTrainings);
-  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today]);
-  const todayTrainings = todaySchedules.map(training => {
-    return {
-      scheduleId: training._id,
-      term: `${training.startTime} - ${training.endTime}`,
-      group: allGroups.filter(group => group._id.toString() === training.attendedGroups[0].groupId)[0],
-      coach: 'Sinisa Kovacevic',
-      membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId),
-      trainingDate: todayDate
-    }
-  });
+  const trainingsFromDatabase = await Training.find({ trainingDate: { $lte: new Date((date + (1000 * 60 * 60 * 24))), $gte: new Date((date + 1)) } });
+  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today])
+    .map(schedule => {
+      return {
+        scheduleId: schedule._id,
+        term: `${schedule.startTime} - ${schedule.endTime}`,
+        group: allGroups.filter(group => group._id.toString() === schedule.attendedGroups[0].groupId)[0],
+        coach: 'Sinisa Kovacevic',
+        membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
+        trainingDate: todayDate
+      }
+    });
+  const allTrainings = todaySchedules.concat(trainingsFromDatabase);
   try {
     res.status(200).json({
-      trainings: todayTrainings,
+      trainings: allTrainings,
     });
   } catch (err) {
     res.status(400).json({
