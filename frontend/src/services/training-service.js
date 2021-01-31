@@ -19,6 +19,17 @@ class TrainingServices {
         });
         return await saveTrainingRequest.json();
     }
+    async editTraining(trainingObject){
+        const editTrainingRequest = await fetch(`${this.backendUrl}/trainings`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(trainingObject)
+        });
+        return await editTrainingRequest.json();
+    }
 }
 
 export default TrainingServices;

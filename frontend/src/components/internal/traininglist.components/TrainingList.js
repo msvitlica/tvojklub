@@ -14,7 +14,7 @@ export default function TrainingList(props) {
     fetchTrainings();
   };
 
-  const fetchTrainings = async() => {
+  const fetchTrainings = async () => {
     const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate, { signal: abortController.signal });
     setTrainings(trainingSchedule);
   }
@@ -27,7 +27,7 @@ export default function TrainingList(props) {
 
   const showTrainingDetails = async (training) => {
     const { match: { params }, history } = props;
-    if(!training._id) {
+    if (!training._id) {
       const trainingId = await onSaveTrainig(training);
       history.push(`trainings/${trainingId}`);
     } else {
@@ -44,8 +44,10 @@ export default function TrainingList(props) {
         {trainings.map((el) => (
           <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
-              <Typography> {el.term}
+              <Typography>
+                {el.term}
               </Typography>
+              {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
               <br></br>
               <Typography > {el.group.name}
               </Typography>

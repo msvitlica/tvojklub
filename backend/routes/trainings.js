@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const uuid = require('uuid');
-const url = require("url");
 const helperMethods = require('../../frontend/src/helpers/helpersMethods');
 
 
@@ -20,7 +18,7 @@ let attendanceStatus = {
 router.get("/", async (req, res) => {
   const date = Number(req.query.date);
   const today = helperMethods.convertDayNumberToString(new Date(date).getDay());
-  const todayDate = new Date(date);
+  const todayDate = new Date(date + (1000 * 60 * 60));
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
@@ -39,7 +37,7 @@ router.get("/", async (req, res) => {
   trainingsFromDatabase.forEach(training => {
     todaySchedules = todaySchedules.filter(scheduleTraining => scheduleTraining.scheduleId.toString() !== training.scheduleId.toString());
   });
-  
+
   const allTrainings = todaySchedules.concat(trainingsFromDatabase);
   try {
     res.status(200).json({
@@ -81,5 +79,19 @@ router.post('/', async (req, res) => {
     })
   }
 })
+
+//Edit training in database
+router.put('/', async (req, res) => {
+  try {
+    const training = req.body;
+    const trainingFromDatabase = await Training.updateOne({ _id: training._id }, { [training.editedProp]: training.editedPropValue});
+    res.status(200).json(trainingFromDatabase);
+  } catch (err) {
+    res.status(400).json({
+      message: "Some error occured",
+      err
+    })
+  }
+});
 
 module.exports = router;

@@ -7,8 +7,8 @@ const trainingSchema = new Schema({
     coach: String,
     membersInGroup: Array,
     trainingDate: Date,
-    scheduleId: Schema.Types.ObjectId
-
+    scheduleId: Schema.Types.ObjectId,
+    trainingStatus: { type: String, default: 'unknown'}
 })
 
 module.exports = mongoose.model('training', trainingSchema);
