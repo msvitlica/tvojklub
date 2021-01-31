@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
   const trainingsFromDatabase = await Training.find({ trainingDate: { $lte: new Date((date + (1000 * 60 * 60 * 24))), $gte: new Date((date + 1)) } });
-  const todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today])
+  let todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today])
     .map(schedule => {
       return {
         scheduleId: schedule._id,
@@ -35,15 +35,11 @@ router.get("/", async (req, res) => {
         membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
         trainingDate: todayDate
       }
-    })
-    .filter(scheduleTraining => {
-      for(let training = 0; training < trainingsFromDatabase.length; training++){
-        if(scheduleTraining.scheduleId.toString() !== trainingsFromDatabase[training].scheduleId.toString()){
-          return scheduleTraining;
-        }
-      }
     });
-
+  trainingsFromDatabase.forEach(training => {
+    todaySchedules = todaySchedules.filter(scheduleTraining => scheduleTraining.scheduleId.toString() !== training.scheduleId.toString());
+  });
+  
   const allTrainings = todaySchedules.concat(trainingsFromDatabase);
   try {
     res.status(200).json({
