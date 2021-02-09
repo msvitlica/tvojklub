@@ -1,47 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import { ServiceContext } from './../../../services/ServiceContext';
+import TrainingListFilter from '../main.components/TrainingListFilter';
 
-export default class TrainingList extends React.Component {
+export default function TrainingList(props) {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      trainings: []
-    };
+  const [trainings, setTrainings] = useState([]);
+  const service = useContext(ServiceContext);
+  const [selectedDate, setSelectedDate] = React.useState(new Date().toLocaleDateString());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(new Date(date).toLocaleDateString());
+    fetchTrainings();
+  };
+
+  const fetchTrainings = async () => {
+    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
+    setTrainings(trainingSchedule);
   }
-  componentDidMount = () => {
-    fetch('http://localhost:3001/trainings')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ trainings: data.trainings });
-      });
-  }
-  
+  useEffect(() => {
+    fetchTrainings();
+  }, [selectedDate]);
 
-  handleClick = (id) => {
-    const { match: { params }, history } = this.props;
+  const handleClick = (id) => {
+    const { match: { params }, history } = props;
     history.push(`trainings/${id}`);
   }
-  render() {
-    return (
+
+  return (
+    <div>
       <div>
-        <Card>
-          {this.state.trainings.map((el) => (
-            <CardActionArea key={el.id} onClick={() => this.handleClick(el.id)} >
-              <CardContent>
-                <Typography> {el.term}{el.group}
-                </Typography>
-                <br></br>
-                <Typography variant='caption'> {el.groups}
-                </Typography>
-                <Typography>
-                  {el.coach}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          ))}
-        </Card>
+        <TrainingListFilter selectedDate={selectedDate} handleDateChange={handleDateChange}></TrainingListFilter>
       </div>
-    )
-  }
+      <Card>
+        {trainings.map((el) => (
+          <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
+            <CardContent>
+              <Typography> {el.term}
+              </Typography>
+              <br></br>
+              <Typography > {el.group.name}
+              </Typography>
+              <Typography>
+                {el.coach}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        ))}
+      </Card>
+    </div>
+  )
 }
