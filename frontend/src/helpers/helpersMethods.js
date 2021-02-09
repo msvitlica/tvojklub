@@ -33,6 +33,10 @@ function convertDayNumberToString(dayNumber) {
 
     }
 }
+function calculateDate(date,dayNumber){
+    return new Date(date.getTime() + dayNumber*24*60*60*1000).toLocaleDateString();
+}
 
 exports.convertDayNumberToString = convertDayNumberToString;
 exports.calculateDuration = calculateDuration;
+exports.calculateDate= calculateDate;

@@ -17,7 +17,6 @@ const scheduleServices = new ScheduleServices(backendUrl);
 const groupService= new GroupService(backendUrl);
 const trainingService= new TrainingService(backendUrl);
 
-
 class ServiceContextProvider extends Component {
     constructor(props){
         super(props);
