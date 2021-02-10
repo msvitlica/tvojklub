@@ -114,33 +114,30 @@ function NewSchedule(props) {
     }
 
     // Save schedule to database
-    const onSaveSchedule = () => {
+    const onSaveSchedule = async () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
         const err = fieldsValidation();
 
         if (err) {
-            if (schedule._id) {
-                fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
+            if(schedule._id) {
+                const putRequest = await services.scheduleServices.editSchedule(completeSchedule);
+                const response = await putRequest.json();
+                if(putRequest.ok) {
+                    services.messageService.showSuccessMessage(response.msg);
+                }
+                else {
+                    services.messageService.showError(response.msg);
+                }
             }
             else {
-                fetch(`${backendUrl}/schedule-management/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
-                    .catch((error) => {
-                        alert(error.msg)
-                    });
+                const postRequest = await services.scheduleServices.addSchedule(completeSchedule);
+                const response = await postRequest.json();
+                if(postRequest.ok) {
+                    services.messageService.showSuccessMessage(response.msg);
+                }
+                else {
+                    services.messageService.showError(response.msg);
+                }
             }
             setSchedule({
                 startTime: '07:00',
@@ -151,7 +148,6 @@ function NewSchedule(props) {
                 aboutSchedule: ''
             });
             goBack();
-            window.location.reload(true);
         }
     }
 

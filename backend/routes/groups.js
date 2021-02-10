@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
       if (err) console.log(err);
       if (group && group.id !== id) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+        res.status(400).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
         Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {
