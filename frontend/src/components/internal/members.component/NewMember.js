@@ -93,11 +93,17 @@ export default function NewMember(props) {
         }
     }
     const postMember = async () => {
-        await services.memberService.postMember({ member })
-        setMember('');
-        displayMemberList()
+        const postMemeberRequest = await services.memberService.postMember({ member });
+        const response = await postMemeberRequest.json();
+        if (postMemeberRequest.ok) {
+            setMember('');
+            displayMemberList()
+            services.messageService.showSuccessMessage(response.msg);
+        } else {
+            services.messageService.showError(response.msg);
+        }
     }
-    
+
     const onClickCancel = () => {
         displayMemberList();
     }

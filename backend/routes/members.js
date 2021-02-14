@@ -29,7 +29,7 @@ router.post('/newMember', async (req, res) => {
     let newMember = await Member.create(req.body.member);
     console.log(newMember);
       res.status(200).json({
-        msg: 'Member added'
+        msg: 'Novi član uspješno dodan!'
       });        
   } catch (err) {
     res.status(400).json({

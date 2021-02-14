@@ -22,7 +22,6 @@ class ServiceContextProvider extends Component {
         super(props);
         this.messageService = new MessageService(props.onShowMessage);
         this.state.messageService = this.messageService;
-        this.state.groupService.messageService = this.messageService;
     }
     state = {
         memberService,

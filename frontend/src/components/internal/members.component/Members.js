@@ -18,8 +18,7 @@ export default function Members(props) {
 
   useEffect(() => {
     fetchMembers()
-  }, []);
-
+  }, [])
   const rows = members.map(el => (
     {
       id: el._id,
