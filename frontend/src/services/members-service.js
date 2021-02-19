@@ -14,14 +14,15 @@ class MemeberService {
     }
 
     async postMember(newMember) {
-        await fetch(`${this.backendUrl}/members/newMember`, {
+        const postMemeber = await fetch(`${this.backendUrl}/members/newMember`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newMember)
-        })
+        });
+        return postMemeber;
     }
 }
 

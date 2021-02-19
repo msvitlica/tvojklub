@@ -30,11 +30,10 @@ router.get("/", async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try{
-        console.log(req.body);
-        let schedule = await Schedule.create(req.body.completeSchedule);
+        let schedule = await Schedule.create(req.body.schedule);
         return res.status(200).send({
             error: false,
-            schedule
+            msg: 'Raspored uspješno dodan!'
         })
     }catch (err) {
         res.status(400).json({
@@ -46,12 +45,16 @@ router.post('/add', async (req, res) => {
 
 router.put('/edit/:id', async (req, res) => {
     try {
-        const id = req.body.completeSchedule._id;
-        const schedule = req.body.completeSchedule;
-        await Schedule.findByIdAndUpdate(id, schedule);
+        console.log(req.body);
+        const id = req.body.schedule._id;
+        const schedule = req.body.schedule;
+        await Schedule.findByIdAndUpdate(id, schedule); 
+        res.status(200).send({
+            msg: 'Raspored uspješno izmjenjen!'
+        })
     } catch (err) {
         res.status(400).json({
-            message: 'Some error occured',
+            msg: 'Some error occured',
             err
         })
     }
@@ -62,8 +65,7 @@ router.delete('/delete/:id', async (req, res) => {
         const id = req.params.id
         await Schedule.findByIdAndDelete(id);
         return res.status(200).send({
-            error:false,
-            msg: 'Schedule deleted!'
+            msg: 'Raspored uspješno obrisan!'
         })
     } catch (err) {
         res.status(400).json({

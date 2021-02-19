@@ -1,7 +1,7 @@
 class GroupService {
     constructor(url) {
-        this.backendUrl = url;       
-    }    
+        this.backendUrl = url;
+    }
     async getAllGroups(abortController) {
         try {
             const groupsRequest = await fetch(`${this.backendUrl}/groups`, abortController);
@@ -26,47 +26,30 @@ class GroupService {
     }
     async addGroup(groupName) {
         try {
-            await fetch(`${this.backendUrl}/groups`, {
+            let postData = await fetch(`${this.backendUrl}/groups`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: groupName }),
-            }).then(async response =>{
-                const data = await response.json();
-                if(response.ok){
-                    return data;
-                }
-                else{
-                    
-                    const error = (data) || response.statusText;
-                    console.log(error);
-                    return Promise.reject(error);
-                }
-                return data;
-            }).catch(error =>{
-                this.messageService.showError(error.msg);
-                console.log(error);      
-                return;          
             });
-            //return await postedGroup.json();
+            return postData;
         } catch (err) {
             console.log(err);
         }
     }
     async editGroup(id, groupName) {
         try {
-            let editedGroup = await fetch(`${this.backendUrl}/groups/` + id,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ _id: id, name: groupName })
-                })
-            return await editedGroup.json();
+            let editedGroup = await fetch(`${this.backendUrl}/groups/` + id, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ _id: id, name: groupName })
+            });
+            return editedGroup;
         } catch (err) {
             console.log(err);
         }

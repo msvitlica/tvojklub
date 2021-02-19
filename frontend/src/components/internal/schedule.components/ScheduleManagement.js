@@ -31,8 +31,9 @@ function ScheduleManagement(props) {
 
 
     const onDeleteSchedule = async (id) => {
-        await service.scheduleServices.deleteSchedule(id);
+        const deleteScheduleRequest = await service.scheduleServices.deleteSchedule(id);
         setSchedule(schedule.filter(sched => sched._id !== id));
+        service.messageService.showSuccessMessage(deleteScheduleRequest.msg);
     }
 
     const onEditSchedule = async (id) => {
