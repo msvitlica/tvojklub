@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
     Grid,
-    TextField,
     Radio,
+    TextField,
     RadioGroup,
     FormControl,
     FormControlLabel,
@@ -15,11 +15,12 @@ import {
     List,
     ListItem,
     ListItemText,
-    FormHelperText
+    FormHelperText,
+    duration
 } from '@material-ui/core';
-import {
-    calculateDuration
-} from '../../../helpers/helpersMethods';
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { calculateDuration, addHourToStartTime } from '../../../helpers/helpersMethods';
 import { ServiceContext } from './../../../services/ServiceContext';
 
 
@@ -27,14 +28,17 @@ function NewSchedule(props) {
     const services = useContext(ServiceContext);
     const backendUrl = 'http://localhost:3001';
     const { history, match } = props;
+
+    let currentTime = new Date(new Date()).toLocaleString('en-US', { hour12: false });
     const [schedule, setSchedule] = React.useState({
-        startTime: '07:00',
-        endTime: '07:00',
+        startTime: currentTime,
+        endTime: addHourToStartTime(new Date(currentTime).toLocaleString('en-US', { hour12: false })),
         trainingDuration: '',
         attendedGroups: [],
         recurrance: {},
         aboutSchedule: ''
     });
+    console.log(schedule.startTime, schedule.endTime)
     const [groups, setGroups] = React.useState([]);
     const [recurranceType, setRecurranceType] = React.useState('weekly');
     const [recurranceDays, setRecurranceDays] = React.useState({
@@ -58,9 +62,7 @@ function NewSchedule(props) {
         const data = await res.json();
         setGroups(data);
     }
-
     // Get schedule with specific ID
-
     const fetchSchedule = async (controller) => { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
         const schedule = await services.scheduleServices.getScheduleById(match.params.id, controller);
         setSchedule(schedule);
@@ -82,26 +84,31 @@ function NewSchedule(props) {
     // Calculates training duration when user picks start-end time 
     React.useEffect(() => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
+        console.log(duration)
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
         setSchedule({ ...schedule, trainingDuration: `${hours} sat/a ${minutes} min` });
     }, [schedule.startTime, schedule.endTime]);
 
-    // Sets start-end time 
-    const onSetTime = (event) => {
-        setSchedule({ ...schedule, [event.target.name]: event.target.value, trainingDuration: calculateDuration(schedule.startTime, schedule.endTime) })
+    // set start time
+    const setStartTime = (time) => {
+        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
+        let endTime = addHourToStartTime(timeToLocale);
+        setSchedule({ ...schedule, startTime: timeToLocale, endTime: endTime })
     }
-
+    // set end time
+    const setEndTime = (time) => {
+        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
+        setSchedule({ ...schedule,startTime:schedule.startTime, endTime: timeToLocale })
+    }
     // Sets recurrance type
     const onRadioValueChange = event => {
         setRecurranceType(event.target.value);
     }
-
     // Sets recurrance days
     const onCheckboxChange = event => {
         setRecurranceDays({ ...recurranceDays, [event.target.name]: event.target.checked });
     }
-
     // Sets about text
     const onAboutChange = (event) => {
         setSchedule({ ...schedule, aboutSchedule: event.target.value });
@@ -112,7 +119,6 @@ function NewSchedule(props) {
         setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { [event.target.name]: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
     }
-
     // Save schedule to database
     const onSaveSchedule = () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
@@ -144,7 +150,7 @@ function NewSchedule(props) {
             }
             setSchedule({
                 startTime: '07:00',
-                endTime: '07:00',
+                endTime: '08:00',
                 trainingDuration: '',
                 attendedGroups: [],
                 recurrance: {},
@@ -154,7 +160,6 @@ function NewSchedule(props) {
             window.location.reload(true);
         }
     }
-
     // Link to schedule-management page
     const goBack = () => {
         history.push('/schedule-management');
@@ -162,6 +167,7 @@ function NewSchedule(props) {
 
     const fieldsValidation = () => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
+        console.log(duration)
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
 
@@ -173,8 +179,9 @@ function NewSchedule(props) {
         const daysValues = Object.values(recurranceDays)
         const recurranceValidation = daysValues.filter(el => el);
 
-        if (hours === '00' && minutes === '00') {
-            durationError.message = 'Select valid training duration!';
+        if (duration > '12:00') {
+            durationError.message = ` Nepravilan unos kraja treninga`;
+            setSchedule({ ...schedule, trainingDuration: ''  })
             durationError.notValid = true;
             isValid = false;
         }
@@ -205,28 +212,41 @@ function NewSchedule(props) {
                     <h4>Vrijeme Treninga</h4>
                     <Grid item container className="scheduleContainer" direction="column" xs={12}>
                         <Grid item xs={12}>
-                            <TextField
-                                label="Početak"
-                                type="time"
-                                name="startTime"
-                                error={durationError.notValid}
-                                value={schedule.startTime}
-                                variant="outlined"
-                                className="timePicker"
-                                onChange={onSetTime}
-                            />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardTimePicker
+                                    inputVariant='outlined'
+                                    label="Početak"
+                                    ampm={false}
+                                    name="startTime"
+                                    error={durationError.notValid}
+                                    value={schedule.startTime}
+                                    variant="outlined"
+                                    className="timePicker"
+                                    onChange={setStartTime}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                label="Kraj"
-                                type="time"
-                                name='endTime'
-                                error={durationError.notValid}
-                                value={schedule.endTime}
-                                variant="outlined"
-                                className="timePicker"
-                                onChange={onSetTime}
-                            />
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardTimePicker
+                                    inputVariant='outlined'
+                                    label="Kraj Treninga"
+                                    ampm={false}
+                                    name="endTime"
+                                    error={durationError.notValid}
+                                    helperText={durationError.message}
+                                    value={schedule.endTime}
+                                    variant="outlined"
+                                    className="timePicker"
+                                    onChange={setEndTime}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -234,7 +254,6 @@ function NewSchedule(props) {
                                 variant="outlined"
                                 className="timePicker"
                                 error={durationError.notValid}
-                                helperText={durationError.message}
                                 value={schedule.trainingDuration}
                             />
                         </Grid>

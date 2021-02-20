@@ -1,19 +1,15 @@
 function calculateDuration(start, end) {
-    start = start.split(":");
-    end = end.split(":");
-    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+    let startDate = new Date(start);
+    let endDate = new Date(end);
     var diff = endDate.getTime() - startDate.getTime();
     var hours = Math.floor(diff / 1000 / 60 / 60);
     diff -= hours * 1000 * 60 * 60;
     var minutes = Math.floor(diff / 1000 / 60);
-
     if (hours < 0) {
         hours = hours + 24;
     }
     return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
 }
-
 function convertDayNumberToString(dayNumber) {
     switch (dayNumber) {
         case 0:
@@ -33,10 +29,25 @@ function convertDayNumberToString(dayNumber) {
 
     }
 }
-function calculateDate(date,dayNumber){
-    return new Date(date.getTime() + dayNumber*24*60*60*1000).toLocaleDateString();
+function calculateDate(date, dayNumber) {
+    return new Date(date.getTime() + dayNumber * 24 * 60 * 60 * 1000).toLocaleDateString();
 }
+const addHourToStartTime = (start) => {
+    let startTime = new Date(start);
+    // var endOfDay = new Date();
+    // endOfDay.setHours(23, 59, 59, 999);
+    // let beginOfDay = new Date();
+    // beginOfDay.setHours(0, 0, 0, 0);
+    // let addedHourToDay = new Date();
+    // addedHourToDay.setHours(24, 0, 0, 0);
+  
+    let hourToMillisec = startTime.getTime() + (1000 * 60 * 60);
+    let defaultEndTime = new Date(hourToMillisec).toLocaleString('en-US', { hour12: false });
+    return defaultEndTime;
+};
 
 exports.convertDayNumberToString = convertDayNumberToString;
 exports.calculateDuration = calculateDuration;
-exports.calculateDate= calculateDate;
+exports.calculateDate = calculateDate;
+exports.addHourToStartTime = addHourToStartTime;
+
