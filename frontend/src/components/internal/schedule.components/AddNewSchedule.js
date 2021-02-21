@@ -114,33 +114,16 @@ function NewSchedule(props) {
     }
 
     // Save schedule to database
-    const onSaveSchedule = () => {
+    const onSaveSchedule = async () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
         const err = fieldsValidation();
 
         if (err) {
-            if (schedule._id) {
-                fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
+            if(schedule._id) {
+                await services.scheduleServices.editSchedule(completeSchedule);
             }
             else {
-                fetch(`${backendUrl}/schedule-management/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
-                    .catch((error) => {
-                        alert(error.msg)
-                    });
+                await services.scheduleServices.addSchedule(completeSchedule);
             }
             setSchedule({
                 startTime: '07:00',
@@ -151,7 +134,6 @@ function NewSchedule(props) {
                 aboutSchedule: ''
             });
             goBack();
-            window.location.reload(true);
         }
     }
 
@@ -293,7 +275,7 @@ function NewSchedule(props) {
                                 <Grid item xs={12}>
                                     <FormControlLabel control={<Checkbox color="primary" name="monday" onChange={onCheckboxChange} checked={recurranceDays.monday} />} label="Ponedeljak" />
                                     <FormControlLabel control={<Checkbox color="primary" name="tuesday" onChange={onCheckboxChange} checked={recurranceDays.tuesday} />} label="Utorak" />
-                                    <FormControlLabel control={<Checkbox color="primary" name="wednesday" onChange={onCheckboxChange} checked={recurranceDays.wednsday} />} label="Srijeda" />
+                                    <FormControlLabel control={<Checkbox color="primary" name="wednesday" onChange={onCheckboxChange} checked={recurranceDays.wednesday} />} label="Srijeda" />
                                     <FormControlLabel control={<Checkbox color="primary" name="thursday" onChange={onCheckboxChange} checked={recurranceDays.thursday} />} label="Četvrtak" />
                                 </Grid>
                                 <Grid item xs={12}>
