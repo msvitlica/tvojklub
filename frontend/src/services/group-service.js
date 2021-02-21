@@ -8,6 +8,7 @@ class GroupService {
             return await groupsRequest.json();
         } catch (err) {
             console.log(err);
+            this.messageService.showError(err.message);
         }
     }
     async deleteGroup(id) {
@@ -36,6 +37,7 @@ class GroupService {
             }).then(async response =>{
                 const data = await response.json();
                 if(response.ok){
+                    this.messageService.showSuccessMessage()
                     return data;
                 }
                 else{
@@ -69,6 +71,7 @@ class GroupService {
             return await editedGroup.json();
         } catch (err) {
             console.log(err);
+            this.messageService.showError(err.message);
         }
     }
 }
