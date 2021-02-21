@@ -29,6 +29,7 @@ export default function GroupList(props) {
     const onDeleteGroup = async (id) => {
         await services.groupService.deleteGroup(id);
         let filteredGroups = groups.filter(el => el._id !== id);
+        services.messageService.showSuccessMessage('Grupa uspješno obrisana!')
         setGroups(filteredGroups);
     }
 

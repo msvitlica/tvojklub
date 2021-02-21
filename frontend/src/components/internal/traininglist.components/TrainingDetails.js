@@ -1,32 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Typography, CardContent, List, ListItem, ListSubheader,
   ListItemText, ListItemSecondaryAction, Card, TextField,
-  Divider, Grid
+  Divider, Grid, Button
 } from '@material-ui/core';
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
-export default class TrainingDetails extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      trainingInfo: undefined,
-      membersInGroup: [],
-    }
+import { ServiceContext } from '../../../services/ServiceContext';
+
+
+export default function TrainingDetails(props) {
+  const [trainingInfo, setTrainingInfo] = useState(null);
+  const [membersInGroup, setMembersInGroup] = useState([]);
+  const [trainingStatus, setTrainingStatus] = useState(true);
+  const services = useContext(ServiceContext);
+
+  // Get training by id 
+  useEffect(() => {
+    fetchTraining();
+  }, [trainingStatus]);
+
+  // Change training status
+  const changeTrainingStatus = () => {
+    setTrainingStatus(false);
+    services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
+
   }
-  componentDidMount = () => {
-    const { match: { params } } = this.props;
+  const fetchTraining = async () => {
+    const { match: { params } } = props;
     fetch(`http://localhost:3001/trainings/${params.trainingId}`)
       .then(response => response.json())
       .then(data => {
-        this.setState({
-          trainingInfo: data.trainingId,
-          membersInGroup: data.trainingId.membersInGroup,
-        })
-        console.log(this.state.membersInGroup)
+        setTrainingInfo(data.filteredTraining);
+        setMembersInGroup(data.filteredTraining.membersInGroup);
+        setTrainingStatus(data.filteredTraining.trainingStatus !== 'canceled' ? true : false)
       });
   }
-  processMember = (id, attendance) => {
+
+  const processMember = (id, attendance) => {
 
     let attendanceStatus = {
       attended: 'attended',
@@ -34,64 +45,73 @@ export default class TrainingDetails extends React.Component {
       unknown: 'unknown',
     }
 
-    const newMembersInGroup = [...this.state.membersInGroup];
+    const newMembersInGroup = [...membersInGroup];
 
-    if (attendance) {
-      newMembersInGroup.forEach(member => {
-        if (member.id === id) {
-          member.attendance = attendanceStatus.attended
-        }
-      });
+    switch (attendance) {
+      case true:
+        newMembersInGroup.forEach(member => {
+          if (member._id === id) {
+            member.attendance = attendanceStatus.attended
+          }
+        });
+        setTrainingInfo({ ...trainingInfo, membersInGroup: newMembersInGroup })
+        services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'membersInGroup', editedPropValue: trainingInfo.membersInGroup });
+        break
+      case false:
+        newMembersInGroup.forEach(member => {
+          if (member._id === id) {
+            member.attendance = attendanceStatus.noAttended
+          }
+        });
+        setTrainingInfo({ ...trainingInfo, membersInGroup: newMembersInGroup })
+        services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'membersInGroup', editedPropValue: trainingInfo.membersInGroup });
+        break
+      default:
+        newMembersInGroup.forEach(member => {
+          if (member._id === id) {
+            member.attendance = attendanceStatus.unknown
+          }
+        });
     }
-    else {
-      newMembersInGroup.forEach(member => {
-        if (member.id === id) {
-          member.attendance = attendanceStatus.noAttended
-        }
-      });
-    }
-    this.setState({
-      /* trainingInfo: this.state.trainingInfo, */
-      membersInGroup: newMembersInGroup,
-    },
-      () => { console.log(this.state.membersInGroup) });
+    setMembersInGroup(newMembersInGroup);
   }
-  render() {
-    const attended = true;
-    const notAttended = false;
-    if (!this.state.trainingInfo) {
-      return null;
-    }
-    return (
-      <React.Fragment>
-        <Card >
-          <CardContent>
-            <Grid container>
-              <Grid item xs={12} sm={8}>
-                <Typography color="textPrimary" variant='h6'>
-                  {this.state.trainingInfo.term}({this.state.trainingInfo.group})</Typography>
-              </Grid>
-              <Grid item xs={12} sm={4} className='trainingSearchBar'>
-                <TextField id="outlined-basic"
-                  label="Search" />
-              </Grid>
+
+  if (!trainingInfo) {
+    return null;
+  }
+  return (
+    <React.Fragment>
+      <Card >
+        <CardContent>
+          <Grid container>
+            <Grid item xs={12} sm={8}>
+              <Typography color="textPrimary" variant='h6'>
+                {trainingInfo.term}({trainingInfo.group.name})
+              </Typography>
+              {!trainingStatus ? <Typography>Status Treninga: Otkazan</Typography> : null}
+              {trainingStatus ? <Button variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
-          </CardContent>
-        </Card>
-        <List subheader={<ListSubheader color='primary' >{this.state.trainingInfo.group}
-        </ListSubheader>}>
-          {this.state.membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
-            <ListItem key={el.id}>
-              <ListItemText primary={el.name} />
-              <ListItemSecondaryAction>
-                <AttendanceOptionButtons member={el} processMember={this.processMember} />
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <ProcessedMembersList membersInGroup={this.state.membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={this.processMember} />
-      </React.Fragment >
-    )
-  }
+            <Grid item xs={12} sm={4} className='trainingSearchBar'>
+              <TextField id="outlined-basic"
+                label="Search" />
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+      <List subheader={<ListSubheader color='primary' >
+        {trainingInfo.group.name}
+      </ListSubheader>}>
+        {membersInGroup.filter(el => el.attendance === 'unknown').map((el) => (
+          <ListItem key={el._id}>
+            <ListItemText primary={`${el.firstName} ${el.lastName}`} />
+            <ListItemSecondaryAction>
+              {trainingStatus ? <AttendanceOptionButtons member={el} processMember={processMember} /> : null}
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <ProcessedMembersList membersInGroup={membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={processMember} />
+    </React.Fragment >
+  )
 }

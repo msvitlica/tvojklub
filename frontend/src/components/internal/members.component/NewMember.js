@@ -27,6 +27,7 @@ export default function NewMember(props) {
         lastName: '',
         dateOfBirth: '',
         groupId: '',
+        attendance: 'unknown'
     });
     const [firstNameError, setFirstNameError] = useState({});
     const [lastNameError, setLastNameError] = useState({});
@@ -88,6 +89,7 @@ export default function NewMember(props) {
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
                 groupId: member.groupId,
+                attendance: 'unknown'
             })
             postMember();
         }
