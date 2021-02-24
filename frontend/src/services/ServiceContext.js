@@ -1,34 +1,29 @@
 import React, { Component } from 'react';
+import { MessageService } from './messageService';
 import MemberService from './members-service';
-import ScheduleServices from './schedule-services';
+import ScheduleService from './schedule-service';
 import GroupService from './group-service';
 import TrainingService from './training-service';
-import { MessageService } from './messageService';
 
-
-// Import all services and backendUrl
-
+// backendUrl
 const backendUrl = 'http://localhost:3001';
 
-// Create instances of services
+// create context using hook
 export const ServiceContext = React.createContext();
-const memberService = new MemberService(backendUrl);
-const scheduleServices = new ScheduleServices(backendUrl);
-const groupService= new GroupService(backendUrl);
-const trainingService= new TrainingService(backendUrl);
 
 class ServiceContextProvider extends Component {
     constructor(props){
         super(props);
         this.messageService = new MessageService(props.onShowMessage);
-        this.state.messageService = this.messageService;
-        this.state.groupService.messageService = this.messageService;
+        this.state.messageService= this.messageService;
+        this.state.groupService= new GroupService(backendUrl,this.messageService);
+        this.state.memberService= new MemberService(backendUrl,this.messageService);
+        this.state.scheduleServices= new ScheduleService(backendUrl,this.messageService);
+        this.state.trainingService= new TrainingService(backendUrl,this.messageService);
+
     }
     state = {
-        memberService,
-        scheduleServices,
-        groupService,
-        trainingService
+    
     }
     render() {
         return (
@@ -38,5 +33,4 @@ class ServiceContextProvider extends Component {
         )
     }
 }
-
 export default ServiceContextProvider;

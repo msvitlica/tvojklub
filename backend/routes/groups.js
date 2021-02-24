@@ -9,6 +9,7 @@ const Group = require('../models/groupModel')
 router.get("/", async (req, res) => {
   try {
     const groups = await Group.find();
+    console.log(groups)
     return res.status(200).send(groups);
   } catch (err) {
     res.status(400).json({
@@ -54,7 +55,7 @@ router.put('/:id', async(req, res) => {
       if (err) console.log(err);
       if (group && group.id !== id) {
         console.log('Group already exists');
-        res.status(200).send({ msg: 'Grupa sa istim imenom već postoji.' });
+        res.status(400).send({ msg: 'Grupa sa istim imenom već postoji.' });
       } else {
        Group.findByIdAndUpdate(id, { name: body.name },
           function (err, group) {

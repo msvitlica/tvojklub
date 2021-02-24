@@ -58,7 +58,6 @@ function NewSchedule(props) {
         const data = await res.json();
         setGroups(data);
     }
-
     // Get schedule with specific ID
 
     const fetchSchedule = async (controller) => { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
@@ -114,33 +113,16 @@ function NewSchedule(props) {
     }
 
     // Save schedule to database
-    const onSaveSchedule = () => {
+    const onSaveSchedule = async () => {
         const completeSchedule = { ...schedule, recurrance: { recurranceType, recurranceDays } }
         const err = fieldsValidation();
 
         if (err) {
             if (schedule._id) {
-                fetch(`${backendUrl}/schedule-management/edit/${schedule._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
+                await services.scheduleServices.editSchedule(completeSchedule);
             }
             else {
-                fetch(`${backendUrl}/schedule-management/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ completeSchedule })
-                })
-                    .catch((error) => {
-                        alert(error.msg)
-                    });
+                await services.scheduleServices.addSchedule(completeSchedule);
             }
             setSchedule({
                 startTime: '07:00',

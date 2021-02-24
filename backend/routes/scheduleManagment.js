@@ -7,7 +7,7 @@ router.get('/edit/:id', async (req, res) => {
     try {
         const scheduleId = req.params.id
         const schedule = await Schedule.findById(scheduleId);
-        res.status(200).json(schedule);
+        return res.status(200).json(schedule);
     } catch (err) {
         res.status(400).json({
             message: "Some error occured",
@@ -19,7 +19,7 @@ router.get('/edit/:id', async (req, res) => {
 router.get("/", async (req, res) => {
     try {
         const schedule = await Schedule.find();
-        res.status(200).json(schedule);
+        return res.status(200).send(schedule);
     } catch (err) {
         res.status(400).json({
             message: "Some error occured",
@@ -29,14 +29,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    try{
-        console.log(req.body);
-        let schedule = await Schedule.create(req.body.completeSchedule);
+    try {
+        let schedule = await Schedule.create(req.body.schedule);
         return res.status(200).send({
             error: false,
-            schedule
+            msg: 'Trening je uspjesno dodat!'
         })
-    }catch (err) {
+    }
+    catch (err) {
         res.status(400).json({
             message: 'Some error occured',
             err
@@ -46,9 +46,12 @@ router.post('/add', async (req, res) => {
 
 router.put('/edit/:id', async (req, res) => {
     try {
-        const id = req.body.completeSchedule._id;
-        const schedule = req.body.completeSchedule;
-        await Schedule.findByIdAndUpdate(id, schedule);
+        const id = req.body.schedule._id;
+        const schedule = req.body.schedule;
+        let editedSchedule = await Schedule.findByIdAndUpdate(id, schedule);
+        res.status(200).send({
+            msg: 'Trening je uspjesno izmijenjen!'
+        })
     } catch (err) {
         res.status(400).json({
             message: 'Some error occured',
@@ -62,8 +65,7 @@ router.delete('/delete/:id', async (req, res) => {
         const id = req.params.id
         await Schedule.findByIdAndDelete(id);
         return res.status(200).send({
-            error:false,
-            msg: 'Schedule deleted!'
+            msg: 'Trening je obrisan!'
         })
     } catch (err) {
         res.status(400).json({

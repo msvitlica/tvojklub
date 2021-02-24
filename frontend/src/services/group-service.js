@@ -1,13 +1,19 @@
-class GroupService {
-    constructor(url) {
-        this.backendUrl = url;       
-    }    
+
+import BaseService from './base-service';
+
+
+class GroupService extends BaseService {
+    constructor(url, message) {
+        super(url, message);
+    }
+
     async getAllGroups(abortController) {
         try {
             const groupsRequest = await fetch(`${this.backendUrl}/groups`, abortController);
             return await groupsRequest.json();
+         
         } catch (err) {
-            console.log(err);
+            this.message.showError(err.msg)
         }
     }
     async deleteGroup(id) {
@@ -15,9 +21,14 @@ class GroupService {
             const groupsRequest = await fetch(`${this.backendUrl}/groups/${id}`, {
                 method: 'DELETE',
             });
-            return await groupsRequest.json();
+            const data = await groupsRequest.json();
+            if (groupsRequest.ok) {
+                this.message.showSuccessMessage(data.msg);
+            } else {
+                this.message.showError(data.msg);
+            }
         } catch (err) {
-            console.log(err);
+            this.message.showError(err.msg)
         }
     }
     async getGroupById(id, abortController) { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
@@ -26,33 +37,24 @@ class GroupService {
     }
     async addGroup(groupName) {
         try {
-            await fetch(`${this.backendUrl}/groups`, {
+            let postedData = await fetch(`${this.backendUrl}/groups`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: groupName }),
-            }).then(async response =>{
-                const data = await response.json();
-                if(response.ok){
-                    return data;
-                }
-                else{
-                    
-                    const error = (data) || response.statusText;
-                    console.log(error);
-                    return Promise.reject(error);
-                }
-                return data;
-            }).catch(error =>{
-                this.messageService.showError(error.msg);
-                console.log(error);      
-                return;          
             });
-            //return await postedGroup.json();
+            const data = await postedData.json();
+            if (postedData.ok) {
+                this.message.showSuccessMessage(data.msg)
+            }
+            else {
+                this.message.showError(data.msg)
+            }
+
         } catch (err) {
-            console.log(err);
+           this.message.showSuccessMessage(err.msg)
         }
     }
     async editGroup(id, groupName) {
@@ -65,10 +67,16 @@ class GroupService {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ _id: id, name: groupName })
-                })
-            return await editedGroup.json();
+                });
+            let data = await editedGroup.json();
+            if (editedGroup.ok) {
+                this.message.showSuccessMessage(data.msg);
+            } else {
+                this.message.showError(data.msg);
+            }
         } catch (err) {
             console.log(err);
+            this.message.showError(err.msg);
         }
     }
 }
