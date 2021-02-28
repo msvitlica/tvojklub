@@ -23,27 +23,13 @@ export default function AddGroupDialog(props) {
 
     const add_edit_Group = async () => {
         if (props.group._id) {
-            const editedData = await services.groupService.editGroup(props.group._id, draftGroupName);
-            if (editedData.ok) {
-                const response = await editedData.json();
-                handleClose();
-                setDraftGroupName('');
-                services.messageService.showSuccessMessage(response.msg);
-            } else {
-                const response = await editedData.json();
-                services.messageService.showError(response.msg);
-            }
+            await services.groupService.editGroup(props.group._id, draftGroupName);
+            handleClose();
+            setDraftGroupName('');
         } else {
-            const postedData = await services.groupService.addGroup(draftGroupName)
-            if(postedData.ok) {
-                const response = await postedData.json();
-                handleClose();
-                setDraftGroupName('');
-                services.messageService.showSuccessMessage(response.msg);
-            } else {
-                const response = await postedData.json();
-                services.messageService.showError(response.msg);
-            }
+            await services.groupService.addGroup(draftGroupName);
+            handleClose();
+            setDraftGroupName('');
         }
 
     }

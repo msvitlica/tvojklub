@@ -4,27 +4,35 @@ import { ServiceContext } from './../../../services/ServiceContext';
 import TrainingListFilter from '../main.components/TrainingListFilter';
 
 export default function TrainingList(props) {
-
+  const abortController = new AbortController;
   const [trainings, setTrainings] = useState([]);
   const service = useContext(ServiceContext);
-  const [selectedDate, setSelectedDate] = React.useState(new Date().toLocaleDateString());
+  const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
 
   const handleDateChange = (date) => {
-    setSelectedDate(new Date(date).toLocaleDateString());
+    setSelectedDate(new Date(date).getTime());
     fetchTrainings();
   };
 
   const fetchTrainings = async () => {
-    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
+    const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate, { signal: abortController.signal });
     setTrainings(trainingSchedule);
+  }
+  const onSaveTrainig = async (newTraining) => {
+    return await service.trainingService.saveTraining(newTraining);
   }
   useEffect(() => {
     fetchTrainings();
   }, [selectedDate]);
 
-  const handleClick = (id) => {
+  const showTrainingDetails = async (training) => {
     const { match: { params }, history } = props;
-    history.push(`trainings/${id}`);
+    if (!training._id) {
+      const trainingId = await onSaveTrainig(training);
+      history.push(`trainings/${trainingId}`);
+    } else {
+      history.push(`trainings/${training._id}`);
+    }
   }
 
   return (
@@ -34,10 +42,12 @@ export default function TrainingList(props) {
       </div>
       <Card>
         {trainings.map((el) => (
-          <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
+          <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
-              <Typography> {el.term}
+              <Typography>
+                {el.term}
               </Typography>
+              {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
               <br></br>
               <Typography > {el.group.name}
               </Typography>

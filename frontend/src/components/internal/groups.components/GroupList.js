@@ -14,13 +14,7 @@ import { ServiceContext } from './../../../services/ServiceContext';
 export default function GroupList(props) {
     const [openDialog, setDialogOpen] = useState(false);
     const [groups, setGroups] = useState([]);
-    const [group, setGroup] = useState('');
-
-    // Snackbar variables
-    const [snackOpen, setSnackOpen] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [snackbarSeverity, setSeverity] = useState(null);
-
+    const [group, setGroup] = useState('');  
 
     const services = useContext(ServiceContext);
 
@@ -33,13 +27,10 @@ export default function GroupList(props) {
     }, []);
 
     const onDeleteGroup = async (id) => {
-        const deletedGroup = await services.groupService.deleteGroup(id);
+        await services.groupService.deleteGroup(id);
         let filteredGroups = groups.filter(el => el._id !== id);
-        services.messageService.showSuccessMessage(deletedGroup.msg)
+        services.messageService.showSuccessMessage('Grupa uspješno obrisana!')
         setGroups(filteredGroups);
-    }
-    const closeSnackbar = () => {
-        setSnackOpen(false);
     }
 
     const handleClose = async () => {
@@ -106,7 +97,6 @@ export default function GroupList(props) {
                     pageSize={5}
                 />
             </div>
-            <Snackbar open={snackOpen} severity={snackbarSeverity} message={snackbarMessage} onClose={closeSnackbar} />
         </Grid>
     )
 }
