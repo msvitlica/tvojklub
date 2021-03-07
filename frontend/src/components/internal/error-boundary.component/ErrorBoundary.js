@@ -13,7 +13,6 @@ export default class ErrorBoundary extends Component {
         console.log(error, info)
         // Display fallback UI
         this.setState({ hasError: true });
-        services.messageService.showError('Something went wrong');
     }
 
     render() {

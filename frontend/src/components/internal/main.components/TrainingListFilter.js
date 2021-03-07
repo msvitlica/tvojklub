@@ -3,20 +3,20 @@ import { Paper, Button, IconButton } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import TrainingDatePicker from './TrainingDatePicker';
-import helperMethods from '../../../helpers/helpersMethods';
+import { dateFormat, calculateDate } from '../../../helpers/helpersMethods';
 
 export default function TrainingListFilter(props) {
-    const date = new Date().getTime();
-    const [datePlaceholder, setDatePlaceholder] = useState(new Date(date));
+    const date = new Date(dateFormat(new Date().getTime()));
+    const [datePlaceholder, setDatePlaceholder] = useState(props.selectedDate);
 
     const handleCurrentDate = () => {
         setDatePlaceholder(new Date(date));
     }
     const handleTomorrowsDates = () => {
-        setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), 1));
+        setDatePlaceholder(calculateDate(new Date(props.selectedDate), 1));
     };
     const handleYesterdaysDate = () => {
-        setDatePlaceholder(helperMethods.calculateDate(new Date(props.selectedDate), -1));
+        setDatePlaceholder(calculateDate(new Date(props.selectedDate), -1));
     };
 
     useEffect(() => {

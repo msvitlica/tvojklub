@@ -1,12 +1,14 @@
 import BaseService from "./base-service";
+import { dateFormat } from "../helpers/helpersMethods";
 
 class TrainingServices extends BaseService {
     constructor(url, service) {
         super(url, service)
     }
 
-    async getAllTrainings(currentDate, abortController) {
-        const trainingRequest = await fetch(`${this.backendUrl}/trainings/?date=${currentDate}`);
+    async getAllTrainings(currentDateInMs, abortController) {
+        const date = new Date(dateFormat(new Date(currentDateInMs))).getTime();
+        const trainingRequest = await fetch(`${this.backendUrl}/trainings/?date=${date}`);
         const trainings = await trainingRequest.json();
         return trainings.trainings;
     }

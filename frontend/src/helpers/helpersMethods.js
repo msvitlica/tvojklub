@@ -33,10 +33,30 @@ function convertDayNumberToString(dayNumber) {
 
     }
 }
-function calculateDate(date,dayNumber){
-    return new Date(date.getTime() + dayNumber*24*60*60*1000).toLocaleDateString();
+function calculateDate(date, dayNumber) {
+    return new Date(date.getTime() + dayNumber * 24 * 60 * 60 * 1000).toLocaleDateString();
+}
+function dateFormat(date) {
+    const day = new Date(date).getDate();
+    const month = new Date(date).getMonth() + 1;
+    const year = new Date(date).getFullYear();
+    return `${year}-${month}-${day}`;
+}
+function amPmTimeFormat(trainingObj) {
+    let [hours, minutes] = trainingObj.startTime.split(':');
+
+    if(hours === '00'){
+        hours = '12';
+    }
+    if (parseInt(hours) > 12) {
+        hours = parseInt(hours) - 12;
+    }
+
+    return `${hours}:${minutes} ${parseInt(hours) > 12 ? 'pm' : 'am'}`;
 }
 
 exports.convertDayNumberToString = convertDayNumberToString;
 exports.calculateDuration = calculateDuration;
-exports.calculateDate= calculateDate;
+exports.calculateDate = calculateDate;
+exports.dateFormat = dateFormat;
+exports.amPmTimeFormat = amPmTimeFormat;
