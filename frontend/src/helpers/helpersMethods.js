@@ -33,7 +33,6 @@ function calculateDate(date, dayNumber) {
     return new Date(date.getTime() + dayNumber * 24 * 60 * 60 * 1000).toLocaleDateString();
 }
 const addHourToStartTime = (start) => {
-    let startTime = new Date(start);
     // var endOfDay = new Date();
     // endOfDay.setHours(23, 59, 59, 999);
     // let beginOfDay = new Date();
@@ -41,8 +40,8 @@ const addHourToStartTime = (start) => {
     // let addedHourToDay = new Date();
     // addedHourToDay.setHours(24, 0, 0, 0);
   
-    let hourToMillisec = startTime.getTime() + (1000 * 60 * 60);
-    let defaultEndTime = new Date(hourToMillisec).toLocaleString('en-US', { hour12: false });
+    let hourToMillisec = start.getTime() + (1000 * 60 * 60);
+    let defaultEndTime = new Date(hourToMillisec);
     return defaultEndTime;
 };
 

@@ -29,16 +29,16 @@ function NewSchedule(props) {
     const backendUrl = 'http://localhost:3001';
     const { history, match } = props;
 
-    let currentTime = new Date(new Date()).toLocaleString('en-US', { hour12: false });
+    let currentTime = `${new Date().getHours()}:${new Date().getMinutes()}`;
+    let tempEndTime = addHourToStartTime(new Date());
     const [schedule, setSchedule] = React.useState({
         startTime: currentTime,
-        endTime: addHourToStartTime(new Date(currentTime).toLocaleString('en-US', { hour12: false })),
+        endTime: `${tempEndTime.getHours()}:${tempEndTime.getMinutes()}`,
         trainingDuration: '',
         attendedGroups: [],
         recurrance: {},
         aboutSchedule: ''
     });
-    console.log(schedule.startTime, schedule.endTime)
     const [groups, setGroups] = React.useState([]);
     const [recurranceType, setRecurranceType] = React.useState('weekly');
     const [recurranceDays, setRecurranceDays] = React.useState({
@@ -83,8 +83,7 @@ function NewSchedule(props) {
 
     // Calculates training duration when user picks start-end time 
     React.useEffect(() => {
-        const duration = calculateDuration(schedule.startTime, schedule.endTime)
-        console.log(duration)
+        const duration = calculateDuration(new Date(`1970/01/01 ${schedule.startTime}`), new Date(`1970/01/01 ${schedule.endTime}`))
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
         setSchedule({ ...schedule, trainingDuration: `${hours} sat/a ${minutes} min` });
@@ -92,14 +91,17 @@ function NewSchedule(props) {
 
     // set start time
     const setStartTime = (time) => {
-        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
-        let endTime = addHourToStartTime(timeToLocale);
-        setSchedule({ ...schedule, startTime: timeToLocale, endTime: endTime })
+        let timeToLocale = new Date(time);
+        let startTime = `${timeToLocale.getHours()}:${timeToLocale.getMinutes() < 10 ? '0' + timeToLocale.getMinutes() : timeToLocale.getMinutes()}`;
+        let endTimeToLocal = addHourToStartTime(timeToLocale);
+        let endTime = `${endTimeToLocal.getHours()}:${endTimeToLocal.getMinutes() < 10 ? '0' + endTimeToLocal.getMinutes() : endTimeToLocal.getMinutes()}`;
+        setSchedule({ ...schedule, startTime: startTime, endTime: endTime })
     }
     // set end time
     const setEndTime = (time) => {
-        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
-        setSchedule({ ...schedule,startTime:schedule.startTime, endTime: timeToLocale })
+        let timeToLocale = new Date(time);
+        let endTime = `${timeToLocale.getHours()}:${timeToLocale.getMinutes()}`;
+        setSchedule({ ...schedule, startTime:schedule.startTime, endTime: endTime })
     }
     // Sets recurrance type
     const onRadioValueChange = event => {
@@ -166,8 +168,7 @@ function NewSchedule(props) {
     }
 
     const fieldsValidation = () => {
-        const duration = calculateDuration(schedule.startTime, schedule.endTime)
-        console.log(duration)
+        const duration = calculateDuration(new Date(`1970/01/01 ${schedule.startTime}`), new Date(`1970/01/01 ${schedule.endTime}`))
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
 
@@ -219,7 +220,7 @@ function NewSchedule(props) {
                                     ampm={false}
                                     name="startTime"
                                     error={durationError.notValid}
-                                    value={schedule.startTime}
+                                    value={new Date(`1970/01/01 ${schedule.startTime}`)}
                                     variant="outlined"
                                     className="timePicker"
                                     onChange={setStartTime}
@@ -238,7 +239,7 @@ function NewSchedule(props) {
                                     name="endTime"
                                     error={durationError.notValid}
                                     helperText={durationError.message}
-                                    value={schedule.endTime}
+                                    value={new Date(`1970/01/01 ${schedule.endTime}`)}
                                     variant="outlined"
                                     className="timePicker"
                                     onChange={setEndTime}
