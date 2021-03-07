@@ -105,6 +105,7 @@ label.p-8 {
 div.trainingSearchBar {
   display: flex;
   justify-content: flex-end;
+  flex-direction: column;
 }
 p.validationGroup {
   color: red;
@@ -184,4 +185,10 @@ div.training-filter-bar{
 }
 button.today-btn {
   margin: 20px;
+}
+
+button.MuiButton-contained.trainingCancelBtn{
+width: 17vw;
+display: flex;
+align-self: flex-end;
 }

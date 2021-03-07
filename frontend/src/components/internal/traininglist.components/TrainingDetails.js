@@ -14,7 +14,7 @@ export default function TrainingDetails(props) {
   const [membersInGroup, setMembersInGroup] = useState([]);
   const [trainingStatus, setTrainingStatus] = useState(true);
   const services = useContext(ServiceContext);
-
+  const { match: { params }, history } = props;
   // Get training by id 
   useEffect(() => {
     fetchTraining();
@@ -24,7 +24,7 @@ export default function TrainingDetails(props) {
   const changeTrainingStatus = () => {
     setTrainingStatus(false);
     services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
-
+    history.push(`/trainings`);
   }
   const fetchTraining = async () => {
     const { match: { params } } = props;
@@ -89,11 +89,11 @@ export default function TrainingDetails(props) {
                 {trainingInfo.term}({trainingInfo.group.name})
               </Typography>
               {!trainingStatus ? <Typography>Status Treninga: Otkazan</Typography> : null}
-              {trainingStatus ? <Button variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
             <Grid item xs={12} sm={4} className='trainingSearchBar'>
               <TextField id="outlined-basic"
                 label="Search" />
+                 {trainingStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
           </Grid>
         </CardContent>
