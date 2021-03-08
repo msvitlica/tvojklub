@@ -18,7 +18,7 @@ import {
     FormHelperText,
     duration
 } from '@material-ui/core';
-import { MuiPickersUtilsProvider, KeyboardDateTimePicker, KeyboardTimePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { calculateDuration, addHourToStartTime } from '../../../helpers/helpersMethods';
 import { ServiceContext } from './../../../services/ServiceContext';
@@ -29,10 +29,10 @@ function NewSchedule(props) {
     const backendUrl = 'http://localhost:3001';
     const { history, match } = props;
 
-    let currentTime = new Date(new Date()).toLocaleString('en-US', { hour12: false });
+    let currentTime = new Date();
     const [schedule, setSchedule] = React.useState({
         startTime: currentTime,
-        endTime: addHourToStartTime(new Date(currentTime).toLocaleString('en-US', { hour12: false })),
+        endTime: addHourToStartTime(currentTime),
         trainingDuration: '',
         attendedGroups: [],
         recurrance: {},
@@ -84,7 +84,6 @@ function NewSchedule(props) {
     // Calculates training duration when user picks start-end time 
     React.useEffect(() => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
-        console.log(duration)
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
         setSchedule({ ...schedule, trainingDuration: `${hours} sat/a ${minutes} min` });
@@ -92,13 +91,13 @@ function NewSchedule(props) {
 
     // set start time
     const setStartTime = (time) => {
-        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
+        let timeToLocale = new Date(time);
         let endTime = addHourToStartTime(timeToLocale);
         setSchedule({ ...schedule, startTime: timeToLocale, endTime: endTime })
     }
     // set end time
     const setEndTime = (time) => {
-        let timeToLocale = new Date(time).toLocaleString('en-US', { hour12: false });
+        let timeToLocale = new Date(time);
         setSchedule({ ...schedule,startTime:schedule.startTime, endTime: timeToLocale })
     }
     // Sets recurrance type
@@ -167,10 +166,6 @@ function NewSchedule(props) {
 
     const fieldsValidation = () => {
         const duration = calculateDuration(schedule.startTime, schedule.endTime)
-        console.log(duration)
-        const hours = duration.split(':')[0];
-        const minutes = duration.split(':')[1];
-
         const durationError = {};
         const groupError = {};
         const recurranceError = {};

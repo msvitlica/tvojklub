@@ -19,9 +19,7 @@ let attendanceStatus = {
 
 router.get("/", async (req, res) => {
   const date = req.query.date;
-  console.log(date)
   const dayName = helperMethods.convertDayNumberToString(new Date(date).getDay());
-  console.log(dayName)
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
@@ -29,7 +27,8 @@ router.get("/", async (req, res) => {
   const todayTrainings = todaySchedules.map(training => {
     return {
       id: uuid.v1(),
-      term: `${training.startTime} - ${training.endTime}`,
+      startTime: new Date(training.startTime).getHours() + ':' +( new Date(training.startTime).getMinutes()<10 ? '0'+ new Date(training.startTime).getMinutes() : new Date(training.startTime).getMinutes()),
+      endTime: new Date(training.endTime).getHours() + ':' + (new Date(training.endTime).getMinutes()<10 ? '0' + new Date(training.endTime).getMinutes() : new Date(training.endTime).getMinutes()) ,
       group: allGroups.filter(group=> group._id.toString() === training.attendedGroups[0].groupId)[0],
       coach: 'Sinisa Kovacevic',
       membersInGroup: allMembers.filter(member => member.groupId.toString() === training.attendedGroups[0].groupId)
@@ -48,12 +47,11 @@ router.get("/", async (req, res) => {
 });
 // get group by id
 router.get('/:id', async (req, res) => {
-  let pathName = url.parse(req.url, true).pathname;
-  let pathId = pathName.replace('/', '');
-  let filteredFile = trainings.filter(el => el.id.toString() === pathId)[0];
+  const trainingId = req.params.id;
+  let filteredTraining = await Training.findById(trainingId);
   try {
     res.status(200).json({
-      trainingId: filteredFile,
+     filteredTraining
     });
   } catch (err) {
     res.status(400).json({

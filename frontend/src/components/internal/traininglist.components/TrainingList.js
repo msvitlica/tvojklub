@@ -16,6 +16,7 @@ export default function TrainingList(props) {
 
   const fetchTrainings = async () => {
     const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
+    console.log(trainingSchedule)
     setTrainings(trainingSchedule);
   }
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function TrainingList(props) {
         {trainings.map((el) => (
           <CardActionArea key={el.id} onClick={() => handleClick(el.id)} >
             <CardContent>
-              <Typography> {el.term}
+              <Typography> {`${el.startTime}- ${el.endTime}`}
               </Typography>
               <br></br>
               <Typography > {el.group.name}
