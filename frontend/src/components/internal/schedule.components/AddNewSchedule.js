@@ -38,7 +38,6 @@ function NewSchedule(props) {
         recurrance: {},
         aboutSchedule: ''
     });
-    console.log(schedule.startTime, schedule.endTime)
     const [groups, setGroups] = React.useState([]);
     const [recurranceType, setRecurranceType] = React.useState('weekly');
     const [recurranceDays, setRecurranceDays] = React.useState({
