@@ -16,7 +16,7 @@ export default function TrainingList(props) {
 
   const fetchTrainings = async () => {
     const trainingSchedule = await service.trainingService.getAllTrainings(selectedDate);
-    console.log(trainingSchedule)
+    console.log(trainingSchedule.map(el=> el.group.name))
     setTrainings(trainingSchedule);
   }
   useEffect(() => {

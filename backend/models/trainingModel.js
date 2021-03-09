@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const trainingSchema = new Schema({
     startTime: String,
     endTime: String,
-    group: String,
+    group: Object,
     coach: String,
     membersInGroup: Array,
 })
