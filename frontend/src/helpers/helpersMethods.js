@@ -1,19 +1,15 @@
 function calculateDuration(start, end) {
-    start = start.split(":");
-    end = end.split(":");
-    var startDate = new Date(0, 0, 0, start[0], start[1], 0);
-    var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+    let startDate = new Date(start);
+    let endDate = new Date(end);
     var diff = endDate.getTime() - startDate.getTime();
     var hours = Math.floor(diff / 1000 / 60 / 60);
     diff -= hours * 1000 * 60 * 60;
     var minutes = Math.floor(diff / 1000 / 60);
-
     if (hours < 0) {
         hours = hours + 24;
     }
     return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
 }
-
 function convertDayNumberToString(dayNumber) {
     switch (dayNumber) {
         case 0:
@@ -54,9 +50,16 @@ function amPmTimeFormat(trainingObj) {
 
     return `${hours}:${minutes} ${parseInt(hours) > 12 ? 'pm' : 'am'}`;
 }
+const addHourToStartTime = (start) => {
+    let startTime = new Date(start);
+    let hourToMillisec = startTime.getTime() + (1000 * 60 * 60);
+    let defaultEndTime = new Date(hourToMillisec);
+    return defaultEndTime;
+};
 
 exports.convertDayNumberToString = convertDayNumberToString;
 exports.calculateDuration = calculateDuration;
 exports.calculateDate = calculateDate;
 exports.dateFormat = dateFormat;
 exports.amPmTimeFormat = amPmTimeFormat;
+exports.addHourToStartTime = addHourToStartTime;

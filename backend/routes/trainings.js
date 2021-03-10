@@ -27,8 +27,8 @@ router.get("/", async (req, res) => {
     .map(schedule => {
       return {
         scheduleId: schedule._id,
-        startTime: schedule.startTime,
-        endTime: schedule.endTime,
+        startTime: new Date(schedule.startTime).getHours() + ':' + (new Date(schedule.startTime).getMinutes() < 10 ? '0' + new Date(schedule.startTime).getMinutes() : new Date(schedule.startTime).getMinutes()),
+        endTime: new Date(schedule.endTime).getHours() + ':' + (new Date(schedule.endTime).getMinutes() < 10 ? '0' + new Date(schedule.endTime).getMinutes() : new Date(schedule.endTime).getMinutes()),
         group: allGroups.filter(group => group._id.toString() === schedule.attendedGroups[0].groupId)[0],
         coach: 'Sinisa Kovacevic',
         membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
@@ -44,9 +44,10 @@ router.get("/", async (req, res) => {
     const timeB = helperMethods.amPmTimeFormat(trainingB);
     return Date.parse(`1970/01/01 ${timeA}`) - Date.parse(`1970/01/01 ${timeB}`);
   });
+
   try {
     res.status(200).json({
-      trainings: allTrainings,
+      allTrainings,
     });
   } catch (err) {
     res.status(400).json({
@@ -88,7 +89,7 @@ router.post('/', async (req, res) => {
 router.put('/', async (req, res) => {
   try {
     const training = req.body;
-    const trainingFromDatabase = await Training.updateOne({ _id: training._id }, { [training.editedProp]: training.editedPropValue});
+    const trainingFromDatabase = await Training.updateOne({ _id: training._id }, { [training.editedProp]: training.editedPropValue });
     res.status(200).json(trainingFromDatabase);
   } catch (err) {
     res.status(400).json({

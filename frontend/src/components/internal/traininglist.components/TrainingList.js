@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import { ServiceContext } from './../../../services/ServiceContext';
 import TrainingListFilter from '../main.components/TrainingListFilter';
-import { dateFormat } from './../../../helpers/helpersMethods';
 
 export default function TrainingList(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());

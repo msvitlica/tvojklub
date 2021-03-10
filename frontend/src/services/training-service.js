@@ -10,7 +10,8 @@ class TrainingServices extends BaseService {
         const date = new Date(dateFormat(new Date(currentDateInMs))).getTime();
         const trainingRequest = await fetch(`${this.backendUrl}/trainings/?date=${date}`);
         const trainings = await trainingRequest.json();
-        return trainings.trainings;
+        console.log(trainings);
+        return trainings.allTrainings;
     }
     async saveTraining(trainingObject){
         const saveTrainingRequest = await fetch(`${this.backendUrl}/trainings`, {
