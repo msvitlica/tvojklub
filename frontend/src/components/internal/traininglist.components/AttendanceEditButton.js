@@ -1,7 +1,7 @@
 import React from 'react'
 import EditIcon from '@material-ui/icons/Edit';
 import { Button, Typography, ButtonGroup } from '@material-ui/core'
-import AttendanceOptionButtons from './AttendanceOptionButtons'
+
 export default class AttendanceEditButton extends React.Component {
     constructor(props) {
         super(props);
@@ -15,14 +15,14 @@ export default class AttendanceEditButton extends React.Component {
         })
     }
     buttonYClicked = () => {
-        let memberId = this.props.member.id;
+        let memberId = this.props.member._id;
         this.props.processMember(memberId, true);
         this.setState({
             editButton: false
         })
     }
     buttonNClicked = () => {
-        let memberId = this.props.member.id;
+        let memberId = this.props.member._id;
         this.props.processMember(memberId, false);
         this.setState({
             editButton: false

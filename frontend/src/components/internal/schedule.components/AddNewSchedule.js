@@ -120,24 +120,10 @@ function NewSchedule(props) {
 
         if (err) {
             if(schedule._id) {
-                const putRequest = await services.scheduleServices.editSchedule(completeSchedule);
-                const response = await putRequest.json();
-                if(putRequest.ok) {
-                    services.messageService.showSuccessMessage(response.msg);
-                }
-                else {
-                    services.messageService.showError(response.msg);
-                }
+                await services.scheduleServices.editSchedule(completeSchedule);
             }
             else {
-                const postRequest = await services.scheduleServices.addSchedule(completeSchedule);
-                const response = await postRequest.json();
-                if(postRequest.ok) {
-                    services.messageService.showSuccessMessage(response.msg);
-                }
-                else {
-                    services.messageService.showError(response.msg);
-                }
+                await services.scheduleServices.addSchedule(completeSchedule);
             }
             setSchedule({
                 startTime: '07:00',

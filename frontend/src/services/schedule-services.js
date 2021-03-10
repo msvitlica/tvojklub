@@ -1,6 +1,8 @@
-class ScheduleServices {
-    constructor(backendUrl) {
-        this.backendUrl = backendUrl;
+import BaseService from "./base-service";
+
+class ScheduleServices extends BaseService {
+    constructor(url, service) {
+        super(url, service);
     }
 
     async getAllSchedule(abortController) {
@@ -11,7 +13,12 @@ class ScheduleServices {
         const deleteSchedule = await fetch(`${this.backendUrl}/schedule-management/delete/${id}`, {
             method: 'DELETE'
         });
-        return deleteSchedule.json();
+        const response = await deleteSchedule.json();
+        if (deleteSchedule.ok) {
+            this.messageService.showSuccessMessage(response.msg);
+        } else {
+            this.messageService.showError(response.msg);
+        }
     }
     async getScheduleById(id, abortController) { // <= controller unsubscribe fetch request from React DOM tree and prevents updating unmounted component
         let requestSchedule = await fetch(`${this.backendUrl}/schedule-management/edit/${id}`, abortController);
@@ -27,8 +34,13 @@ class ScheduleServices {
                 },
                 body: JSON.stringify({ schedule })
             });
-            return postScheduleReq;
-        } catch(err) {
+            const response = await postScheduleReq.json();
+            if (postScheduleReq.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg);
+            }
+        } catch (err) {
             console.log(err);
         }
     }
@@ -42,7 +54,12 @@ class ScheduleServices {
                 },
                 body: JSON.stringify({ schedule })
             });
-            return putScheduleReq;
+            const response = await putScheduleReq.json();
+            if (putScheduleReq.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg);
+            }
         } catch (err) {
             console.log(err);
         }

@@ -27,6 +27,7 @@ export default function NewMember(props) {
         lastName: '',
         dateOfBirth: '',
         groupId: '',
+        attendance: 'unknown'
     });
     const [firstNameError, setFirstNameError] = useState({});
     const [lastNameError, setLastNameError] = useState({});
@@ -88,20 +89,15 @@ export default function NewMember(props) {
                 lastName: member.lastName,
                 dateOfBirth: member.dateOfBirth,
                 groupId: member.groupId,
+                attendance: 'unknown'
             })
             postMember();
         }
     }
     const postMember = async () => {
-        const postMemeberRequest = await services.memberService.postMember({ member });
-        const response = await postMemeberRequest.json();
-        if (postMemeberRequest.ok) {
-            setMember('');
-            displayMemberList()
-            services.messageService.showSuccessMessage(response.msg);
-        } else {
-            services.messageService.showError(response.msg);
-        }
+        await services.memberService.postMember({ member });
+        setMember('');
+        displayMemberList();
     }
 
     const onClickCancel = () => {

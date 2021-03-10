@@ -1,6 +1,8 @@
-class GroupService {
-    constructor(url) {
-        this.backendUrl = url;
+import BaseService from './base-service';
+
+class GroupService extends BaseService {
+    constructor(url, service) {
+        super(url, service);
     }
     async getAllGroups(abortController) {
         try {
@@ -8,14 +10,20 @@ class GroupService {
             return await groupsRequest.json();
         } catch (err) {
             console.log(err);
+            this.messageService.showError(err.message);
         }
     }
     async deleteGroup(id) {
         try {
-            const groupsRequest = await fetch(`${this.backendUrl}/groups/${id}`, {
+            const deleteRequest = await fetch(`${this.backendUrl}/groups/${id}`, {
                 method: 'DELETE',
             });
-            return await groupsRequest.json();
+            const response = await deleteRequest.json();
+            if(deleteRequest.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -34,7 +42,12 @@ class GroupService {
                 },
                 body: JSON.stringify({ name: groupName }),
             });
-            return postData;
+            const response = await postData.json();
+            if(postData.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -49,9 +62,15 @@ class GroupService {
                 },
                 body: JSON.stringify({ _id: id, name: groupName })
             });
-            return editedGroup;
+            const response = await editedGroup.json();
+            if(editedGroup.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg)
+            }
         } catch (err) {
             console.log(err);
+            this.messageService.showError(err.message);
         }
     }
 }

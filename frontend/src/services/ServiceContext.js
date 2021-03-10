@@ -12,23 +12,18 @@ const backendUrl = 'http://localhost:3001';
 
 // Create instances of services
 export const ServiceContext = React.createContext();
-const memberService = new MemberService(backendUrl);
-const scheduleServices = new ScheduleServices(backendUrl);
-const groupService= new GroupService(backendUrl);
-const trainingService= new TrainingService(backendUrl);
 
 class ServiceContextProvider extends Component {
     constructor(props){
         super(props);
         this.messageService = new MessageService(props.onShowMessage);
         this.state.messageService = this.messageService;
+        this.state.memberService = new MemberService(backendUrl, this.messageService);
+        this.state.scheduleServices = new ScheduleServices(backendUrl, this.messageService);
+        this.state.groupService = new GroupService(backendUrl, this.messageService);
+        this.state.trainingService = new TrainingService(backendUrl, this.messageService);
     }
-    state = {
-        memberService,
-        scheduleServices,
-        groupService,
-        trainingService
-    }
+    state = {}
     render() {
         return (
             <ServiceContext.Provider value={{ ...this.state }}>
