@@ -17,9 +17,20 @@ router.get('/edit/:id', async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
+    const schedule = await Schedule.find();
+    const settedTime = schedule.map(el => {
+        return {
+            _id: el._id,
+            term: new Date(el.startTime).getHours() + ':' + (new Date(el.startTime).getMinutes()< 10 ? '0'+new Date(el.startTime).getMinutes():new Date(el.startTime).getMinutes() ) + '-' + new Date(el.endTime).getHours() + ':' +( new Date(el.endTime).getMinutes()< 10 ? '0'+ new Date(el.endTime).getMinutes() :new Date(el.endTime).getMinutes() ) ,
+            duration: `${el.trainingDuration}`,
+            description: `${el.aboutSchedule}`,
+            groups: el.attendedGroups
+        }
+
+    })
+    console.log(settedTime)
     try {
-        const schedule = await Schedule.find();
-        res.status(200).json(schedule);
+        res.status(200).json(settedTime);
     } catch (err) {
         res.status(400).json({
             message: "Some error occured",
@@ -29,13 +40,14 @@ router.get("/", async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-    try{
+    try {
+        console.log(req.body);
         let schedule = await Schedule.create(req.body.schedule);
         return res.status(200).send({
             error: false,
             msg: 'Raspored uspješno dodan!'
         })
-    }catch (err) {
+    } catch (err) {
         res.status(400).json({
             message: 'Some error occured',
             err

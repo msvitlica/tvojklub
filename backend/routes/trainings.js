@@ -22,12 +22,13 @@ router.get("/", async (req, res) => {
   const allMembers = await Members.find();
   const allSchedule = await Schedule.find();
   const allGroups = await Group.find();
-  const trainingsFromDatabase = await Training.find({ trainingDate: { $lte: new Date((date + (1000 * 60 * 60 * 24))), $gte: new Date((date + 1)) } });
+  const trainingsFromDatabase = await Training.find({ trainingDate: { $lte: new Date((date + (1000 * 60 * 60 * 24))), $gte: new Date((date)) } });
   let todaySchedules = allSchedule.filter(schedule => schedule.recurrance.recurranceDays[today])
     .map(schedule => {
       return {
         scheduleId: schedule._id,
-        term: `${schedule.startTime} - ${schedule.endTime}`,
+        startTime: new Date(schedule.startTime).getHours() + ':' + (new Date(schedule.startTime).getMinutes() < 10 ? '0' + new Date(schedule.startTime).getMinutes() : new Date(schedule.startTime).getMinutes()),
+        endTime: new Date(schedule.endTime).getHours() + ':' + (new Date(schedule.endTime).getMinutes() < 10 ? '0' + new Date(schedule.endTime).getMinutes() : new Date(schedule.endTime).getMinutes()),
         group: allGroups.filter(group => group._id.toString() === schedule.attendedGroups[0].groupId)[0],
         coach: 'Sinisa Kovacevic',
         membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
@@ -38,10 +39,15 @@ router.get("/", async (req, res) => {
     todaySchedules = todaySchedules.filter(scheduleTraining => scheduleTraining.scheduleId.toString() !== training.scheduleId.toString());
   });
 
-  const allTrainings = todaySchedules.concat(trainingsFromDatabase);
+  const allTrainings = todaySchedules.concat(trainingsFromDatabase).sort((trainingA, trainingB) => {
+    const timeA = helperMethods.amPmTimeFormat(trainingA);
+    const timeB = helperMethods.amPmTimeFormat(trainingB);
+    return Date.parse(`1970/01/01 ${timeA}`) - Date.parse(`1970/01/01 ${timeB}`);
+  });
+
   try {
     res.status(200).json({
-      trainings: allTrainings,
+      allTrainings,
     });
   } catch (err) {
     res.status(400).json({
@@ -69,7 +75,6 @@ router.get('/:id', async (req, res) => {
 //Saves training in database
 router.post('/', async (req, res) => {
   try {
-    console.log(req.body)
     const savedTraining = await new Training(req.body).save();
     res.status(200).json(savedTraining._id);
   } catch (err) {
@@ -84,7 +89,7 @@ router.post('/', async (req, res) => {
 router.put('/', async (req, res) => {
   try {
     const training = req.body;
-    const trainingFromDatabase = await Training.updateOne({ _id: training._id }, { [training.editedProp]: training.editedPropValue});
+    const trainingFromDatabase = await Training.updateOne({ _id: training._id }, { [training.editedProp]: training.editedPropValue });
     res.status(200).json(trainingFromDatabase);
   } catch (err) {
     res.status(400).json({

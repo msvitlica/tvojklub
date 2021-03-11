@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const scheduleSchema = new Schema({
     startTime: String,
     endTime: String,
-    trainingDuration: String,
+    trainingDuration:String,
     attendedGroups: Array,
     recurrance: Object,
     aboutSchedule: String

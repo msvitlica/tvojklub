@@ -4,14 +4,13 @@ import { ServiceContext } from './../../../services/ServiceContext';
 import TrainingListFilter from '../main.components/TrainingListFilter';
 
 export default function TrainingList(props) {
-  const abortController = new AbortController;
-  const [trainings, setTrainings] = useState([]);
-  const service = useContext(ServiceContext);
   const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
+  const [trainings, setTrainings] = useState([]);
+  const abortController = new AbortController;
+  const service = useContext(ServiceContext);
 
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
-    fetchTrainings();
   };
 
   const fetchTrainings = async () => {
@@ -45,7 +44,7 @@ export default function TrainingList(props) {
           <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
               <Typography>
-                {el.term}
+                {`${el.startTime} - ${el.endTime}`}
               </Typography>
               {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
               <br></br>
