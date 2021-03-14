@@ -46,7 +46,7 @@ export default function TrainingList(props) {
               <Typography>
                 {`${el.startTime} - ${el.endTime}`}
               </Typography>
-              {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
+              {el.trainingStatus === 'canceled' ? <Typography className= 'canceledTrainingText'>Status Treninga: Otkazan</Typography> : null}
               <br></br>
               <Typography > {el.group.name}
               </Typography>

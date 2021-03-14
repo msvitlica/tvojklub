@@ -16,7 +16,6 @@ import {
     ListItem,
     ListItemText,
     FormHelperText,
-    duration
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -114,7 +113,7 @@ function NewSchedule(props) {
 
     // Sets attended groups
     const onSetAttendedGroup = (event) => {
-        setSchedule({ ...schedule, attendedGroups: [...schedule.attendedGroups, { [event.target.name]: event.target.value }] })
+        setSchedule({ ...schedule, attendedGroups: [ { [event.target.name]: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
     }
     // Save schedule to database

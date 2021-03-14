@@ -25,7 +25,12 @@ export default function TrainingDetails(props) {
     setTrainingStatus(false);
     services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
     history.push(`/trainings`);
+    }
+  // return to TriningList
+  const returnToTrainingList = () => {
+    history.push('/trainings')
   }
+
   const fetchTraining = async () => {
     const { match: { params } } = props;
     fetch(`http://localhost:3001/trainings/${params.trainingId}`)
@@ -36,12 +41,11 @@ export default function TrainingDetails(props) {
         setTrainingStatus(data.filteredTraining.trainingStatus !== 'canceled' ? true : false)
       });
   }
-
   const processMember = (id, attendance) => {
 
     let attendanceStatus = {
-      attended: 'attended',
-      noAttended: 'noAttended',
+      attended: 'Prisutan',
+      noAttended: 'Nije Prisutan',
       unknown: 'unknown',
     }
 
@@ -85,15 +89,22 @@ export default function TrainingDetails(props) {
         <CardContent>
           <Grid container>
             <Grid item xs={12} sm={8}>
-              <Typography color="textPrimary" variant='h6'>
-                {trainingInfo.term}({trainingInfo.group.name})
-              </Typography>
-              {!trainingStatus ? <Typography>Status Treninga: Otkazan</Typography> : null}
+              <List subheader={<ListSubheader color='primary' >
+                {`${trainingInfo.startTime} - ${trainingInfo.endTime}`} ({trainingInfo.group.name})
+      </ListSubheader>}>
+              </List>
+              {!trainingStatus ? <Typography className='canceledTrainingText'>Status Treninga: Otkazan</Typography>
+                : null}
+             
+              <div className='inputButtons'>
+
+                < Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
+              </div>
             </Grid>
             <Grid item xs={12} sm={4} className='trainingSearchBar'>
               <TextField id="outlined-basic"
                 label="Search" />
-                 {trainingStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
+              {trainingStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
           </Grid>
         </CardContent>
@@ -111,7 +122,7 @@ export default function TrainingDetails(props) {
         ))}
       </List>
       <Divider />
-      <ProcessedMembersList membersInGroup={membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={processMember} />
+      <ProcessedMembersList membersInGroup={membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={processMember} trainingStatus={trainingStatus} />
     </React.Fragment >
   )
 }

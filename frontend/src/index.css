@@ -129,12 +129,18 @@ padding-left: 600px;
 justify-content: space-between;
 }
 button.attendanceBtnY {
-  color:rgb(13, 18, 22);
-   background-color:rgb(93, 231, 208);
+  color:rgb(255,255,255);
+   background-color:#3f51b5;
+}
+button.attendanceBtnY:hover{
+  background-color:#283892b0;
 }
 button.attendanceBtnN {
-  color:rgb(13, 18, 22);
-   background-color:rgb(219, 180, 51)
+  color:rgb(255, 255, 255);
+   background-color:#f50057;
+}
+button.attendanceBtnN:hover{
+  background-color: #f50056a9;
 }
 div.dataGrid{
   height: 400px;
@@ -188,7 +194,12 @@ button.today-btn {
 }
 
 button.MuiButton-contained.trainingCancelBtn{
-width: 17vw;
+width: 13vw;
 display: flex;
 align-self: flex-end;
+}
+
+
+p.MuiTypography-body1.canceledTrainingText{
+  color: #f50056a9
 }
