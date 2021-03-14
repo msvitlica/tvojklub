@@ -24,8 +24,7 @@ export default function TrainingDetails(props) {
   const changeTrainingStatus = () => {
     setTrainingStatus(false);
     services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
-    history.push(`/trainings`);
-    }
+  }
   // return to TriningList
   const returnToTrainingList = () => {
     history.push('/trainings')
@@ -95,15 +94,15 @@ export default function TrainingDetails(props) {
               </List>
               {!trainingStatus ? <Typography className='canceledTrainingText'>Status Treninga: Otkazan</Typography>
                 : null}
-             
+
               <div className='inputButtons'>
 
                 < Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
               </div>
             </Grid>
             <Grid item xs={12} sm={4} className='trainingSearchBar'>
-              <TextField id="outlined-basic"
-                label="Search" />
+              {/* <TextField id="outlined-basic"
+                label="Search" /> */}
               {trainingStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
           </Grid>
