@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import { ServiceContext } from './../../../services/ServiceContext';
 import TrainingListFilter from '../main.components/TrainingListFilter';
+import { timeFormatUI } from './../../../helpers/helpersMethods';
 
 export default function TrainingList(props) {
   const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
@@ -44,7 +45,7 @@ export default function TrainingList(props) {
           <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
               <Typography>
-                {`${el.startTime} - ${el.endTime}`}
+                {`${timeFormatUI(el.startTime)} - ${timeFormatUI(el.endTime)}`}
               </Typography>
               {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
               <br></br>

@@ -38,28 +38,25 @@ function dateFormat(date) {
     const year = new Date(date).getFullYear();
     return `${year}-${month}-${day}`;
 }
-function amPmTimeFormat(trainingObj) {
-    let [hours, minutes] = trainingObj.startTime.split(':');
-
-    if(hours === '00'){
-        hours = '12';
-    }
-    if (parseInt(hours) > 12) {
-        hours = parseInt(hours) - 12;
-    }
-
-    return `${hours}:${minutes} ${parseInt(hours) > 12 ? 'pm' : 'am'}`;
-}
 const addHourToStartTime = (start) => {
     let startTime = new Date(start);
     let hourToMillisec = startTime.getTime() + (1000 * 60 * 60);
     let defaultEndTime = new Date(hourToMillisec);
     return defaultEndTime;
-};
+}
+function clientTimeFormat(dateFromDB){
+    const time = dateFromDB.split('T')[1].split(':');
+    const date = dateFromDB.split('T')[0].split('-');
+    return new Date(parseInt(date[0]), parseInt(date[1] -1 ), parseInt(date[2]), parseInt(time[0]), parseInt(time[1]));
+}
+function timeFormatUI(date) {
+    const frontendDate = clientTimeFormat(date);
+    return new Date(frontendDate).getHours() + ':' + (new Date(frontendDate).getMinutes() < 10 ? '0' + new Date(frontendDate).getMinutes() : new Date(frontendDate).getMinutes());
+}
 
 exports.convertDayNumberToString = convertDayNumberToString;
 exports.calculateDuration = calculateDuration;
 exports.calculateDate = calculateDate;
 exports.dateFormat = dateFormat;
-exports.amPmTimeFormat = amPmTimeFormat;
 exports.addHourToStartTime = addHourToStartTime;
+exports.timeFormatUI = timeFormatUI;

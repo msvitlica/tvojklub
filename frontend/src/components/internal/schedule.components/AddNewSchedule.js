@@ -97,7 +97,7 @@ function NewSchedule(props) {
     // set end time
     const setEndTime = (time) => {
         let timeToLocale = new Date(time);
-        setSchedule({ ...schedule,startTime:schedule.startTime, endTime: timeToLocale })
+        setSchedule({ ...schedule, startTime: schedule.startTime, endTime: timeToLocale })
     }
     // Sets recurrance type
     const onRadioValueChange = event => {
@@ -123,7 +123,7 @@ function NewSchedule(props) {
         const err = fieldsValidation();
 
         if (err) {
-            if(schedule._id) {
+            if (schedule._id) {
                 await services.scheduleServices.editSchedule(completeSchedule);
             }
             else {
@@ -157,7 +157,7 @@ function NewSchedule(props) {
 
         if (duration > '12:00') {
             durationError.message = ` Nepravilan unos kraja treninga`;
-            setSchedule({ ...schedule, trainingDuration: ''  })
+            setSchedule({ ...schedule, trainingDuration: '' })
             durationError.notValid = true;
             isValid = false;
         }
