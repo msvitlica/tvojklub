@@ -8,11 +8,19 @@ class MemeberService extends BaseService {
     async getAllMembers() {
         try {
             const res = await fetch(`${this.backendUrl}/members`);
+            
             const data = await res.json();
+            console.log(data);
             return data.members;
+            
         } catch (err) {
             console.log(err);
         }
+    }
+
+    async getMemberById(id, abortController) {
+        let requestedMember = await fetch(`${this.backendUrl}/members/edit/${id}`, abortController);
+        return await requestedMember.json();
     }
 
     async postMember(newMember) {
