@@ -10,7 +10,6 @@ class TrainingServices extends BaseService {
         const date = new Date(dateFormat(new Date(currentDateInMs))).getTime();
         const trainingRequest = await fetch(`${this.backendUrl}/trainings/?date=${date}`);
         const trainings = await trainingRequest.json();
-        console.log(trainings);
         return trainings.allTrainings;
     }
     async saveTraining(trainingObject){
@@ -25,15 +24,15 @@ class TrainingServices extends BaseService {
         return await saveTrainingRequest.json();
     }
     async editTraining(trainingObject){
-        const editTrainingRequest = await fetch(`${this.backendUrl}/trainings`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(trainingObject)
-        });
-        return await editTrainingRequest.json();
+            const editTrainingRequest = await fetch(`${this.backendUrl}/trainings`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(trainingObject)
+            });
+            return await editTrainingRequest.json();   
     }
 }
 

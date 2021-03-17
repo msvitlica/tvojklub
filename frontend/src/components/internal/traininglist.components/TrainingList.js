@@ -46,12 +46,14 @@ export default function TrainingList(props) {
               <Typography>
                 {`${el.startTime} - ${el.endTime}`}
               </Typography>
-              {el.trainingStatus === 'canceled' ? <Typography className= 'canceledTrainingText'>Status Treninga: Otkazan</Typography> : null}
+              {el.trainingStatus === 'canceled' ? <Typography color='secondary'>Status Treninga: Otkazan</Typography> : null}
+              {el.trainingStatus === 'finished' ? <Typography color='primary'> Status Treninga: Zavrsen</Typography> : null}
               <br></br>
-              <Typography > {el.group.name}
+              <Typography variant='subtitle1'>
+                <b>Grupa:</b>{`\n${el.group.name}`}
               </Typography>
-              <Typography>
-                {el.coach}
+              <Typography variant='subtitle1'>
+                <b>Trener: </b>{`\n${el.coach}`}
               </Typography>
             </CardContent>
           </CardActionArea>

@@ -32,7 +32,7 @@ export default class AttendanceEditButton extends React.Component {
     render() {
         return (
             <React.Fragment>
-                {this.props.trainingStatus ?
+                {this.props.cancelBtnStatus?
             <div>
                 {this.state.editButton ?
                     <div>

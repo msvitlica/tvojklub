@@ -198,8 +198,3 @@ width: 13vw;
 display: flex;
 align-self: flex-end;
 }
-
-
-p.MuiTypography-body1.canceledTrainingText{
-  color: #f50056a9
-}
