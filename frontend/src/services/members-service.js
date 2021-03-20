@@ -7,12 +7,10 @@ class MemeberService extends BaseService {
 
     async getAllMembers() {
         try {
-            const res = await fetch(`${this.backendUrl}/members`);
-            
+            const res = await fetch(`${this.backendUrl}/members`);            
             const data = await res.json();
             console.log(data);
-            return data.members;
-            
+            return data.members;            
         } catch (err) {
             console.log(err);
         }
@@ -34,6 +32,23 @@ class MemeberService extends BaseService {
         });
         const response = await postMember.json();
         if(postMember.ok) {
+            this.messageService.showSuccessMessage(response.msg);
+        } else {
+            this.messageService.showError(response.msg);
+        }
+    }
+
+    async postMemberEdit(id, editedMember) {
+        const postedMember = await fetch(`${this.backendUrl}/members/edit/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(editedMember)
+        });
+        const response = await postedMember.json();
+        if(postedMember.ok) {
             this.messageService.showSuccessMessage(response.msg);
         } else {
             this.messageService.showError(response.msg);

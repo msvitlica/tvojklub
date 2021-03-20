@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import MaterialTable from 'material-table';
 import { Link } from 'react-router-dom';
 import { IconButton, Button, Grid } from '@material-ui/core';
-import EditMemberDialog from './EditMemberDialog';
 //SLAVEN
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -13,8 +12,6 @@ import { ServiceContext } from './../../../services/ServiceContext';
 
 export default function Members(props) {
   const [members, setMemberList] = useState([]);
-  const [selectedMember, setSelectedMember] = useState(null)
-  const [dialogMemberEdit, setDialgMemberEdit] = useState(false);
   const services = useContext(ServiceContext);
   
   // Get data from backend
@@ -24,33 +21,18 @@ export default function Members(props) {
     console.log(allMembers);
   }
 
-  const fetchSelectedMember = async (id) => {
-    const fetchedMember = await services.memberService.getMemberById(id)
-    setSelectedMember(fetchedMember); 
-  }
-
-  const editMemberHandler = id => {
-    // fetchSelectedMember(id);
-    console.log(selectedMember);
-    setDialgMemberEdit(true);
-  }
-
-  const closeDialog = () => {
-    setDialgMemberEdit(false);
-    // setTimeout(fetchMembers, 1000);
-  }
-
   useEffect(() => {
     fetchMembers()
   }, []);
 
   const editDeleteBtnContainer = (elId) => (
     <React.Fragment>
-      <IconButton 
-        onClick={() => editMemberHandler(elId)} 
-        aria-label='modify member'>
-        <EditIcon />
-      </IconButton>
+      <Link to={`/members/edit/${elId}`}>
+        <IconButton 
+          aria-label='modify member'>
+          <EditIcon />
+        </IconButton>
+      </Link>
       <IconButton 
         onClick={() => console.log(elId)} 
         aria-label='delete member'>
@@ -84,12 +66,7 @@ export default function Members(props) {
         <Link to='members/newMember'>
           <Button className='btn' color="primary" variant='outlined'>Dodaj novog člana</Button>
         </Link>
-      </Grid>
-      <EditMemberDialog 
-        open={dialogMemberEdit}
-        member={selectedMember}
-        handleClose={closeDialog}>        
-      </EditMemberDialog>    
+      </Grid>   
 
       <Grid item xs={12}>
         <MaterialTable 
