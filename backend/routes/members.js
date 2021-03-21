@@ -49,11 +49,15 @@ router.post('/newMember', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const body = req.body;
-    Member.findByIdAndUpdate(id, body.member);
-    res.status(200).json({
-      msg: 'Uspješno ste izmijenili člana!'
-    });  
+    Member.findByIdAndUpdate(id, req.body, (err, member) => {
+      if(err) {
+        console.log(err);
+      } else {
+        res.status(200).json({
+          msg: 'Uspješno ste izmijenili člana!'
+        });
+      }
+    })      
   } catch(err) {
     res.status(400).json({
       msg: 'Neuspješna izmjena člana!'

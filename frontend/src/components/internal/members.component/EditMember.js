@@ -108,7 +108,7 @@ export default function NewMember(props) {
     }
 
     const postEditedMember = async () => {
-        await services.memberService.postMemberEdit(member.id, { member });
+        await services.memberService.postMemberEdit(member._id, member);
         setMember('');
         displayMemberList();
     }
@@ -129,7 +129,7 @@ export default function NewMember(props) {
                     <div>
                         <TextField
                             name="firstName"
-                            value={member.firstName}
+                            value={member.firstName || ''}
                             label="FirstName"
                             variant="filled"
                             onChange={handleChange}
@@ -140,7 +140,7 @@ export default function NewMember(props) {
                     <div>
                         <TextField
                             name="lastName"
-                            value={member.lastName}
+                            value={member.lastName ||''}
                             label="LastName"
                             variant="filled"
                             onChange={handleChange}
@@ -153,7 +153,7 @@ export default function NewMember(props) {
                             label="Birthday"
                             type="date"
                             name='dateOfBirth'
-                            value={member.dateOfBirth}
+                            value={member.dateOfBirth || ''}
                             onChange={handleChange}
                             helperText={birthDateError.emptyInput}
                             error={birthDateError.notValid}
@@ -166,7 +166,7 @@ export default function NewMember(props) {
                             <InputLabel className='p-8'>Group</InputLabel>
                             <Select variant="filled"
                                 name="groupId"
-                                value={member.groupId}
+                                value={member.groupId || ''}
                                 onChange={handleChange}
                                 error={groupError.notValid}
                             >
