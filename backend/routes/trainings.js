@@ -27,8 +27,8 @@ router.get("/", async (req, res) => {
     .map(schedule => {
       return {
         scheduleId: schedule._id,
-        startTime: new Date(schedule.startTime).getHours() + ':' + (new Date(schedule.startTime).getMinutes() < 10 ? '0' + new Date(schedule.startTime).getMinutes() : new Date(schedule.startTime).getMinutes()),
-        endTime: new Date(schedule.endTime).getHours() + ':' + (new Date(schedule.endTime).getMinutes() < 10 ? '0' + new Date(schedule.endTime).getMinutes() : new Date(schedule.endTime).getMinutes()),
+        startTime: schedule.startTime,
+        endTime: schedule.endTime,
         group: allGroups.filter(group => group._id.toString() === schedule.attendedGroups[0].groupId)[0],
         coach: 'Sinisa Kovacevic',
         membersInGroup: allMembers.filter(member => member.groupId.toString() === schedule.attendedGroups[0].groupId),
@@ -39,11 +39,10 @@ router.get("/", async (req, res) => {
     todaySchedules = todaySchedules.filter(scheduleTraining => scheduleTraining.scheduleId.toString() !== training.scheduleId.toString());
   });
 
-  const allTrainings = todaySchedules.concat(trainingsFromDatabase).sort((trainingA, trainingB) => {
-    const timeA = helperMethods.amPmTimeFormat(trainingA);
-    const timeB = helperMethods.amPmTimeFormat(trainingB);
-    return Date.parse(`1970/01/01 ${timeA}`) - Date.parse(`1970/01/01 ${timeB}`);
-  });
+  const allTrainings = todaySchedules.concat(trainingsFromDatabase)
+    .sort((trainingA, trainingB) => {
+      return Date.parse(trainingA.startTime) - Date.parse(trainingB.startTime);
+    });
 
   try {
     res.status(200).json({
