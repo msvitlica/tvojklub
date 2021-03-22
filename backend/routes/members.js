@@ -63,6 +63,20 @@ router.put('/edit/:id', async (req, res) => {
       msg: 'Neuspješna izmjena člana!'
     })
   }
-})
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await Member.findByIdAndRemove(req.params.id);
+    res.status(200).send({
+      msg: `Grupa je obrisana.`
+    })
+  } catch (err) {
+    res.status(400).json({
+      msg: 'Bad request',
+      err
+    });
+  }
+});
 
 module.exports = router;

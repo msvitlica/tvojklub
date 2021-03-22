@@ -45,15 +45,22 @@ export default function NewMember(props) {
         setGroupList(allGroups);
     }
 
+    useEffect(() => {
+        
+    }, [member])
+
     const fetchMember = async (id) => {
         const fetchedMember = await services.memberService.getMemberById(id);
-        setMember(fetchedMember);
+        setMember({
+            ...fetchedMember,
+            dateOfBirth: fetchedMember.dateOfBirth.split('T')[0]
+        });
     }
 
     useEffect(() => {
         fetchGroup();
         fetchMember(id);
-    }, []);
+    }, [])
 
     const handleChange = (e) => {
         setMember({ ...member, [e.target.name]: e.target.value });
@@ -109,7 +116,7 @@ export default function NewMember(props) {
 
     const postEditedMember = async () => {
         await services.memberService.postMemberEdit(member._id, member);
-        setMember('');
+        // setMember('');
         displayMemberList();
     }
 
@@ -120,7 +127,7 @@ export default function NewMember(props) {
     const displayMemberList = () => {
         history.push('/members');
     }
-
+    
     return (
         <Grid container>
             <Grid item xs={1} sm={4}></Grid>

@@ -21,6 +21,14 @@ export default function Members(props) {
     console.log(allMembers);
   }
 
+  //DELETE MEMBER
+  const onDeleteMember = async (id) => {
+    await services.memberService.deleteMember(id);
+    let filteredMembers = members.filter(el => el._id !== id);
+    services.messageService.showSuccessMessage('Član uspješno obrisan!')
+    setMemberList(filteredMembers);
+}
+
   useEffect(() => {
     fetchMembers()
   }, []);
@@ -28,13 +36,13 @@ export default function Members(props) {
   const editDeleteBtnContainer = (elId) => (
     <React.Fragment>
       <Link to={`/members/edit/${elId}`}>
-        <IconButton 
+        <IconButton
           aria-label='modify member'>
           <EditIcon />
         </IconButton>
       </Link>
-      <IconButton 
-        onClick={() => console.log(elId)} 
+      <IconButton
+        onClick={() => onDeleteMember(elId)} 
         aria-label='delete member'>
         <DeleteIcon />
       </IconButton>

@@ -54,6 +54,22 @@ class MemeberService extends BaseService {
             this.messageService.showError(response.msg);
         }
     }
+
+    async deleteMember(id) {
+        try {
+            const deleteRequest = await fetch(`${this.backendUrl}/members/${id}`, {
+                method: 'DELETE',
+            });
+            const response = await deleteRequest.json();
+            if(deleteRequest.ok) {
+                this.messageService.showSuccessMessage(response.msg);
+            } else {
+                this.messageService.showError(response.msg);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
 
 export default MemeberService;
