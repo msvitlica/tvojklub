@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { calculateDuration, addHourToStartTime } from '../../../helpers/helpersMethods';
+import { calculateDuration, addHourToStartTime, validateSheduleDuration } from '../../../helpers/helpersMethods';
 import { ServiceContext } from './../../../services/ServiceContext';
 
 
@@ -81,12 +81,11 @@ function NewSchedule(props) {
 
     // Calculates training duration when user picks start-end time 
     React.useEffect(() => {
-        const duration = calculateDuration(schedule.startTime, schedule.endTime)
+        const duration = calculateDuration(schedule.startTime, schedule.endTime);
         const hours = duration.split(':')[0];
         const minutes = duration.split(':')[1];
         setSchedule({ ...schedule, trainingDuration: `${hours} sat/a ${minutes} min` });
     }, [schedule.startTime, schedule.endTime]);
-
     // set start time
     const setStartTime = (time) => {
         let timeToLocale = new Date(time);
@@ -113,7 +112,7 @@ function NewSchedule(props) {
 
     // Sets attended groups
     const onSetAttendedGroup = (event) => {
-        setSchedule({ ...schedule, attendedGroups: [ { [event.target.name]: event.target.value }] })
+        setSchedule({ ...schedule, attendedGroups: [{ [event.target.name]: event.target.value }] })
         setGroups(groups.filter(group => group.name !== event.target.value));
     }
     // Save schedule to database
@@ -145,7 +144,10 @@ function NewSchedule(props) {
     }
 
     const fieldsValidation = () => {
-        const duration = calculateDuration(schedule.startTime, schedule.endTime)
+
+        const duration = calculateDuration(schedule.startTime, schedule.endTime);
+        const hoursDuration= validateSheduleDuration(duration);
+      
         const durationError = {};
         const groupError = {};
         const recurranceError = {};
@@ -154,7 +156,7 @@ function NewSchedule(props) {
         const daysValues = Object.values(recurranceDays)
         const recurranceValidation = daysValues.filter(el => el);
 
-        if (duration > '12:00') {
+        if (hoursDuration === 0 || hoursDuration>= 5) {
             durationError.message = ` Nepravilan unos kraja treninga`;
             setSchedule({ ...schedule, trainingDuration: '' })
             durationError.notValid = true;

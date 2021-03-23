@@ -44,14 +44,22 @@ const addHourToStartTime = (start) => {
     let defaultEndTime = new Date(hourToMillisec);
     return defaultEndTime;
 }
-function clientTimeFormat(dateFromDB){
+function clientTimeFormat(dateFromDB) {
     const time = dateFromDB.split('T')[1].split(':');
     const date = dateFromDB.split('T')[0].split('-');
-    return new Date(parseInt(date[0]), parseInt(date[1] -1 ), parseInt(date[2]), parseInt(time[0]), parseInt(time[1]));
+    return new Date(parseInt(date[0]), parseInt(date[1] - 1), parseInt(date[2]), parseInt(time[0]), parseInt(time[1]));
 }
 function timeFormatUI(date) {
     const frontendDate = clientTimeFormat(date);
-    return new Date(frontendDate).getHours() + ':' + (new Date(frontendDate).getMinutes() < 10 ? '0' + new Date(frontendDate).getMinutes() : new Date(frontendDate).getMinutes());
+    return (new Date(frontendDate).getHours() < 10 ? '0' + new Date(frontendDate).getHours() : new Date(frontendDate).getHours()) + ':' + (new Date(frontendDate).getMinutes() < 10 ? '0' + new Date(frontendDate).getMinutes() : new Date(frontendDate).getMinutes());
+}
+function validateSheduleDuration(duration) {
+    const hoursDuration = duration.split(':')[0];
+    if (hoursDuration.split[0] === '0') {
+        hoursDuration.split[0] = ''
+    }
+    let hoursToNumber = Number(hoursDuration);
+    return hoursToNumber;
 }
 
 exports.convertDayNumberToString = convertDayNumberToString;
@@ -60,3 +68,5 @@ exports.calculateDate = calculateDate;
 exports.dateFormat = dateFormat;
 exports.addHourToStartTime = addHourToStartTime;
 exports.timeFormatUI = timeFormatUI;
+exports.validateSheduleDuration = validateSheduleDuration;
+

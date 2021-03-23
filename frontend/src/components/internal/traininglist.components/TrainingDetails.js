@@ -7,7 +7,7 @@ import {
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
 import { ServiceContext } from '../../../services/ServiceContext';
-
+import { timeFormatUI } from '../../../helpers/helpersMethods'
 
 export default function TrainingDetails(props) {
   const [trainingInfo, setTrainingInfo] = useState(null);
@@ -121,7 +121,7 @@ export default function TrainingDetails(props) {
           <Grid container>
             <Grid item xs={12} sm={8}>
               <Typography variant='h6'>
-                Termin:{`\n ${trainingInfo.startTime} - ${trainingInfo.endTime}`} </Typography>
+                Termin:{`\n ${timeFormatUI(trainingInfo.startTime)} - ${timeFormatUI(trainingInfo.endTime)}`} </Typography>
               <Typography variant='subtitle1'>
                 Grupa: {`\n${trainingInfo.group.name}`}
               </Typography>
