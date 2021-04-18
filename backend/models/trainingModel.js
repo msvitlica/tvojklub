@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const trainingSchema = new Schema({
-    term: String,
+    startTime: String,
+    endTime: String,
     group: Object,
     coach: String,
     membersInGroup: Array,

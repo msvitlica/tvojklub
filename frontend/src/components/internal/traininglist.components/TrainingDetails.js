@@ -7,24 +7,41 @@ import {
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
 import { ServiceContext } from '../../../services/ServiceContext';
-
+import { timeFormatUI } from '../../../helpers/helpersMethods'
 
 export default function TrainingDetails(props) {
   const [trainingInfo, setTrainingInfo] = useState(null);
   const [membersInGroup, setMembersInGroup] = useState([]);
-  const [trainingStatus, setTrainingStatus] = useState(true);
+  const [trainingCancelStatus, setTrainingCancelStatus] = useState(true);
+  const [trainingFinishStatus, setTrainingFinishStatus] = useState(true);
+  const [cancelBtnStatus, setCancelBtnStatus] = useState(true);
+  const [finishedBtnStatus, setFinishedBtnStatus] = useState(true);
   const services = useContext(ServiceContext);
-
+  const { match: { params }, history } = props;
   // Get training by id 
   useEffect(() => {
     fetchTraining();
-  }, [trainingStatus]);
+  }, []);
 
   // Change training status
-  const changeTrainingStatus = () => {
-    setTrainingStatus(false);
-    services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
 
+  const changeTrainingStatus = () => {
+    setCancelBtnStatus(false);
+    setTrainingCancelStatus(false);
+    setFinishedBtnStatus(true);
+    services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'canceled' });
+  }
+  // return to TriningList
+  const returnToTrainingList = () => {
+    history.push('/trainings')
+  }
+
+  // save processed members to database
+  const finishTraining = () => {
+    setFinishedBtnStatus(true);
+    setTrainingFinishStatus(false)
+    setCancelBtnStatus(false);
+    services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'finished' });
   }
   const fetchTraining = async () => {
     const { match: { params } } = props;
@@ -33,15 +50,23 @@ export default function TrainingDetails(props) {
       .then(data => {
         setTrainingInfo(data.filteredTraining);
         setMembersInGroup(data.filteredTraining.membersInGroup);
-        setTrainingStatus(data.filteredTraining.trainingStatus !== 'canceled' ? true : false)
+        if (data.filteredTraining.trainingStatus == 'finished') {
+          setFinishedBtnStatus(true);
+          setTrainingFinishStatus(false)
+          setCancelBtnStatus(false);
+        }
+        if (data.filteredTraining.trainingStatus === 'canceled') {
+          setCancelBtnStatus(false);
+          setTrainingCancelStatus(false);
+          setFinishedBtnStatus(true);
+        }
       });
   }
-
   const processMember = (id, attendance) => {
 
     let attendanceStatus = {
-      attended: 'attended',
-      noAttended: 'noAttended',
+      attended: 'Prisutan',
+      noAttended: 'Nije Prisutan',
       unknown: 'unknown',
     }
 
@@ -52,6 +77,11 @@ export default function TrainingDetails(props) {
         newMembersInGroup.forEach(member => {
           if (member._id === id) {
             member.attendance = attendanceStatus.attended
+            if (membersInGroup.filter(el => el.attendance == 'unknown').length === 0) {
+              setFinishedBtnStatus(false);
+            } else {
+              setFinishedBtnStatus(true);
+            }
           }
         });
         setTrainingInfo({ ...trainingInfo, membersInGroup: newMembersInGroup })
@@ -61,6 +91,11 @@ export default function TrainingDetails(props) {
         newMembersInGroup.forEach(member => {
           if (member._id === id) {
             member.attendance = attendanceStatus.noAttended
+            if (membersInGroup.filter(el => el.attendance == 'unknown').length === 0) {
+              setFinishedBtnStatus(false);
+            } else {
+              setFinishedBtnStatus(true);
+            }
           }
         });
         setTrainingInfo({ ...trainingInfo, membersInGroup: newMembersInGroup })
@@ -85,15 +120,28 @@ export default function TrainingDetails(props) {
         <CardContent>
           <Grid container>
             <Grid item xs={12} sm={8}>
-              <Typography color="textPrimary" variant='h6'>
-                {trainingInfo.term}({trainingInfo.group.name})
+              <Typography variant='h6'>
+                Termin:{`\n ${timeFormatUI(trainingInfo.startTime)} - ${timeFormatUI(trainingInfo.endTime)}`} </Typography>
+              <Typography variant='subtitle1'>
+                Grupa: {`\n${trainingInfo.group.name}`}
               </Typography>
-              {!trainingStatus ? <Typography>Status Treninga: Otkazan</Typography> : null}
-              {trainingStatus ? <Button variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
+
+              {!trainingCancelStatus ? <Typography color='secondary'>Status Treninga: Otkazan</Typography>
+                : null}
+              {!trainingFinishStatus ? <Typography color='primary'> Status Treninga: Zavrsen</Typography>
+                : null}
+              <div className='inputButtons'>
+                {finishedBtnStatus ? null :
+                  <Button variant='contained' color='primary' onClick={finishTraining}>Zavrsi Trening</Button>
+                }
+                < Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
+              </div>
+
             </Grid>
             <Grid item xs={12} sm={4} className='trainingSearchBar'>
-              <TextField id="outlined-basic"
-                label="Search" />
+              {/* <TextField id="outlined-basic"
+                label="Search" /> */}
+              {cancelBtnStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
             </Grid>
           </Grid>
         </CardContent>
@@ -105,13 +153,13 @@ export default function TrainingDetails(props) {
           <ListItem key={el._id}>
             <ListItemText primary={`${el.firstName} ${el.lastName}`} />
             <ListItemSecondaryAction>
-              {trainingStatus ? <AttendanceOptionButtons member={el} processMember={processMember} /> : null}
+              {cancelBtnStatus ? <AttendanceOptionButtons member={el} processMember={processMember} /> : null}
             </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>
       <Divider />
-      <ProcessedMembersList membersInGroup={membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={processMember} />
+      <ProcessedMembersList membersInGroup={membersInGroup.filter(el => el.attendance !== 'unknown')} processMember={processMember} cancelBtnStatus={cancelBtnStatus} />
     </React.Fragment >
   )
 }

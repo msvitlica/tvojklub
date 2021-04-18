@@ -31,6 +31,8 @@ export default class AttendanceEditButton extends React.Component {
 
     render() {
         return (
+            <React.Fragment>
+                {this.props.cancelBtnStatus?
             <div>
                 {this.state.editButton ?
                     <div>
@@ -46,6 +48,10 @@ export default class AttendanceEditButton extends React.Component {
                     </Button></Typography>
                 }
             </div>
+            : 
+            null
+    }
+            </React.Fragment>
         )
     }
 }
