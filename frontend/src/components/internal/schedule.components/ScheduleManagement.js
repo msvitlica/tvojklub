@@ -15,18 +15,18 @@ function ScheduleManagement(props) {
     const [schedule, setSchedule] = useState([]);
     const service = useContext(ServiceContext);
 
-    const abortController = new AbortController();
+   /*  const abortController = new AbortController(); */
 
     const fetchData = async () => {
-        const schedule = await service.scheduleServices.getAllSchedule({ signal: abortController.signal });
+        const schedule = await service.scheduleServices.getAllSchedule(/* { signal: abortController.signal } */);
         setSchedule(schedule);
     }
 
     useEffect(() => {
         fetchData();
-        return () => {
+      /*   return () => {
             abortController.abort();
-        }
+        } */
     }, []);
 
 
@@ -65,10 +65,10 @@ function ScheduleManagement(props) {
     const rows = schedule.map((term) => {
         return {
             id: term._id,
-            term: `${term.startTime} - ${term.endTime}`,
-            duration: term.trainingDuration,
-            groups: term.attendedGroups.map(group => group.groupId),
-            description: term.aboutSchedule,
+            term:term.term,
+            duration: term.duration,
+            groups: term.groups.map(group => group.name),
+            description: term.description,
             actions: term._id
         }
     });
