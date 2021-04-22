@@ -58,7 +58,7 @@ export default function NewMember(props) {
         if(id) fetchMember(id);
     }, [])
 
-    const handleChange = (e) => {
+    const handleChange = e => {
         setMember({ ...member, [e.target.name]: e.target.value });
     }
 
