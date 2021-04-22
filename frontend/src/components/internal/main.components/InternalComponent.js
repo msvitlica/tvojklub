@@ -31,7 +31,7 @@ export default class InternalComponent extends React.Component {
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />
                     <Route path='/members/newMember' component={NewMember} />
-                    <Route path='/members/edit/:id' component={EditMember} />
+                    <Route path='/members/edit/:id' component={NewMember} />
                     <Route exact path='/groups' component={GroupList} />
                     <Route exact path='/groups/new' component={AddGroupDialog} />
                     <Route path='/groups/edit/:id' component={AddGroupDialog} />

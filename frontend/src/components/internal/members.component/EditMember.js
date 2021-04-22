@@ -110,13 +110,12 @@ export default function NewMember(props) {
                 groupId: member.groupId,
                 attendance: 'unknown'
             })
-            postEditedMember();
+            editMember();
         }
     }
 
-    const postEditedMember = async () => {
-        await services.memberService.postMemberEdit(member._id, member);
-        // setMember('');
+    const editMember = async () => {
+        await services.memberService.editMmber(member._id, member);
         displayMemberList();
     }
 

@@ -4,6 +4,9 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
+require('./routes/authRoutes')(app);
+require('./models/userModel');
+require('./services/passport');
 
 const port = process.env.PORT || 3001;
 
@@ -40,4 +43,5 @@ mongoose
 app.listen(port, function () {
   console.log("Runnning on " + port);
 });
+
 module.exports = app;

@@ -9,8 +9,7 @@ class MemeberService extends BaseService {
         try {
             const res = await fetch(`${this.backendUrl}/members`);            
             const data = await res.json();
-            console.log(data);
-            return data.members;            
+            return data.members;         
         } catch (err) {
             console.log(err);
         }
@@ -38,7 +37,7 @@ class MemeberService extends BaseService {
         }
     }
 
-    async postMemberEdit(id, editedMember) {
+    async editMember(id, editedMember) {
         const postedMember = await fetch(`${this.backendUrl}/members/edit/${id}`, {
             method: 'PUT',
             headers: {

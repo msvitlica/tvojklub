@@ -18,7 +18,6 @@ export default function Members(props) {
   const fetchMembers = async () => {
     const allMembers = await services.memberService.getAllMembers();
     setMemberList(allMembers);
-    console.log(allMembers);
   }
 
   //DELETE MEMBER
