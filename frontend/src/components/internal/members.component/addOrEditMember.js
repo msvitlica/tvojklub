@@ -55,9 +55,7 @@ export default function NewMember(props) {
 
     useEffect(() => {
         fetchGroup();
-        if(id) {
-            fetchMember(id);
-        }
+        if(id) fetchMember(id);
     }, [])
 
     const handleChange = (e) => {
