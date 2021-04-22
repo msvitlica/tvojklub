@@ -177,7 +177,7 @@ export default function NewMember(props) {
                                 error={groupError.notValid}
                             >
                                 {groups.map(el => (
-                                    <MenuItem key={el._id} value={el._id}>{el.name}</MenuItem>
+                                    <MenuItem key={el._id} value={el}>{el.name}</MenuItem>
                                 ))}
                             </Select>
                             <FormHelperText className='validationGroup'>{groupError.emptyInput}</FormHelperText>
