@@ -87,5 +87,4 @@ export default function Members(props) {
       <Grid item xs={1} sm={2}></Grid>
     </Grid>
   )
-
 }
