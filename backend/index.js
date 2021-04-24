@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 const logger = require("morgan");
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-require('./models/User');
+require('./models/userModel');
 require('./services/passport');
+require('./routes/authRoutes')(app);
 
 const port = process.env.PORT || 3001;
 
@@ -44,4 +45,5 @@ mongoose
 app.listen(port, function () {
   console.log("Runnning on " + port);
 });
+
 module.exports = app;
