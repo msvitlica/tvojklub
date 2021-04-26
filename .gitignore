@@ -2,7 +2,7 @@
 keys.js
 
 # Testing
-.vscode
+.vscode/
 
 # Logs
 logs
