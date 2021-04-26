@@ -23,8 +23,15 @@ router.get("/", async (req, res) => {
     });
   }
 });
-router.post('/newMember', async (req, res) => {
-  
+
+router.get('/edit/:id', async (req, res) => {
+  const id = req.params.id;
+  const targetMember = await Member.findById(id);
+  console.log(targetMember);
+  res.status(200).send(targetMember);
+});
+
+router.post('/newMember', async (req, res) => {  
   try {
     let newMember = await Member.create(req.body.member);
     console.log(newMember);
@@ -36,6 +43,39 @@ router.post('/newMember', async (req, res) => {
       msg: 'Bad Request'
     })
     console.log(err);
+  }
+});
+
+router.put('/edit/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    Member.findByIdAndUpdate(id, req.body, (err, member) => {
+      if(err) {
+        console.log(err);
+      } else {
+        res.status(200).json({
+          msg: 'Uspješno ste izmijenili člana!'
+        });
+      }
+    })      
+  } catch(err) {
+    res.status(400).json({
+      msg: 'Neuspješna izmjena člana!'
+    })
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await Member.findByIdAndRemove(req.params.id);
+    res.status(200).send({
+      msg: `Grupa je obrisana.`
+    })
+  } catch (err) {
+    res.status(400).json({
+      msg: 'Bad request',
+      err
+    });
   }
 });
 
