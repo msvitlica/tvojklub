@@ -1,14 +1,38 @@
 require("dotenv").config();
 const express = require("express");
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
-const cookieSession = require('cookie-session');
-const passport = require('passport');
+const keys = require('./config/keys');
 require('./models/userModel');
 require('./services/passport');
+
+const mongoose = require('mongoose');
+
+mongoose
+.connect(process.env.MONGO_DEV_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false    
+})
+.then(console.log("Database connected!"))
+.catch(err => console.log(err));
+
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey]
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 require('./routes/authRoutes')(app);
+
 
 const port = process.env.PORT || 3001;
 
@@ -32,15 +56,7 @@ app.use("/groups", groupeRouter);
 const scheduleManagement = require('./routes/scheduleManagment');
 app.use('/schedule-management', scheduleManagement);
 
-const mongoose = require('mongoose');
-mongoose
-  .connect(process.env.MONGO_DEV_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false    
-  })
-  .then(console.log("Database connected!"))
-  .catch(err => console.log(err));
+
 
 app.listen(port, function () {
   console.log("Runnning on " + port);
