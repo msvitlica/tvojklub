@@ -3,7 +3,7 @@ import React from 'react';
 import {
     Grid,
     Typography,
-    Button
+    Button, Link
 } from '@material-ui/core';
 
 
@@ -16,6 +16,7 @@ function Login(props) {
                 <Typography className="loginLogo" variant="h1">Tvoj Klub</Typography>
                 <Button className="btn" variant="outlined" color="secondary" onClick={props.login} >SIGN IN WITH GOOGLE</Button>
                 <Button className="btn" variant="outlined" color="primary" onClick={props.login} >SIGN IN WITH FACEBOOK</Button>
+                <Link href="/auth/google" color="primary">AUTH WITH GOOGLE</Link>
             </Grid>
             <Grid sm={2} item> </Grid>
         </Grid>
