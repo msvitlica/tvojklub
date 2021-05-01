@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
     Grid,
     Typography,
@@ -15,8 +14,13 @@ function Login(props) {
             <Grid xs={12} sm={8} direction="column" item container>
                 <Typography className="loginLogo" variant="h1">Tvoj Klub</Typography>
                 <Button className="btn" variant="outlined" color="secondary" onClick={props.login} >SIGN IN WITH GOOGLE</Button>
+                {/* <Button className="btn" variant="outlined" color="secondary">
+                    <Link href="/auth/google" color="secondary">
+                        SIGN IN WITH GOOGLE
+                    </Link>
+                </Button> */}
                 <Button className="btn" variant="outlined" color="primary" onClick={props.login} >SIGN IN WITH FACEBOOK</Button>
-                <Link href="/auth/google" color="primary">AUTH WITH GOOGLE</Link>
+                
             </Grid>
             <Grid sm={2} item> </Grid>
         </Grid>

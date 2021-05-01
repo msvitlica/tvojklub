@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  googleId: String
-  // club: String,
-  // name: String,
+  authId: String,
+  club: String,
+  name: String,
+  isConfirmedCoach: Boolean,
+  isAllowedToEdit: Boolean
 });
 
 mongoose.model('users', userSchema);
