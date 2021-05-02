@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import { StylesProvider } from "@material-ui/core/styles";
 import {
@@ -28,6 +28,26 @@ function App() {
   const [open, setOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [severity, setSeverity] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+      fetchUser();
+  }, []);
+
+  // useEffect(() => {
+  //   if(currentUser !== null) {
+
+  //     console.log('Ovaj korisnik nema kluba!');
+  //   }
+  // }, [currentUser]);
+
+
+
+  const fetchUser = async () => {
+    const data = await fetch('/api/current_user');
+    const user = await data.json();
+    setCurrentUser(user);
+  }
 
   const login = () => {
     auth.login(() => {
