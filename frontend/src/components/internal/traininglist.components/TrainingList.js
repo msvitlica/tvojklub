@@ -5,10 +5,13 @@ import TrainingListFilter from '../main.components/TrainingListFilter';
 import { timeFormatUI } from './../../../helpers/helpersMethods';
 
 export default function TrainingList(props) {
-  const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
+  const [selectedDate, setSelectedDate] = useState(new Date().getTime());
   const [trainings, setTrainings] = useState([]);
   const abortController = new AbortController;
   const service = useContext(ServiceContext);
+  const { match: { params }, history } = props;
+    console.log(props.history.location.state)
+    console.log(selectedDate)
 
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
@@ -26,7 +29,6 @@ export default function TrainingList(props) {
   }, [selectedDate]);
 
   const showTrainingDetails = async (training) => {
-    const { match: { params }, history } = props;
     if (!training._id) {
       const trainingId = await onSaveTrainig(training);
       history.push(`trainings/${trainingId}`);
