@@ -28,30 +28,10 @@ function App() {
   const [open, setOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState('');
   const [severity, setSeverity] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-      fetchUser();
-  }, []);
-
-  // useEffect(() => {
-  //   if(currentUser !== null) {
-
-  //     console.log('Ovaj korisnik nema kluba!');
-  //   }
-  // }, [currentUser]);
-
-
-
-  const fetchUser = async () => {
-    const data = await fetch('/api/current_user');
-    const user = await data.json();
-    setCurrentUser(user);
-  }
 
   const login = () => {
     auth.login(() => {
-      history.replace('/');
+      history.replace('/auth/google');
     })
     setAuth(auth.isAuthenticated());
   }
@@ -73,7 +53,6 @@ function App() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
@@ -85,13 +64,21 @@ function App() {
             <Route path="/login" >
               <ExternalComponent login={login} />
             </Route>
-            <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
+            <PrivateRoute
+              isAuthenticated={isAuthenticated} 
+              logout={logout} 
+              component={InternalComponent} />
           </Switch>
         </ErrorBoundary>
         <div>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={severity}>
-              {snackMessage}
+          <Snackbar 
+            open={open} 
+            autoHideDuration={6000} 
+            onClose={handleClose}>
+            <Alert 
+              onClose={handleClose} 
+              severity={severity}>
+                {snackMessage}
             </Alert>
           </Snackbar>
         </div>

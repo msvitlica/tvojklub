@@ -23,6 +23,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import {
     Drawer,
     List,
+    Link,
     ListItem,
     ListItemIcon,
     ListItemText
@@ -30,9 +31,9 @@ import {
 
 // Routing Component
 
-import {
-    Link
-} from 'react-router-dom';
+// import {
+//     Link
+// } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -73,7 +74,8 @@ export default function NavBar(props) {
                     <Typography variant="h6" className={classes.title}>
                         {title}
                     </Typography>
-                    <Button onClick={props.logout} >
+                    <a href="/api/logout">LOGOUT</a>
+                    <Button>
                         <Avatar src="/broken-image.jpg" />
                     </Button>
                 </Toolbar>

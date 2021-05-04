@@ -7,5 +7,9 @@ module.exports = function(app) {
     
     app.use(proxy('/api/logout', 
         { target: 'http://localhost:3001/' }
-    ));
+    )),
+
+    app.use(proxy('/api/current_user', 
+        { target: 'http://localhost:3001/' }
+    ))
 }
