@@ -10,6 +10,9 @@ export default function TrainingList(props) {
   const abortController = new AbortController;
   const service = useContext(ServiceContext);
   const { match: { params }, history } = props;
+
+  // props.history.location.states is object passed from TrainingDetails component
+  // it contains chosen date in milliseconds
     console.log(props.history.location.state)
     console.log(selectedDate)
 
@@ -24,9 +27,18 @@ export default function TrainingList(props) {
   const onSaveTrainig = async (newTraining) => {
     return await service.trainingService.saveTraining(newTraining);
   }
+
   useEffect(() => {
     fetchTrainings();
   }, [selectedDate]);
+
+  // update selectedDate variable to chosen date
+ useEffect((prevState)=>{
+   if( props.history.location.state !== prevState){
+  setSelectedDate(props.history.location.state.selectedDate)
+   }
+ },[props.history.location.state])
+
 
   const showTrainingDetails = async (training) => {
     if (!training._id) {

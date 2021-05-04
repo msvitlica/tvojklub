@@ -34,7 +34,7 @@ export default function TrainingDetails(props) {
   }
   // return to TriningList
   const returnToTrainingList = () => {
-    history.replace('/trainings', {selectedDate: selectedDate})
+    history.push('/trainings', {selectedDate: selectedDate})
   }
 
   // save processed members to database
