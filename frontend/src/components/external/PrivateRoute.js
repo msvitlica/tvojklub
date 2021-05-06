@@ -5,31 +5,37 @@ import {
 } from 'react-router-dom';
 
 function PrivateRoute({ component: Component, ...rest }) {
-    const { isAuthenticated, logout } = rest;
+    // const { isAuthenticated, logout } = rest;
+    const [ currentUser, setCurrentUser ] = useState(null);
+    const [ fetching, setFetching ] = useState(true);
 
-//     const [currentUser, setCurrentUser] = useState(null);
-
-//   useEffect(() => {
-//     fetchUser();
-//   }, []);
-
-//   useEffect(() => {
-//     console.log(currentUser);
-//   }, [currentUser]);
-   
-  
-//   const fetchUser = async () => {
-//     const res = await fetch('/api/current_user');
-//     const user = await res.json();
-//     setCurrentUser(user);
-//   }
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await fetch('/api/current_user');
+                if(fetching) {
+                    const user = await res.json();
+                    setCurrentUser(user);
+                }
+                setFetching(false);
+            } catch {
+                console.log('nema korisnika');
+            }
+        }
+        fetchUser();    
+    }, []);
     
     return (
+        <div>
+            <Route { ...rest } render={ () => { if (fetching && currentUser === null) return <h1>Fetching...</h1>} }/>
+            <Route { ...rest } render={ () => { if (currentUser && !fetching) return <Component user={currentUser} />} }/>
+            <Route { ...rest } render={ () => { if (!currentUser && !fetching) return <Redirect to="/login" />} }/>
+        </div>
         // <Route
         //     {...rest}
         //     render={(props) =>
-        //         isAuthenticated ? (
-        //             <Component logout={logout} />
+        //         (currentUser !== null && !fetching) ? (
+        //             <Component />
         //         ) : (
         //                 <Redirect
         //                     to={{
@@ -40,10 +46,6 @@ function PrivateRoute({ component: Component, ...rest }) {
         //             )
         //     }
         // />
-        <Route
-            {...rest}
-            render={(props) => <Component logout={logout} /> }
-        />
     );
 }
 

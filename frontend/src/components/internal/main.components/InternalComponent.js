@@ -26,7 +26,7 @@ export default class InternalComponent extends React.Component {
             <div>
                 <NavBar logout={this.props.logout} />
                 <Switch>
-                    <Route exact path="/" component={TrainingList} />
+                    <Route exact path="/" user={this.props.user} component={TrainingList} />
                     <Route path='/trainings/:trainingId' component={TrainingDetails} />
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />

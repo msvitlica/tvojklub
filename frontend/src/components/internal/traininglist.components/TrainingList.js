@@ -9,6 +9,8 @@ export default function TrainingList(props) {
   const service = useContext(ServiceContext);
   const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
 
+  console.log('Props iz komponente TrainingList: ', props);
+
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
     fetchTrainings();

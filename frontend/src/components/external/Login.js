@@ -4,9 +4,25 @@ import {
     Typography,
     Button, Link
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles({
+    googleLink: {
+        width: '100%',
+        height: '100%',
+        '&:hover': {
+            textDecoration: 'none'
+        }
+    },
+    btnContainer: {
+        padding: '0px',
+        height: '2.3rem'
+    }
+});
 
 function Login(props) {
+
+    const classes = useStyles();
 
     return (
         <Grid className="loginContainer" container>
@@ -14,14 +30,23 @@ function Login(props) {
             <Grid xs={12} sm={8} direction="column" item container>
                 <Typography className="loginLogo" variant="h1">Tvoj Klub</Typography>
                 <Button 
-                    className="btn"
+                    className={`btn ${classes.btnContainer}`}
                     variant="outlined" 
                     color="secondary">
-                    <Link href="/auth/google" color="secondary">
+                    <Link 
+                        href="/auth/google" 
+                        className={classes.googleLink} 
+                        color="secondary">
                         SIGN IN WITH GOOGLE
                     </Link>
                 </Button>
-                <Button className="btn" variant="outlined" color="primary" onClick={props.login} >SIGN IN WITH FACEBOOK</Button>
+                <Button 
+                    className="btn" 
+                    variant="outlined" 
+                    color="primary" 
+                    onClick={props.login} >
+                    SIGN IN WITH FACEBOOK
+                </Button>
             </Grid>
             <Grid sm={2} item> </Grid>
         </Grid>
