@@ -7,7 +7,9 @@ const Group = require ('../models/groupModel');
 router.get('/edit/:id', async (req, res) => {
     try {
         const scheduleId = req.params.id
-        const schedule = await Schedule.findById(scheduleId);
+        let schedule = await Schedule.findById(scheduleId);
+        const groups = await Group.find({});
+        schedule = { ...schedule.toObject(), attendedGroups:  groups.filter(group=> group._id.toString()== schedule.attendedGroups[0].groupId) }
         res.status(200).json(schedule);
     } catch (err) {
         res.status(400).json({
