@@ -2,18 +2,18 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import { ServiceContext } from './../../../services/ServiceContext';
 import TrainingListFilter from '../main.components/TrainingListFilter';
+import { timeFormatUI } from './../../../helpers/helpersMethods';
 
 export default function TrainingList(props) {
-  const abortController = new AbortController;
-  const [trainings, setTrainings] = useState([]);
-  const service = useContext(ServiceContext);
   const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
+  const [trainings, setTrainings] = useState([]);
+  const abortController = new AbortController;
+  const service = useContext(ServiceContext);
 
   console.log('Props iz komponente TrainingList: ', props);
 
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
-    fetchTrainings();
   };
 
   const fetchTrainings = async () => {
@@ -47,14 +47,16 @@ export default function TrainingList(props) {
           <CardActionArea key={el._id} onClick={() => showTrainingDetails(el)} >
             <CardContent>
               <Typography>
-                {el.term}
+                {`${timeFormatUI(el.startTime)} - ${timeFormatUI(el.endTime)}`}
               </Typography>
-              {el.trainingStatus === 'canceled' ? <Typography>Status Treninga: Otkazan</Typography> : null}
+              {el.trainingStatus === 'canceled' ? <Typography color='secondary'>Status Treninga: Otkazan</Typography> : null}
+              {el.trainingStatus === 'finished' ? <Typography color='primary'> Status Treninga: Zavrsen</Typography> : null}
               <br></br>
-              <Typography > {el.group.name}
+              <Typography variant='subtitle1'>
+                <b>Grupa:</b>{`\n${el.group.name}`}
               </Typography>
-              <Typography>
-                {el.coach}
+              <Typography variant='subtitle1'>
+                <b>Trener: </b>{`\n${el.coach}`}
               </Typography>
             </CardContent>
           </CardActionArea>
