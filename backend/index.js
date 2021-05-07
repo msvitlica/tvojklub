@@ -4,9 +4,6 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
-/*require('./routes/authRoutes')(app);
-require('./models/userModel');
-require('./services/passport'); */
 
 const port = process.env.PORT || 3001;
 

@@ -49,6 +49,11 @@ function clientTimeFormat(dateFromDB) {
     const date = dateFromDB.split('T')[0].split('-');
     return new Date(parseInt(date[0]), parseInt(date[1] - 1), parseInt(date[2]), parseInt(time[0]), parseInt(time[1]));
 }
+const setClientDateFormat = (dateFromDB) => {
+   const date = dateFromDB.split('T')[0].split('-');
+    const datePlusHour= new Date(date).getTime() +(1000*60*60*24);
+    return datePlusHour;
+}
 function timeFormatUI(date) {
     const frontendDate = clientTimeFormat(date);
     return (new Date(frontendDate).getHours() < 10 ? '0' + new Date(frontendDate).getHours() : new Date(frontendDate).getHours()) + ':' + (new Date(frontendDate).getMinutes() < 10 ? '0' + new Date(frontendDate).getMinutes() : new Date(frontendDate).getMinutes());
@@ -69,4 +74,5 @@ exports.dateFormat = dateFormat;
 exports.addHourToStartTime = addHourToStartTime;
 exports.timeFormatUI = timeFormatUI;
 exports.validateSheduleDuration = validateSheduleDuration;
+exports.setClientDateFormat = setClientDateFormat;
 
