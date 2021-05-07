@@ -29,9 +29,16 @@ function App() {
   const [snackMessage, setSnackMessage] = useState('');
   const [severity, setSeverity] = useState('');
 
+  // const login = () => {
+  //   auth.login(() => {
+  //     history.replace('/auth/google');
+  //   })
+  //   setAuth(auth.isAuthenticated());
+  // }
+
   const login = () => {
     auth.login(() => {
-      history.replace('/auth/google');
+      history.replace('/');
     })
     setAuth(auth.isAuthenticated());
   }

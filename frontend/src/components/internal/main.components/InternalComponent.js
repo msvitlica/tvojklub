@@ -1,6 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar';
 import Members from '../members.component/Members';
+import Dashboard from '../dashboard.component/Dashboard';
 import addOrEditMember from '../members.component/addOrEditMember';
 import TrainingList from '../traininglist.components/TrainingList';
 import GroupList from '../groups.components/GroupList';
@@ -21,7 +22,6 @@ export default class InternalComponent extends React.Component {
         super(props);
     }
     render() {
-        console.log(this.props.user);
         return (
             <div>
                 <NavBar logout={this.props.logout} />
@@ -29,8 +29,11 @@ export default class InternalComponent extends React.Component {
                     <Route 
                         exact 
                         path="/" 
-                        render={props => <Dashboard {...props} user={this.props.user} />} 
-                        />
+                        render={props => (
+                            <Dashboard 
+                                {...props} 
+                                user={this.props.user} />
+                        )} />
                     <Route path='/trainings/:trainingId' component={TrainingDetails} />
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />

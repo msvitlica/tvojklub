@@ -4,8 +4,28 @@ import {
     Redirect
 } from 'react-router-dom';
 
+// function PrivateRoute({ component: Component, ...rest }) {
+//     const { isAuthenticated, logout } = rest;
+//     return (
+//         <Route
+//             {...rest}
+//             render={(props) =>
+//                 isAuthenticated ? (
+//                     <Component logout={logout} />
+//                 ) : (
+//                         <Redirect
+//                             to={{
+//                                 pathname: "/login",
+//                                 state: { from: props.location }
+//                             }}
+//                         />
+//                     )
+//             }
+//         />
+//     );
+// }
+
 function PrivateRoute({ component: Component, ...rest }) {
-    // const { isAuthenticated, logout } = rest;
     const [ currentUser, setCurrentUser ] = useState(null);
     const [ fetching, setFetching ] = useState(true);
 
@@ -27,31 +47,16 @@ function PrivateRoute({ component: Component, ...rest }) {
     
     return (
         <div>
-            <Route 
+            <Route
                 { ...rest } 
                 render={ () => { if (fetching && currentUser === null) return <h1>Fetching...</h1>} }/>
-            <Route 
+            <Route
                 { ...rest } 
                 render={ () => { if (currentUser && !fetching) return <Component user={currentUser} />} }/>
-            <Route 
+            <Route
                 { ...rest } 
                 render={ () => { if (!currentUser && !fetching) return <Redirect to="/login" />} }/>
         </div>
-        // <Route
-        //     {...rest}
-        //     render={(props) =>
-        //         (currentUser !== null && !fetching) ? (
-        //             <Component />
-        //         ) : (
-        //                 <Redirect
-        //                     to={{
-        //                         pathname: "/login",
-        //                         state: { from: props.location }
-        //                     }}
-        //                 />
-        //             )
-        //     }
-        // />
     );
 }
 

@@ -23,7 +23,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import {
     Drawer,
     List,
-    Link,
+    // Link,
     ListItem,
     ListItemIcon,
     ListItemText
@@ -31,9 +31,9 @@ import {
 
 // Routing Component
 
-// import {
-//     Link
-// } from 'react-router-dom';
+import {
+    Link
+} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
