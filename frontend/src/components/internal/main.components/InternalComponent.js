@@ -1,6 +1,7 @@
 import React from 'react';
 import NavBar from './NavBar';
 import Members from '../members.component/Members';
+import Dashboard from '../dashboard.component/Dashboard';
 import NewMember from '../members.component/NewMember';
 import EditMember from '../members.component/EditMember';
 import TrainingList from '../traininglist.components/TrainingList';
@@ -22,11 +23,16 @@ export default class InternalComponent extends React.Component {
         super(props);
     }
     render() {
+        console.log(this.props.user);
         return (
             <div>
                 <NavBar logout={this.props.logout} />
                 <Switch>
-                    <Route exact path="/" user={this.props.user} component={TrainingList} />
+                    <Route 
+                        exact 
+                        path="/" 
+                        render={props => <Dashboard {...props} user={this.props.user} />} 
+                        />
                     <Route path='/trainings/:trainingId' component={TrainingDetails} />
                     <Route path='/trainings' component={TrainingList} />
                     <Route exact path='/members' component={Members} />

@@ -27,9 +27,15 @@ function PrivateRoute({ component: Component, ...rest }) {
     
     return (
         <div>
-            <Route { ...rest } render={ () => { if (fetching && currentUser === null) return <h1>Fetching...</h1>} }/>
-            <Route { ...rest } render={ () => { if (currentUser && !fetching) return <Component user={currentUser} />} }/>
-            <Route { ...rest } render={ () => { if (!currentUser && !fetching) return <Redirect to="/login" />} }/>
+            <Route 
+                { ...rest } 
+                render={ () => { if (fetching && currentUser === null) return <h1>Fetching...</h1>} }/>
+            <Route 
+                { ...rest } 
+                render={ () => { if (currentUser && !fetching) return <Component user={currentUser} />} }/>
+            <Route 
+                { ...rest } 
+                render={ () => { if (!currentUser && !fetching) return <Redirect to="/login" />} }/>
         </div>
         // <Route
         //     {...rest}
