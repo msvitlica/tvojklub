@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
   Typography, CardContent, List, ListItem, ListSubheader,
-  ListItemText, ListItemSecondaryAction, Card, TextField,
+  ListItemText, ListItemSecondaryAction, Card,
   Divider, Grid, Button
 } from '@material-ui/core';
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
 import { ServiceContext } from '../../../services/ServiceContext';
-import { timeFormatUI } from '../../../helpers/helpersMethods'
+import { timeFormatUI, setClientDateFormat } from '../../../helpers/helpersMethods'
 
 export default function TrainingDetails(props) {
   const [trainingInfo, setTrainingInfo] = useState(null);
   const [membersInGroup, setMembersInGroup] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [trainingCancelStatus, setTrainingCancelStatus] = useState(true);
   const [trainingFinishStatus, setTrainingFinishStatus] = useState(true);
   const [cancelBtnStatus, setCancelBtnStatus] = useState(true);
@@ -33,7 +34,7 @@ export default function TrainingDetails(props) {
   }
   // return to TriningList
   const returnToTrainingList = () => {
-    history.push('/trainings')
+    history.push('/trainings', {selectedDate: selectedDate})
   }
 
   // save processed members to database
@@ -44,12 +45,13 @@ export default function TrainingDetails(props) {
     services.trainingService.editTraining({ _id: trainingInfo._id, editedProp: 'trainingStatus', editedPropValue: 'finished' });
   }
   const fetchTraining = async () => {
-    const { match: { params } } = props;
     fetch(`http://localhost:3001/trainings/${params.trainingId}`)
       .then(response => response.json())
       .then(data => {
         setTrainingInfo(data.filteredTraining);
         setMembersInGroup(data.filteredTraining.membersInGroup);
+        setSelectedDate(setClientDateFormat(data.filteredTraining.trainingDate));
+
         if (data.filteredTraining.trainingStatus == 'finished') {
           setFinishedBtnStatus(true);
           setTrainingFinishStatus(false)
@@ -134,7 +136,7 @@ export default function TrainingDetails(props) {
                 {finishedBtnStatus ? null :
                   <Button variant='contained' color='primary' onClick={finishTraining}>Zavrsi Trening</Button>
                 }
-                < Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
+                <Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
               </div>
 
             </Grid>
