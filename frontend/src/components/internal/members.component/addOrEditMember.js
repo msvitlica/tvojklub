@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { TextField, Button, InputLabel, Select, MenuItem, FormControl, FormHelperText, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ServiceContext } from '../../../services/ServiceContext';
@@ -35,6 +36,7 @@ export default function NewMember(props) {
     const [groupError, setGroupError] = useState({});
     const [groups, setGroupList] = useState([]);
     const { history } = props;
+    const { id } = useParams();
 
     const services = useContext(ServiceContext);
 
@@ -42,12 +44,24 @@ export default function NewMember(props) {
         const allGroups = await services.groupService.getAllGroups();
         setGroupList(allGroups);
     }
+
+    const fetchMember = async (id) => {
+        const fetchedMember = await services.memberService.getMemberById(id);
+        setMember({
+            ...fetchedMember,
+            dateOfBirth: fetchedMember.dateOfBirth.split('T')[0]
+        });
+    }
+
     useEffect(() => {
-        fetchGroup()
+        fetchGroup();
+        if(id) fetchMember(id);
     }, [])
-    const handleChange = (e) => {
+
+    const handleChange = e => {
         setMember({ ...member, [e.target.name]: e.target.value });
     }
+
     const validate = () => {
         const firstNameError = {};
         const lastNameError = {};
@@ -91,12 +105,19 @@ export default function NewMember(props) {
                 groupId: member.groupId,
                 attendance: 'unknown'
             })
+            if(id) return editMember();
             postMember();
         }
     }
+
     const postMember = async () => {
         await services.memberService.postMember({ member });
         setMember('');
+        displayMemberList();
+    }
+
+    const editMember = async () => {
+        await services.memberService.editMember(member._id, member);
         displayMemberList();
     }
 
@@ -114,7 +135,7 @@ export default function NewMember(props) {
                     <div>
                         <TextField
                             name="firstName"
-                            value={member.firstName}
+                            value={member.firstName || ''}
                             label="FirstName"
                             variant="filled"
                             onChange={handleChange}
@@ -125,7 +146,7 @@ export default function NewMember(props) {
                     <div>
                         <TextField
                             name="lastName"
-                            value={member.lastName}
+                            value={member.lastName || ''}
                             label="LastName"
                             variant="filled"
                             onChange={handleChange}
@@ -138,7 +159,7 @@ export default function NewMember(props) {
                             label="Birthday"
                             type="date"
                             name='dateOfBirth'
-                            value={member.dateOfBirth}
+                            value={member.dateOfBirth || ''}
                             onChange={handleChange}
                             helperText={birthDateError.emptyInput}
                             error={birthDateError.notValid}
@@ -151,7 +172,7 @@ export default function NewMember(props) {
                             <InputLabel className='p-8'>Group</InputLabel>
                             <Select variant="filled"
                                 name="groupId"
-                                value={member.groupId}
+                                value={member.groupId || ''}
                                 onChange={handleChange}
                                 error={groupError.notValid}
                             >

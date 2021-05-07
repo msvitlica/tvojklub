@@ -9,4 +9,3 @@ mongo installaton instructions
 5) to restart engines in docker run docker restart $(docker ps -a -q);
 6) open  http://localhost:8081;
 7) create new base tvojklub in Mongo Express;
-
