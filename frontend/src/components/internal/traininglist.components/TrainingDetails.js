@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   Typography, CardContent, List, ListItem, ListSubheader,
   ListItemText, ListItemSecondaryAction, Card,
-  Divider, Grid, Button
+  Divider, Grid, Button, TextField
 } from '@material-ui/core';
 import ProcessedMembersList from './ProcessedMembersList'
 import AttendanceOptionButtons from './AttendanceOptionButtons';
@@ -120,32 +120,39 @@ export default function TrainingDetails(props) {
     <React.Fragment>
       <Card >
         <CardContent>
-          <Grid container>
-            <Grid item xs={12} sm={8}>
-              <Typography variant='h6'>
-                Termin:{`\n ${timeFormatUI(trainingInfo.startTime)} - ${timeFormatUI(trainingInfo.endTime)}`} </Typography>
-              <Typography variant='subtitle1'>
+          <div className="container">
+            <div className="term-group-status">
+              <Typography variant="h6">
+                Termin: {`\n ${timeFormatUI(trainingInfo.startTime)} - ${timeFormatUI(trainingInfo.endTime)}`}
+              </Typography>
+              <Typography className='group-name' variant="subtitle1">
                 Grupa: {`\n${trainingInfo.group.name}`}
               </Typography>
-
               {!trainingCancelStatus ? <Typography color='secondary'>Status Treninga: Otkazan</Typography>
                 : null}
-              {!trainingFinishStatus ? <Typography color='primary'> Status Treninga: Zavrsen</Typography>
+              {!trainingFinishStatus ? <Typography className='finish-btn' color='primary'> Status Treninga: Zavrsen</Typography>
                 : null}
-              <div className='inputButtons'>
-                {finishedBtnStatus ? null :
-                  <Button variant='contained' color='primary' onClick={finishTraining}>Zavrsi Trening</Button>
-                }
-                <Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button>
+            </div>
+            <div className="finish-cancel-returnBtns">
+              <div>
+                <Button className='cancel-btn' variant="contained" onClick={returnToTrainingList} color="default">
+                  Nazad
+                </Button>
               </div>
-
-            </Grid>
-            <Grid item xs={12} sm={4} className='trainingSearchBar'>
-              {/* <TextField id="outlined-basic"
-                label="Search" /> */}
-              {cancelBtnStatus ? <Button className='trainingCancelBtn' variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button> : null}
-            </Grid>
-          </Grid>
+              <div className='finish-cancelBtns'>
+                {finishedBtnStatus ?
+                  null :
+                  <Button className='finish-btn' variant='contained' color='primary' onClick={finishTraining}>Zavrsi Trening</Button>
+                }
+                {cancelBtnStatus ? <Button variant="contained" color='secondary' onClick={changeTrainingStatus}>Otkaži Trening</Button>
+                  : null}
+                {/* <Button variant="contained" color='default' onClick={returnToTrainingList} >Nazad</Button> */}
+              </div>
+              <div>
+                <TextField className="searchBar" label="Search" />
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
       <List subheader={<ListSubheader color='primary' >
