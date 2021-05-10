@@ -5,23 +5,33 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { UserContext } from '../../external/PrivateRoute';
+import { ServiceContext } from './../../../services/ServiceContext';
 
 
 const Dashboard = props => {
-  
+  const services = useContext(ServiceContext);
   const { currentUser, fetchUser } = useContext(UserContext);
   const [ clubName, setClubName] = useState(currentUser.club ? currentUser.club.clubName : '');
   const [ openDialog, setOpenDialog ] = useState(!!currentUser.club);
   const [ validationError, setValidationError] = useState({});
   const [ club, setClub ] = useState(currentUser.club || {});
+  const [ clubCoaches, setClubCoaches ] = useState(club.coaches || []);
+  const [ newClubCoaches, setNewClubCoaches ] = useState(club.newCoaches || []);
 
   useEffect(() => {
     if(!currentUser.club) return;
     fetchClub();
   }, []);
 
+  const handleCoachesChanges = e => {
+    const changedCoach = e.target.name;
+    const newCoachesList = newClubCoaches.filter(coach => {
+      return;
+    })
+  }
+
   const fetchClub = async () => {
-    const currentClub = await services.clubService.fetchClub();
+    const currentClub = await services.clubService.fetchClub(currentUser.club.clubId);
     setClub(currentClub);
   }
 
@@ -55,9 +65,13 @@ const Dashboard = props => {
     const newClub = {};
     const listOfCoachesIds = [];
 
-    if(club.coaches) listOfCoachesIds = [...club.coaches.map(item => item._id)];
+    if(club.coaches) {
+      listOfCoachesIds = [...club.coaches.map(item => item._id)];
+    }
     
-    if(listOfCoachesIds.includes(currentUser._id)) newClub = { ...club, clubName: clubName }
+    if(listOfCoachesIds.includes(currentUser._id)) {
+      newClub = { ...club, clubName: clubName }
+    }
     await services.clubService.editClub(newClub);
     setOpenDialog(false);
   }

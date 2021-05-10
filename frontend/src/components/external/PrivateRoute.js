@@ -22,10 +22,11 @@ function PrivateRoute({ component: Component, ...rest }) {
             console.log('nema korisnika');
         }
     }
+    fetchUser();
 
-    useEffect(() => {
-        fetchUser();    
-    }, []);
+    // useEffect(() => {
+    //     fetchUser();    
+    // }, []);
     
     return (
         <UserContext.Provider value={{ currentUser, fetchUser }}>
