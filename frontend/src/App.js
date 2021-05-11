@@ -22,7 +22,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function App() {
+function App(props) {
   const history = useHistory();
   const [isAuthenticated, setAuth] = React.useState(auth.isAuthenticated());
   const [open, setOpen] = useState(false);

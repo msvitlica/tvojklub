@@ -32,8 +32,11 @@ passport.use(
       const user = await new User({ 
         authId: profile.id,
         name: profile.displayName,
-        isConfirmedCoach: false,
-        isAllowedToEdit: false
+        isOwner: true,
+        club: {
+          clubName: '',
+          clubId: ''
+        }
       }).save()
       done(null, user);
     }

@@ -5,8 +5,6 @@ const clubSchema = new Schema({
   clubId: Schema.Types.ObjectID,
   name: String,
   owner: String,
-  coaches: [],
-  newCoaches: []
 });
 
 mongoose.model('clubs', clubSchema);

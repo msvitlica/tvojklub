@@ -3,10 +3,9 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   authId: String,
-  club: String,
+  club: Object,
   name: String,
-  isConfirmedCoach: Boolean,
-  isAllowedToEdit: Boolean
+  isOwner: Boolean
 });
 
 mongoose.model('users', userSchema);

@@ -10,8 +10,6 @@ export default function TrainingList(props) {
   const abortController = new AbortController;
   const service = useContext(ServiceContext);
 
-  console.log('Props iz komponente TrainingList: ', props);
-
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
   };
