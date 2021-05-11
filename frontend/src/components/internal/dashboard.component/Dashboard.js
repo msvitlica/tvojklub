@@ -24,10 +24,13 @@ const Dashboard = props => {
   }, []);
 
   const handleCoachesChanges = e => {
-    const changedCoach = e.target.name;
-    const newCoachesList = newClubCoaches.filter(coach => {
-      return;
-    })
+    const allCoaches = [...clubCoaches, ... newClubCoaches];
+    const selectedCoach = allCoaches.find(coach => coach._id === e.target.name);
+    selectedCoach.isConfirmedCoach = e.target.checked;
+    const coaches = allCoaches.filter(coach => coach.isConfirmedCoach === true);
+    const waiting = allCoaches.filter(coach => coach.isConfirmedCoach === false);
+    setClubCoaches(coaches);
+    setNewClubCoaches(waiting);
   }
 
   const fetchClub = async () => {
