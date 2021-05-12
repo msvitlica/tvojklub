@@ -23,8 +23,8 @@ function PrivateRoute({ component: Component, ...rest }) {
     const [ fetching, setFetching ] = useState(true);
     const [ openDialog, setOpenDialog ] = useState(!currentUser.club || !currentUser.club.clubName);
     const [ validationError, setValidationError] = useState({});
+    const [ club, setClub ] = useState({});
     const [ clubName, setClubName] = useState('');
-    const [ club, setClub ] = useState(currentUser.club || {});
     const [ noUser, setNoUser ] = useState('');
 
     const fetchUser = async () => {
@@ -33,7 +33,6 @@ function PrivateRoute({ component: Component, ...rest }) {
             if(fetching) {
                 const user = await res.json();
                 setCurrentUser(user);
-                console.log(currentUser);
             }
             setFetching(false);
         } catch {
@@ -46,6 +45,21 @@ function PrivateRoute({ component: Component, ...rest }) {
         fetchUser();
     }, []);
 
+    useEffect(() => {
+        console.log(currentUser);
+    }, [currentUser]);
+
+    
+    useEffect(() => {
+        if(!club && !club.owner) return;
+        updateUser();       
+    }, [club]);
+    
+    const updateUser = async () => {
+        const updatedUser = await services.userService.editUser(club);
+        setCurrentUser(updatedUser);
+    }
+    
     const handleChange = e => {
         setClubName(e.target.value);
     }
@@ -68,12 +82,12 @@ function PrivateRoute({ component: Component, ...rest }) {
 
     const addClub = async () => {
         const newClub = {
-            clubName: clubName,
+            name: clubName,
             owner: currentUser._id
         }
-        setClub(newClub);
-        setOpenDialog(false);        
-        await services.clubService.addClub(club);
+        setOpenDialog(false);
+        const confirmedClub = await services.clubService.addClub(newClub);
+        setClub(confirmedClub);
     }
 
     const editClub = async () => {
@@ -83,7 +97,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     }
 
     const addOrEditClub = async () => {
-        if(club.clubId) return editClub();
+        if(club.clubId) return editClub(club._id);
         addClub();
     }
 
@@ -111,7 +125,7 @@ function PrivateRoute({ component: Component, ...rest }) {
                     render={ () => { if(noUser) return <Redirect to='/login' /> }}
                 />
             </div>
-            <Dialog open={false}>
+            <Dialog open={openDialog}>
                 <DialogContent>
                 <TextField
                     autoFocus

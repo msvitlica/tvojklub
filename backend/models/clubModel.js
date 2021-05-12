@@ -7,4 +7,4 @@ const clubSchema = new Schema({
   owner: String,
 });
 
-mongoose.model('clubs', clubSchema);
+module.exports = mongoose.model('club', clubSchema);

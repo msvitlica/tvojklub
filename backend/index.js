@@ -56,7 +56,11 @@ app.use("/groups", groupeRouter);
 const scheduleManagement = require('./routes/scheduleManagment');
 app.use('/schedule-management', scheduleManagement);
 
+const clubRouter = require("./routes/clubs");
+app.use("/club", clubRouter);
 
+const userRouter = require("./routes/users");
+app.use("/user", userRouter);
 
 app.listen(port, function () {
   console.log("Runnning on " + port);

@@ -7,7 +7,7 @@ class ClubService extends BaseService {
 
     async fetchClub(id, abortController) {
         try {
-            const clubRequest = await fetch(`${this.backendUrl}/club/${id}`, abortController);
+            const clubRequest = await fetch(`${this.backendUrl}/${id}`, abortController);
             return await clubRequest.json();
         } catch (err) {
             console.log(err);
@@ -23,7 +23,7 @@ class ClubService extends BaseService {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...club }),
+                body: JSON.stringify({...club}),
             });
             const response = await postData.json();
             if(postData.ok) {
