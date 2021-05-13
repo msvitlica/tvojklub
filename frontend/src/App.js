@@ -29,13 +29,6 @@ function App(props) {
   const [snackMessage, setSnackMessage] = useState('');
   const [severity, setSeverity] = useState('');
 
-  // const login = () => {
-  //   auth.login(() => {
-  //     history.replace('/auth/google');
-  //   })
-  //   setAuth(auth.isAuthenticated());
-  // }
-
   const login = () => {
     auth.login(() => {
       history.replace('/');
@@ -72,8 +65,6 @@ function App(props) {
               <ExternalComponent login={login} />
             </Route>
             <PrivateRoute
-              isAuthenticated={isAuthenticated} 
-              logout={logout} 
               component={InternalComponent} />
           </Switch>
         </ErrorBoundary>

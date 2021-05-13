@@ -20,10 +20,11 @@ function PrivateRoute({ component: Component, ...rest }) {
 
     const services = useContext(ServiceContext);
     const [ currentUser, setCurrentUser ] = useState({});
+    const [ userWithClub, setUserWithClub ] = useState({});
     const [ fetching, setFetching ] = useState(true);
     const [ validationError, setValidationError] = useState({});
     const [ club, setClub ] = useState({});
-    const [ openDialog, setOpenDialog ] = useState(!currentUser.club || !currentUser.club.clubName);
+    const [ openDialog, setOpenDialog ] = useState(!userWithClub.club || !userWithClub.club.clubName);
     const [ clubName, setClubName] = useState('');
     const [ noUser, setNoUser ] = useState('');
 
@@ -45,8 +46,18 @@ function PrivateRoute({ component: Component, ...rest }) {
         fetchUser();
     }, []);
 
-    // useEffect(() => {
-    // }, [currentUser]);
+    const fetchUserFromDb = async () => {
+        const userFromDb = await services.userService.fetchUserById(currentUser._id);
+        if(userFromDb.club.clubName) {
+            setOpenDialog(false);
+        }
+        setUserWithClub(userFromDb);
+    }
+
+    useEffect(() => {
+        if(!currentUser.club || !currentUser.club.clubName) return
+        fetchUserFromDb();
+    }, [currentUser]);
     
     const handleChange = e => {
         setClubName(e.target.value);
@@ -99,7 +110,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     }
     
     return (
-        <UserContext.Provider value={{ currentUser }}>
+        <UserContext.Provider value={{ userWithClub }}>
             <div>
                 <Route
                     { ...rest } 

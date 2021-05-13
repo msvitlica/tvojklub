@@ -4,19 +4,6 @@ const uuid = require('uuid');
 
 const Club = require('../models/clubModel');
 
-// GET REQUEST
-// router.get("/", async (req, res) => {
-//   try {
-//     const groups = await Group.find();
-//     return res.status(200).send(groups);
-//   } catch (err) {
-//     res.status(400).json({
-//       message: "Some error occured",
-//       err
-//     });
-//   }
-// });
-
 // GET CLUB BY OWNER_ID
 router.get('/:id', async (req, res) => {
   const id = req.params.id;
