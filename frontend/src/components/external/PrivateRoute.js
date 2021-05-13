@@ -21,9 +21,9 @@ function PrivateRoute({ component: Component, ...rest }) {
     const services = useContext(ServiceContext);
     const [ currentUser, setCurrentUser ] = useState({});
     const [ fetching, setFetching ] = useState(true);
-    const [ openDialog, setOpenDialog ] = useState(!currentUser.club || !currentUser.club.clubName);
     const [ validationError, setValidationError] = useState({});
     const [ club, setClub ] = useState({});
+    const [ openDialog, setOpenDialog ] = useState(!currentUser.club || !currentUser.club.clubName);
     const [ clubName, setClubName] = useState('');
     const [ noUser, setNoUser ] = useState('');
 
@@ -45,20 +45,8 @@ function PrivateRoute({ component: Component, ...rest }) {
         fetchUser();
     }, []);
 
-    useEffect(() => {
-        console.log(currentUser);
-    }, [currentUser]);
-
-    
-    useEffect(() => {
-        if(!club && !club.owner) return;
-        updateUser();       
-    }, [club]);
-    
-    const updateUser = async () => {
-        const updatedUser = await services.userService.editUser(club);
-        setCurrentUser(updatedUser);
-    }
+    // useEffect(() => {
+    // }, [currentUser]);
     
     const handleChange = e => {
         setClubName(e.target.value);
@@ -87,6 +75,8 @@ function PrivateRoute({ component: Component, ...rest }) {
         }
         setOpenDialog(false);
         const confirmedClub = await services.clubService.addClub(newClub);
+        const currentClub = await services.clubService.fetchClub(newClub.owner);
+        const updatedUser = await services.userService.editUser(currentClub);
         setClub(confirmedClub);
     }
 

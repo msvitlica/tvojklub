@@ -5,18 +5,28 @@ class UserService extends BaseService {
         super(url, service);
     }
 
+    async fetchUserById(id) {
+        try {
+            let currentUser = await fetch(`${this.backendUrl}/user/${id}`);
+            return await currentUser.json();
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     async editUser({ owner, name, _id }) {
         try {
-            let userToEdit = await fetch(`${this.backendUrl}/edit/${owner}`, {
+            const userToEdit = await fetch(`${this.backendUrl}/user/${owner}`)
+            let user = await fetch(`${this.backendUrl}/user/edit/${owner}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ ... userToEdit, club: {clubName: name, clubId: _id }})
+                body: JSON.stringify({ ...userToEdit, club: {clubName: name, clubId: _id }})
             });
-            const response = await userToEdit.json();
-            if(userToEdit.ok) {
+            const response = await user.json();
+            if(user.ok) {
                 this.messageService.showSuccessMessage(response.msg);
             } else {
                 this.messageService.showError(response.msg)

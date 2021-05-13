@@ -17,11 +17,11 @@ const Club = require('../models/clubModel');
 //   }
 // });
 
-// GET BY ID REQUEST
+// GET CLUB BY OWNER_ID
 router.get('/:id', async (req, res) => {
   const id = req.params.id;
-  const targetClub = await Club.findById(id);
-  console.log(targetGroup);
+  const targetClub = await Club.findOne({ owner: id });
+  console.log(targetClub);
   res.status(200).send(targetClub);
 });
 

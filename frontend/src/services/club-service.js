@@ -5,9 +5,9 @@ class ClubService extends BaseService {
         super(url, service);
     }
 
-    async fetchClub(id, abortController) {
+    async fetchClub(ownerId, abortController) {
         try {
-            const clubRequest = await fetch(`${this.backendUrl}/${id}`, abortController);
+            const clubRequest = await fetch(`${this.backendUrl}/club/${ownerId}`, abortController);
             return await clubRequest.json();
         } catch (err) {
             console.log(err);

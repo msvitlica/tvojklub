@@ -8,4 +8,4 @@ const userSchema = new Schema({
   isOwner: Boolean
 });
 
-mongoose.model('users', userSchema);
+module.exports = mongoose.model('users', userSchema);

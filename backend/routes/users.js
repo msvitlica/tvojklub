@@ -4,6 +4,17 @@ const uuid = require('uuid');
 
 const User = require('../models/userModel');
 
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const targetUser = await User.findById(id);
+    console.log(targetUser);
+    res.status(200).send(targetUser)
+  } catch(err) {
+    console.log(err);
+  }
+});
+
 router.put('/edit/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -11,7 +22,7 @@ router.put('/edit/:id', async (req, res) => {
     console.log(body);
     await User.findOne({ _id: id }, function (err, user) {
       if (err) console.log(err);
-      if (user && user.club) {
+      if (user && user.club && user.club.clubId) {
         console.log('User already has a club');
         res.status(400).send({ msg: 'Taj korisnik već ima klub.' });
       } else {
