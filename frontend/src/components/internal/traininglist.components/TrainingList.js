@@ -5,10 +5,16 @@ import TrainingListFilter from '../main.components/TrainingListFilter';
 import { timeFormatUI } from './../../../helpers/helpersMethods';
 
 export default function TrainingList(props) {
-  const [selectedDate, setSelectedDate] = React.useState(new Date().getTime());
+  const [selectedDate, setSelectedDate] = useState(new Date().getTime());
   const [trainings, setTrainings] = useState([]);
   const abortController = new AbortController;
   const service = useContext(ServiceContext);
+  const { match: { params }, history } = props;
+
+  // props.history.location.states is object passed from TrainingDetails component
+  // it contains chosen date in milliseconds
+    console.log(props.history.location.state)
+    console.log(selectedDate)
 
   const handleDateChange = (date) => {
     setSelectedDate(new Date(date).getTime());
@@ -21,12 +27,20 @@ export default function TrainingList(props) {
   const onSaveTrainig = async (newTraining) => {
     return await service.trainingService.saveTraining(newTraining);
   }
+
   useEffect(() => {
     fetchTrainings();
   }, [selectedDate]);
 
+  // update selectedDate variable to chosen date
+ useEffect((prevState)=>{
+   if( props.history.location.state !== prevState){
+  setSelectedDate(props.history.location.state.selectedDate)
+   }
+ },[props.history.location.state])
+
+
   const showTrainingDetails = async (training) => {
-    const { match: { params }, history } = props;
     if (!training._id) {
       const trainingId = await onSaveTrainig(training);
       history.push(`trainings/${trainingId}`);
