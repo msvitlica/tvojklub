@@ -14,6 +14,13 @@ const useStyles = makeStyles({
             textDecoration: 'none'
         }
     },
+    facebookLink: {
+        width: '100%',
+        height: '100%',
+        '&:hover': {
+            textDecoration: 'none'
+        }
+    },
     btnContainer: {
         padding: '0px',
         height: '2.3rem'
@@ -43,9 +50,13 @@ function Login(props) {
                 <Button 
                     className="btn" 
                     variant="outlined" 
-                    color="primary" 
-                    onClick={props.login} >
-                    SIGN IN WITH FACEBOOK
+                    color="primary">
+                    <Link 
+                        href="http://localhost:3001/auth/facebook" 
+                        className={classes.facebookLink} 
+                        color="primary">
+                        SIGN IN WITH FACEBOOK
+                    </Link>
                 </Button>
             </Grid>
             <Grid sm={2} item> </Grid>

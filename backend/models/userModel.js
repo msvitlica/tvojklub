@@ -3,7 +3,10 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   authId: String,
-  club: Object,
+  club: {
+    clubName: String,
+    clubId: String
+  },
   name: String,
   isOwner: Boolean
 });

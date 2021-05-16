@@ -36,7 +36,7 @@ class ClubService extends BaseService {
         }
     }
 
-    async editGroup(club) {
+    async editClub(club) {
         try {
             let editedClub = await fetch(`${this.backendUrl}/club/edit/${club._id}`, {
                 method: 'PUT',
