@@ -17,13 +17,13 @@ import GroupIcon from '@material-ui/icons/Group';
 import TrainingListIcon from '@material-ui/icons/FormatListNumbered';
 import MembersIcon from '@material-ui/icons/Person';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import LogoutIcon from '@material-ui/icons/Launch';
 
 // Drawer components
 
 import {
     Drawer,
     List,
-    // Link,
     ListItem,
     ListItemIcon,
     ListItemText
@@ -44,6 +44,19 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+    },
+    iconContainer: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    linkIcon: {
+        marginRight: '5px'
+    },
+    linkText: {
+        textDecoration: 'none'
+    },
+    sideMenu: {
+        width: '150px'
     }
 }));
 
@@ -75,8 +88,6 @@ export default function NavBar(props) {
         }
         setState({ ...state, sideMenuState: open });
     }
-
-
     
     return (
         <div>
@@ -95,15 +106,19 @@ export default function NavBar(props) {
             </AppBar>
 
             <Drawer 
-                id="side-menu" 
+                id="side-menu"
                 open={state.sideMenuState} 
                 anchor="right"
                 onClose={toggleSideMenu(false)} >
-                <List>
+                <List className={classes.sideMenu}>
                     <a href="/api/logout">
                         <ListItem button>
-                            <ListItemIcon>
-                                <ListItemText primary='logout' />
+                            <ListItemIcon className={classes.iconContainer}>
+                                <LogoutIcon className={classes.linkIcon} />
+                                <ListItemText 
+                                    className={classes.linkText}
+                                    primary='logout' />
+                                
                             </ListItemIcon>
                         </ListItem>
                     </a>
@@ -114,32 +129,32 @@ export default function NavBar(props) {
                 <List>
                     <Link to='/trainings' onClick={toggleDrawer(false)}>
                         <ListItem button>
-                            <ListItemIcon>
-                                <TrainingListIcon />
+                            <ListItemIcon className={classes.iconContainer}>
+                                <TrainingListIcon className={classes.linkIcon} />
                                 <ListItemText primary='Lista Treninga' />
                             </ListItemIcon>
                         </ListItem>
                     </Link>
                     <Link to='/members' onClick={toggleDrawer(false)}>
                         <ListItem button>
-                            <ListItemIcon>
-                                <MembersIcon />
+                            <ListItemIcon className={classes.iconContainer}>
+                                <MembersIcon className={classes.linkIcon} />
                                 <ListItemText primary='Članovi' />
                             </ListItemIcon>
                         </ListItem>
                     </Link>
                     <Link to='/groups' onClick={toggleDrawer(false)}>
                         <ListItem button>
-                            <ListItemIcon>
-                                <GroupIcon />
+                            <ListItemIcon className={classes.iconContainer}>
+                                <GroupIcon className={classes.linkIcon} />
                                 <ListItemText primary='Grupe' />
                             </ListItemIcon>
                         </ListItem>
                     </Link>
                     <Link to='/schedule-management' onClick={toggleDrawer(false)}>
                         <ListItem button>
-                            <ListItemIcon>
-                                <ScheduleIcon />
+                            <ListItemIcon className={classes.iconContainer}>
+                                <ScheduleIcon className={classes.linkIcon} />
                                 <ListItemText primary='Raspored' />
                             </ListItemIcon>
                         </ListItem>
