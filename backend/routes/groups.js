@@ -77,6 +77,7 @@ router.put('/:id', async (req, res) => {
 });
 router.delete('/:id', async (req, res) => {
   try {
+    console.log(req.rawHeaders);
     const id = req.params.id;
     await Group.findByIdAndRemove(id);
     res.status(200).send({

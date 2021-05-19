@@ -25,19 +25,62 @@ export default class InternalComponent extends React.Component {
             <div>
                 <NavBar logout={this.props.logout} />
                 <Switch>
-                    <Route exact path="/" component={TrainingList} />
-                    <Route path='/trainings/:trainingId' component={TrainingDetails} />
-                    <Route path='/trainings' component={TrainingList} />
-                    <Route exact path='/members' component={Members} />
-                    <Route path='/members/newMember' component={addOrEditMember} />
-                    <Route path='/members/edit/:id' component={addOrEditMember} />
-                    <Route exact path='/groups' component={GroupList} />
-                    <Route exact path='/groups/new' component={AddGroupDialog} />
-                    <Route path='/groups/edit/:id' component={AddGroupDialog} />
-                    <Route path='/processedGroups' component={TrainingDetails} />
-                    <Route path='/schedule-management/edit/:id' component={NewSchedule} />
-                    <Route path='/schedule-management/new-schedule' component={NewSchedule} />
-                    <Route path='/schedule-management' component={ScheduleManagement} />
+                    <Route 
+                        exact 
+                        path="/" 
+                        component={TrainingList}
+                    />
+                    <Route 
+                        path='/trainings/:rainingId' 
+                        component={TrainingDetails}
+                    />
+                    <Route 
+                        path='/trainings' 
+                        component={TrainingList} 
+                    />
+                    <Route 
+                        exact 
+                        path='/members' 
+                        component={Members} 
+                    />
+                    <Route 
+                        path='/members/newMember' 
+                        component={addOrEditMember} 
+                    />
+                    <Route 
+                        path='/members/edit/:id' 
+                        component={addOrEditMember} 
+                    />
+                    <Route 
+                        exact 
+                        path='/groups' 
+                        component={GroupList} 
+                    />
+                    <Route 
+                        exact 
+                        path='/groups/new' 
+                        component={AddGroupDialog} 
+                    />
+                    <Route 
+                        path='/groups/edit/:id' 
+                        component={AddGroupDialog} 
+                    />
+                    <Route 
+                        path='/processedGroups' 
+                        component={TrainingDetails} 
+                    />
+                    <Route 
+                        path='/schedule-management/edit/:id' 
+                        component={NewSchedule} 
+                    />
+                    <Route 
+                        path='/schedule-management/new-schedule' 
+                        component={NewSchedule} 
+                    />
+                    <Route 
+                        path='/schedule-management' 
+                        component={ScheduleManagement} 
+                    />
                 </Switch>
             </div>
         )

@@ -9,7 +9,8 @@ class MemeberService extends BaseService {
         try {
             const res = await fetch(`${this.backendUrl}/members`);            
             const data = await res.json();
-            return data.members;         
+            console.log(data);
+            return data.members;            
         } catch (err) {
             console.log(err);
         }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import { StylesProvider } from "@material-ui/core/styles";
 import {
@@ -22,7 +22,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function App() {
+function App(props) {
   const history = useHistory();
   const [isAuthenticated, setAuth] = React.useState(auth.isAuthenticated());
   const [open, setOpen] = useState(false);
@@ -53,7 +53,6 @@ function App() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
@@ -65,13 +64,19 @@ function App() {
             <Route path="/login" >
               <ExternalComponent login={login} />
             </Route>
-            <PrivateRoute isAuthenticated={isAuthenticated} logout={logout} component={InternalComponent} />
+            <PrivateRoute
+              component={InternalComponent} />
           </Switch>
         </ErrorBoundary>
         <div>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={severity}>
-              {snackMessage}
+          <Snackbar 
+            open={open} 
+            autoHideDuration={6000} 
+            onClose={handleClose}>
+            <Alert 
+              onClose={handleClose} 
+              severity={severity}>
+                {snackMessage}
             </Alert>
           </Snackbar>
         </div>

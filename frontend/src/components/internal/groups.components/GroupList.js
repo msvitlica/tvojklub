@@ -10,14 +10,13 @@ import Snackbar from './../snackbar.components/Snackbar';
 // Including Service Context
 import { ServiceContext } from './../../../services/ServiceContext';
 
-
 export default function GroupList(props) {
     const [openDialog, setDialogOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [group, setGroup] = useState('');  
 
     const services = useContext(ServiceContext);
-
+    
     const fetchData = async () => {
         const allGroups = await services.groupService.getAllGroups();
         setGroups(allGroups)
