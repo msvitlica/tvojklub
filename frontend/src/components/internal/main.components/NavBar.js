@@ -49,11 +49,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar(props) {
 
+    console.log('renderujem navbar');
 
     const classes = useStyles();
     const [state, setState] = React.useState({
-        drawerState: false
+        drawerState: false,
+        sideMenuState: false
     });
+
     const [title, setTitle] = React.useState('Lista Treninga');
 
     // Toggle Drawer 
@@ -64,6 +67,17 @@ export default function NavBar(props) {
         setState({ ...state, drawerState: open });
         setTitle(event.target.innerText);
     }
+
+    // toggle side menu
+    const toggleSideMenu = (open) => (event) => {
+        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+        setState({ ...state, sideMenuState: open });
+    }
+
+
+    
     return (
         <div>
             <AppBar className='navbar' position="static">
@@ -74,12 +88,27 @@ export default function NavBar(props) {
                     <Typography variant="h6" className={classes.title}>
                         {title}
                     </Typography>
-                    <a href="/api/logout">LOGOUT</a>
-                    <Button>
+                    <Button onClick={toggleSideMenu(true)}>
                         <Avatar src="/broken-image.jpg" />
                     </Button>
                 </Toolbar>
             </AppBar>
+
+            <Drawer 
+                id="side-menu" 
+                open={state.sideMenuState} 
+                anchor="right"
+                onClose={toggleSideMenu(false)} >
+                <List>
+                    <a href="/api/logout">
+                        <ListItem button>
+                            <ListItemIcon>
+                                <ListItemText primary='logout' />
+                            </ListItemIcon>
+                        </ListItem>
+                    </a>
+                </List>
+            </Drawer>
 
             <Drawer id="nav" open={state.drawerState} onClose={toggleDrawer(false)}>
                 <List>

@@ -117,7 +117,7 @@ function PrivateRoute({ component: Component, ...rest }) {
                     render={ () => { if (fetching && currentUser === null) return <h1>Fetching...</h1>} }/>
                 <Route
                     { ...rest } 
-                    render={ () => { if (currentUser && !fetching) return <Component user={currentUser} />} }/>
+                    render={ () => { if (currentUser && !fetching) return <Component />} }/>
                 <Route
                     { ...rest } 
                     render={ () => { if (!currentUser && !fetching) return <Redirect to="/login" />} }/>
